@@ -1,29 +1,17 @@
-# README #
+# GRA SIECIOWA
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## Opis
+	
+- Aplikacja składa się z dwóch części: serwera gry oraz aplikacji klientów, które reperują grafikę
+- Serwer generuje mapy gry, akceptuje gracy, wykrywa kolizję oraz śledzi wynik danego gracza
+- Aby połączyć się z serwerem należy podać adres i port serwera 
+- Po podłączeniu do serwera użytkownik może sterować mały pojazdem i poruszać się po mapie przeszkodami oraz strzelać do innych uczestników
+- Zestrzelenie lub kolizja z przeszkodami lub z innymi użytkownikami oznacza koniec gry
+- Punkt zdobywamy za zestrzelenie innych graczy oraz za czas jazdy bez kolizji
 
-### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+### Autorzy
+- KW
+- BH
+- DJ
+- MJ
