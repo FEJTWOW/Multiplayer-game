@@ -1,4 +1,6 @@
 QT       += core gui
+QT       += network widgets
+requires(qtConfig(udpsocket))
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,13 +19,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    sender.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    sender.h
 
 FORMS += \
     mainwindow.ui
+
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
