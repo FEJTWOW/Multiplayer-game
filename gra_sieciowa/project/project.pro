@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     client \
-    server
+    server \
+    game_test
