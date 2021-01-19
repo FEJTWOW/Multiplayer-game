@@ -41,3 +41,6 @@ HEADERS += \
     settings.h
 
 FORMS +=
+
+RESOURCES += \
+    PlayersResources.qrc
