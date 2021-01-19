@@ -43,3 +43,6 @@ HEADERS += \
     obstacle.h
 
 FORMS +=
+
+RESOURCES += \
+    PlayersResources.qrc
