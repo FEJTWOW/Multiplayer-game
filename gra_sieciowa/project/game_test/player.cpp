@@ -15,6 +15,14 @@ Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
 {
     this->setRect(QRectF(point, size));
     this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
+
+    this->setBrush(Qt::cyan);
+    this->setPen(QPen(Qt::cyan, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
+
+    //QString filename = ":/new/Player/PackmanPng"; // trzeba by miec wiele png, dla kazdego gracza, lub svg ze zmiennym kolorem
+    //QImage image(filename);
+    //QPixmap item( QPixmap::fromImage(image));
+    //scene()->addPixmap(item);
 }
 
 
