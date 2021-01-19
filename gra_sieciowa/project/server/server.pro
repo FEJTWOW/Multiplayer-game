@@ -20,11 +20,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    sender.cpp
+    network.cpp
+
 
 HEADERS += \
+    clientsocket.h \
     mainwindow.h \
-    sender.h
+    network.h
 
 FORMS += \
     mainwindow.ui
@@ -35,3 +37,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
+else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
+
+INCLUDEPATH += $$PWD/../utils
+DEPENDPATH += $$PWD/../utils
