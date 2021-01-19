@@ -38,7 +38,7 @@ class Game: public QGraphicsView
 public:
     Game(QWidget * parent =0);
     void initGame();
-    void addNewPlayer(int x, int y, int w, int h);
+    void addNewPlayer(QPoint point, QSize size);
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;

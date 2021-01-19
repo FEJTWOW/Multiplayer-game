@@ -8,7 +8,7 @@ Settings::Settings()
 
     // Player settings
      player_speed = 10;
-     player_size = {600,800};
+     player_size = {100,100};
      player_point = {0,0};
      player_color = Qt::red;
 

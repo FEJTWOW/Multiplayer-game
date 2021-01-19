@@ -10,7 +10,7 @@ class Player : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
-    Player(int x, int y, int w, int h);
+    Player(QPoint x, QSize h);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     Bullet * playerBullets;

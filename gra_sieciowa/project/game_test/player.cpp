@@ -11,9 +11,9 @@
 extern Game * newGame;
 
 
-Player::Player(int x, int y, int w, int h) : xPos(x), yPos(y)
+Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
 {
-    this->setRect(xPos,yPos,w,h);
+    this->setRect(QRectF(point, size));
     this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
 }
 

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     newGame = new Game();
     newGame->initGame();
-    newGame->addNewPlayer(0,0,100,100);
+    newGame->addNewPlayer(QPoint(0,0), QSize(100,100));
     newGame->show();
 
 
