@@ -3,6 +3,8 @@
 
 #include "player.h"
 #include "score.h"
+#include "settings.h"
+#include "obstacle.h"
 
 #include <QWidget>
 #include <QGraphicsView>
@@ -36,10 +38,14 @@ class Game: public QGraphicsView
 {
 public:
     Game(QWidget * parent =0);
-
+    void initGame();
+    void addNewPlayer(QPoint point, QSize size);
+    void generateObstacles(int count);
     QGraphicsScene * graphicsScene;
-    Player * player;
-    Score * curr_score;
+    QList <Player*> players;
+    QList <Score*> playerScores;
+    Settings * settings;
+    int numOfPlayers;
 };
 
 #endif // GAME_H

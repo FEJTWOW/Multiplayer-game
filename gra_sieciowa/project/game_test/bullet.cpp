@@ -1,21 +1,23 @@
 #include "bullet.h"
+#include "obstacle.h"
 #include "enemy.h"
 #include "game.h"
 
 #include <QTimer>
 #include <QGraphicsScene>
 #include <QList>
+#include <QDebug>
 
 extern Game * newGame;
 
 Bullet::Bullet()
 {
-    setRect(0,0,10,50);
+    setRect(QRectF(newGame->settings->bullet_point, newGame->settings->bullet_size));
 
     auto timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));
 
-    timer->start(50);
+    timer->start(newGame->settings->bullet_timer_in_ms);
 }
 
 void Bullet::move()
@@ -23,18 +25,24 @@ void Bullet::move()
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        newGame->curr_score->increase();
-
-        if(typeid(*(colliding_items[i])) == typeid(Enemy));
-        scene()->removeItem(colliding_items[i]);
-        scene()->removeItem(this);
-
-        delete colliding_items[i];
-        delete this;
-        return;
+        if(typeid(*(colliding_items[i])) == typeid(Enemy))
+        {
+            //newGame->curr_score->increase();
+            scene()->removeItem(colliding_items[i]);
+            scene()->removeItem(this);
+            delete colliding_items[i];
+            delete this;
+            return;
+        }
+        else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
+        {
+            delete this;
+            return;
+        }
+        else break;
     }
 
-    setPos(x(), y()-10);
+    setPos(x(), y()-newGame->settings->bullet_speed);
     if(pos().y() + rect().height() < 0)
     {
         scene()->removeItem(this);

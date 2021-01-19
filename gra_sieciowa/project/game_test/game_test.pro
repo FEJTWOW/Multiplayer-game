@@ -29,13 +29,17 @@ SOURCES += \
     bullet.cpp \
     enemy.cpp \
     score.cpp \
-    game.cpp
+    game.cpp \
+    settings.cpp \
+    obstacle.cpp
 
 HEADERS += \
     player.h \
     bullet.h \
     enemy.h \
     score.h \
-    game.h
+    game.h \
+    settings.h \
+    obstacle.h
 
 FORMS +=
