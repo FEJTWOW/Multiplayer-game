@@ -1,4 +1,5 @@
 #include "bullet.h"
+#include "obstacle.h"
 #include "enemy.h"
 #include "game.h"
 
@@ -11,12 +12,12 @@ extern Game * newGame;
 
 Bullet::Bullet()
 {
-    setRect(0,0,10,50);
+    setRect(QRectF(newGame->settings->bullet_point, newGame->settings->bullet_size));
 
     auto timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));
 
-    timer->start(50);
+    timer->start(newGame->settings->bullet_timer_in_ms);
 }
 
 void Bullet::move()
@@ -24,28 +25,24 @@ void Bullet::move()
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        qDebug() << "XD";
-
         if(typeid(*(colliding_items[i])) == typeid(Enemy))
         {
-            //qDebug() << "XD1";
             //newGame->curr_score->increase();
-            qDebug() << "XD1.1";
             scene()->removeItem(colliding_items[i]);
-            qDebug() << "XD1.2";
             scene()->removeItem(this);
-            qDebug() << "XD2";
             delete colliding_items[i];
             delete this;
             return;
         }
-        else
+        else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
         {
-            break;
+            delete this;
+            return;
         }
+        else break;
     }
 
-    setPos(x(), y()-10);
+    setPos(x(), y()-newGame->settings->bullet_speed);
     if(pos().y() + rect().height() < 0)
     {
         scene()->removeItem(this);

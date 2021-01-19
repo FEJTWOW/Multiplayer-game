@@ -23,6 +23,7 @@ public:
 
     // Bullet settings
         int bullet_speed;
+        int bullet_timer_in_ms;
         QSize bullet_size;
         QPoint bullet_point;
         QColor bullet_color;
@@ -33,7 +34,8 @@ public:
 
 
     // Obstacles settings
-        //
+        int obstacle_min_size;
+        int obstacle_max_size;
         //
         //
         //

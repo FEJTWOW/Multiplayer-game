@@ -44,3 +44,12 @@ void Game::addNewPlayer(QPoint point, QSize size)
     show();
 
 }
+
+void Game::generateObstacles(int count)
+{
+    for(int i = 0; i < count; i++)
+    {
+        auto newObstacle = new Obstacle();
+        graphicsScene->addItem(newObstacle);
+    }
+}
