@@ -15,11 +15,9 @@ Score::Score(QGraphicsItem *parent): QGraphicsTextItem(parent)
 
 void Score::setupScore()
 {
-    qDebug() << newGame->numOfPlayers << " " << newGame->playerScores[newGame->numOfPlayers]->curr_score;
     newGame->playerScores[newGame->numOfPlayers]->setPlainText(QString("Current score:") + QString::number((newGame->playerScores[newGame->numOfPlayers]->curr_score)));
-    newGame->playerScores[newGame->numOfPlayers]->setDefaultTextColor(Qt::red);
-    qDebug() << "score1";
-    newGame->playerScores[newGame->numOfPlayers]->setFont(QFont("System", 14));
+    newGame->playerScores[newGame->numOfPlayers]->setDefaultTextColor(newGame->settings->score_color);
+    newGame->playerScores[newGame->numOfPlayers]->setFont(newGame->settings->score_font);
 }
 
 void Score::increase()

@@ -23,6 +23,7 @@ public:
 
     // Bullet settings
         int bullet_speed;
+        int bullet_update_ms;
         QSize bullet_size;
         QPoint bullet_point;
         QColor bullet_color;
