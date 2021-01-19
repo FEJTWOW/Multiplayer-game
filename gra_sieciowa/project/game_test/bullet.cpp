@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QGraphicsScene>
 #include <QList>
+#include <QDebug>
 
 extern Game * newGame;
 
@@ -23,15 +24,25 @@ void Bullet::move()
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        newGame->curr_score->increase();
+        qDebug() << "XD";
 
-        if(typeid(*(colliding_items[i])) == typeid(Enemy));
-        scene()->removeItem(colliding_items[i]);
-        scene()->removeItem(this);
-
-        delete colliding_items[i];
-        delete this;
-        return;
+        if(typeid(*(colliding_items[i])) == typeid(Enemy))
+        {
+            //qDebug() << "XD1";
+            //newGame->curr_score->increase();
+            qDebug() << "XD1.1";
+            scene()->removeItem(colliding_items[i]);
+            qDebug() << "XD1.2";
+            scene()->removeItem(this);
+            qDebug() << "XD2";
+            delete colliding_items[i];
+            delete this;
+            return;
+        }
+        else
+        {
+            break;
+        }
     }
 
     setPos(x(), y()-10);

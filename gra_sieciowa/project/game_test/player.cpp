@@ -1,14 +1,23 @@
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "score.h"
+#include "game.h"
 
 #include <QKeyEvent>
 #include <QGraphicsScene>
 
-Player::Player()
-{
+extern Game * newGame;
 
+
+Player::Player(int x, int y, int w, int h) : xPos(x), yPos(y)
+{
+    this->setRect(xPos,yPos,w,h);
+    this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
 }
+
+
+
 
 void Player::keyPressEvent(QKeyEvent *event)
 {
@@ -32,12 +41,19 @@ void Player::keyPressEvent(QKeyEvent *event)
     {
         auto newBullet = new Bullet();
         newBullet->setPos(x()+50,y()-51);
-        scene()->addItem(newBullet);
+        newGame->graphicsScene->addItem(newBullet);
     }
 }
 
 void Player::spawn()
 {
+    // This needs to go
     auto new_enemy = new Enemy();
     scene()->addItem(new_enemy);
+}
+
+void Player::takeOver()
+{
+    this->setFlag(QGraphicsItem::ItemIsFocusable);
+    this->setFocus();
 }

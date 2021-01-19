@@ -36,10 +36,13 @@ class Game: public QGraphicsView
 {
 public:
     Game(QWidget * parent =0);
-
+    void initGame();
+    void addNewPlayer(int x, int y, int w, int h);
     QGraphicsScene * graphicsScene;
-    Player * player;
-    Score * curr_score;
+    QList <Player*> players;
+    QList <Score*> playerScores;
+    int numOfPlayers;
+    Score * curr_score; // legacy reasons
 };
 
 #endif // GAME_H
