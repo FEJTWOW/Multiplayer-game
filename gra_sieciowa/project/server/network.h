@@ -20,6 +20,7 @@ public slots:
     void onNewConnection();
     void onDisconnected();
     void onMessage(const QString& message) const;
+    void onMessage(const QByteArray& data) const;
 
 protected:
     QList<Socket*> clients;

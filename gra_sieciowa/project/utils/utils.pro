@@ -22,6 +22,7 @@ SOURCES += \
     utils.cpp
 
 HEADERS += \
+    playeraction.h \
     socket.h \
     utils_global.h \
     utils.h

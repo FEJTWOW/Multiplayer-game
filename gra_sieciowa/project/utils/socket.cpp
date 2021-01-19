@@ -35,3 +35,9 @@ void Socket::sendString(const QString& string)
     this->tcpSocket->write(string.toUtf8().constData(),string.length());
     return;
 }
+
+
+void Socket::sendData(const QByteArray& data)
+{
+    tcpSocket->write(data, data.size()); //write the data itself
+}

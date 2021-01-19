@@ -23,6 +23,7 @@ void Network::onNewConnection()
     qDebug() << "Client connected!";
     connect(sockHandle, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(sockHandle, SIGNAL(message(const QString&)), this, SLOT(onMessage(const QString&)));
+    connect(sockHandle, SIGNAL(message(const QByteArray&)), this, SLOT(onMessage(const QByteArray&)));
 
 }
 
@@ -45,5 +46,11 @@ void Network::sendAll(const QString &message) const
 void Network::onMessage(const QString& message) const
 {
     sendAll(message);
-    qDebug() << message;
+    qDebug() << "String" << message;
+}
+
+
+void Network::onMessage(const QByteArray& data) const
+{
+    qDebug() << "Data" << data;
 }
