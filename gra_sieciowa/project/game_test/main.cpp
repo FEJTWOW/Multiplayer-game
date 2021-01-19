@@ -11,7 +11,8 @@ int main(int argc, char *argv[])
 
     newGame = new Game();
     newGame->initGame();
-    newGame->addNewPlayer(QPoint(0,0), QSize(100,100));
+    newGame->generateObstacles(2);
+    newGame->addNewPlayer(QPoint(newGame->settings->player_point), QSize(newGame->settings->player_size));
     newGame->show();
 
 

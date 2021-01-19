@@ -4,6 +4,7 @@
 #include "player.h"
 #include "score.h"
 #include "settings.h"
+#include "obstacle.h"
 
 #include <QWidget>
 #include <QGraphicsView>
@@ -39,6 +40,7 @@ public:
     Game(QWidget * parent =0);
     void initGame();
     void addNewPlayer(QPoint point, QSize size);
+    void generateObstacles(int count);
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;

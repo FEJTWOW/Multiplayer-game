@@ -1,11 +1,11 @@
 #include <QApplication>
 
-#include "receiver.h"
+#include "serversocket.h"
+#include <QHostAddress>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Receiver receiver;
-    receiver.show();
+    ServerSocket sock(QHostAddress::LocalHost,12345, nullptr);
     return app.exec();
 }

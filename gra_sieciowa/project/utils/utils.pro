@@ -1,8 +1,8 @@
-QT       += core gui
-QT       += network widgets
-requires(qtConfig(udpsocket))
+QT -= gui
+QT += network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+TEMPLATE = lib
+DEFINES += UTILS_LIBRARY
 
 CONFIG += c++11
 
@@ -18,25 +18,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp \
-    serversocket.cpp
+    socket.cpp \
+    utils.cpp
 
 HEADERS += \
-    mainwindow.h \
-    serversocket.h
-
-FORMS += \
-    mainwindow.ui
+    socket.h \
+    utils_global.h \
+    utils.h
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+unix {
+    target.path = /usr/lib
+}
 !isEmpty(target.path): INSTALLS += target
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
-else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
-
-INCLUDEPATH += $$PWD/../utils
-DEPENDPATH += $$PWD/../utils

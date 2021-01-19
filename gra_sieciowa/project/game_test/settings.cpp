@@ -14,7 +14,8 @@ Settings::Settings()
 
     // Bullet settings
      bullet_speed = 10;
-     bullet_size = {10,50};
+     bullet_timer_in_ms = 20;
+     bullet_size = {5,20};
      bullet_point = {0,0} ;
      bullet_color = Qt::blue;
 
@@ -23,8 +24,8 @@ Settings::Settings()
      score_font = {"System", 14};
 
     // Obstacles settings
-        //
-        //
+     obstacle_min_size = 5;
+     obstacle_max_size = 30;
         //
         //
     // Enemy settings

@@ -1,12 +1,12 @@
 #include "mainwindow.h"
-#include "sender.h"
+
 
 #include <QApplication>
+#include "network.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Sender sender;
-    sender.show();
+    Network network(12345);
     return app.exec();
 }

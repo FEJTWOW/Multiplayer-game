@@ -30,7 +30,8 @@ SOURCES += \
     enemy.cpp \
     score.cpp \
     game.cpp \
-    settings.cpp
+    settings.cpp \
+    obstacle.cpp
 
 HEADERS += \
     player.h \
@@ -38,7 +39,8 @@ HEADERS += \
     enemy.h \
     score.h \
     game.h \
-    settings.h
+    settings.h \
+    obstacle.h
 
 FORMS +=
 

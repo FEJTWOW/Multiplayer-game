@@ -32,16 +32,16 @@ void Player::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Left && pos().x() > 0)
         this->movementDirection[LEFT] = true;
-    else if(event->key() == Qt::Key_Right && pos().x() + 100 < 800)
+    else if(event->key() == Qt::Key_Right && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width())
         this->movementDirection[RIGHT] = true;
     else if(event->key() == Qt::Key_Up  && pos().y() > 0)
         this->movementDirection[UP] = true;
-    else if(event->key() == Qt::Key_Down  && pos().y() < 500)
+    else if(event->key() == Qt::Key_Down  && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
         this->movementDirection[DOWN] = true;
     else if(event->key() == Qt::Key_Space)
     {
         auto newBullet = new Bullet();
-        newBullet->setPos(x()+50,y()-51);
+        newBullet->setPos(x()+(newGame->settings->player_size.width()/2),y()-(newGame->settings->player_size.height()+1));
         newGame->graphicsScene->addItem(newBullet);
     }
     movePlayer();
