@@ -11,17 +11,18 @@ class Socket : public QObject
 public:
     explicit Socket(QObject *parent = nullptr, QTcpSocket* socket = nullptr);
     virtual ~Socket() { }
-    virtual void sendString(const QString &string);
+    virtual void sendString(const QString& string);
 
 
 signals:
-    void message(const QString &message) const;
-    void error(const QString &error) const;
+    void message(const QString& message) const;
+    void error(const QString& error) const;
     void disconnected() const;
 
 protected slots:
     void onReadyRead();
     void onDisconnected() const;
+
 
 protected:
     QTcpSocket *tcpSocket;

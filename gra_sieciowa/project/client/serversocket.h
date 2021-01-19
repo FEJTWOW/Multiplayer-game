@@ -14,7 +14,8 @@ public:
 
 
 signals:
-
+public slots:
+    void onMessage(const QString& message) const;
 };
 
 #endif // SERVERSOCKET_H

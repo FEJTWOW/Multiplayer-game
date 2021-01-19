@@ -20,6 +20,7 @@ Socket::Socket(QObject *parent, QTcpSocket* socket) : QObject(parent)
 void Socket::onReadyRead()
 {
     qDebug() << "Czytam se";
+    emit message(tcpSocket->readAll());
     return;
 }
 

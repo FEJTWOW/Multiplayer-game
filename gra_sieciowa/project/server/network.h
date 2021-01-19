@@ -19,6 +19,7 @@ public slots:
     void sendAll(const QString &message) const;
     void onNewConnection();
     void onDisconnected();
+    void onMessage(const QString& message) const;
 
 protected:
     QList<Socket*> clients;

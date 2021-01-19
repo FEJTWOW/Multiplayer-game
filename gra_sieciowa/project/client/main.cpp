@@ -7,5 +7,6 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     ServerSocket sock(QHostAddress::LocalHost,12345, nullptr);
+    sock.sendString("kupa");
     return app.exec();
 }
