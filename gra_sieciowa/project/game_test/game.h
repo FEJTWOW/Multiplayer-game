@@ -3,6 +3,7 @@
 
 #include "player.h"
 #include "score.h"
+#include "settings.h"
 
 #include <QWidget>
 #include <QGraphicsView>
@@ -41,8 +42,8 @@ public:
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
+    Settings * settings;
     int numOfPlayers;
-    Score * curr_score; // legacy reasons
 };
 
 #endif // GAME_H
