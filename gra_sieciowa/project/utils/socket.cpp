@@ -19,7 +19,7 @@ Socket::Socket(QObject *parent, QTcpSocket* socket) : QObject(parent)
 
 void Socket::onReadyRead()
 {
-    qDebug() << "Czytam se";
+//    qDebug() << "Czytam se";
     emit message(tcpSocket->readAll());
 }
 
@@ -37,7 +37,7 @@ void Socket::sendString(const QString& string)
 
 void Socket::sendData(const QByteArray& data) const
 {
-    qDebug() << "Wysyłanie" << data;
+//    qDebug() << "Wysyłanie" << data;
 
     tcpSocket->write(data);
 }

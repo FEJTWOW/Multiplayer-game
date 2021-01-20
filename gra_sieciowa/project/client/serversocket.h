@@ -4,6 +4,7 @@
 #include <QObject>
 #include "socket.h"
 #include "playeraction.h"
+#include "gamestate.h"
 
 class ServerSocket : public Socket
 {
@@ -13,6 +14,7 @@ public:
             QObject *parent);
 
     void sendPlayerAction(const PlayerAction& playerAction) const;
+    GameState parseGameState(const QByteArray& data) const;
 
 
 signals:

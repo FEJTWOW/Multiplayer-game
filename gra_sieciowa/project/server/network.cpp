@@ -43,6 +43,23 @@ void Network::sendAll(const QString &message) const
     }
 }
 
+void Network::sendAll(const QByteArray &data) const
+{
+    for (auto socket : clients)
+    {
+        socket->sendData(data);
+    }
+}
+
+void Network::sendAll(const GameState& gameState) const
+{
+    for(auto socket : clients)
+    {
+        socket->sendGameState(gameState);
+    }
+}
+
+
 void Network::onMessage(const QString& message) const
 {
     //sendAll(message);
@@ -53,7 +70,10 @@ void Network::onMessage(const QString& message) const
 void Network::onMessage(const QByteArray& data) const
 {
     qDebug() << "Data" << data;
+
     parsePlayerAction(data);
+    GameState test{1,2,3,4,200,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    sendAll(test);
 }
 
 PlayerAction Network::parsePlayerAction(const QByteArray& data) const
@@ -65,3 +85,4 @@ PlayerAction Network::parsePlayerAction(const QByteArray& data) const
     return playerAction;
 
 }
+
