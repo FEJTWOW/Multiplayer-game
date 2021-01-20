@@ -10,7 +10,7 @@ Settings::Settings()
      player_speed = 10;
      player_size = {35,35};
      player_point = {0,0};
-     player_color = Qt::red;
+     player_color = Qt::red;//Qt::cyan
 
     // Bullet settings
      bullet_speed = 10;

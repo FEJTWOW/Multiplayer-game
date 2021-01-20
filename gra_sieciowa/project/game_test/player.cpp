@@ -17,8 +17,8 @@ Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
     this->setRect(QRectF(point, size));
     this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
 
-    this->setBrush(Qt::cyan);
-    this->setPen(QPen(Qt::cyan, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
+    this->setBrush(newGame->settings->player_color);
+    this->setPen(QPen(newGame->settings->player_color, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
 
     //QString filename = ":/new/Player/PackmanPng"; // trzeba by miec wiele png, dla kazdego gracza, lub svg ze zmiennym kolorem
     //QImage image(filename);
@@ -73,22 +73,22 @@ void Player::keyReleaseEvent(QKeyEvent *event)
 
 
 void Player::movePlayer() {
-    if (this->movementDirection[UP] && this->movementDirection[RIGHT])
-        setPos(x()+newGame->settings->player_speed, y()-newGame->settings->player_speed);
+    if (this->movementDirection[UP] && this->movementDirection[RIGHT] && pos().x() > 0 && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width())
+        moveBy(newGame->settings->player_speed, -newGame->settings->player_speed);
     else if (this->movementDirection[DOWN] && this->movementDirection[LEFT] && pos().x() > 0 && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
-        setPos(x()-newGame->settings->player_speed, y()+newGame->settings->player_speed);
+        moveBy(-newGame->settings->player_speed, newGame->settings->player_speed);
     else if (this->movementDirection[UP] && this->movementDirection[LEFT] && pos().x() > 0)
-        setPos(x()-newGame->settings->player_speed, y()-newGame->settings->player_speed);
+        moveBy(-newGame->settings->player_speed, -newGame->settings->player_speed);
     else if (this->movementDirection[DOWN] && this->movementDirection[RIGHT] && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width() && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
-        setPos(x()+newGame->settings->player_speed, y()+newGame->settings->player_speed);
+        moveBy(newGame->settings->player_speed, newGame->settings->player_speed);
     else if (this->movementDirection[RIGHT] && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width())
-        setPos(x()+newGame->settings->player_speed, y());
+        moveBy(newGame->settings->player_speed, 0);
     else if (this->movementDirection[LEFT] && pos().x() > 0)
-        setPos(x()-newGame->settings->player_speed, y());
+        moveBy(-newGame->settings->player_speed, 0);
     else if (this->movementDirection[DOWN] && pos().x() > 0 && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
-        setPos(x(), y()+newGame->settings->player_speed);
+        moveBy(0, newGame->settings->player_speed);
     else if (this->movementDirection[UP] && pos().x() > 0)
-        setPos(x(), y()-newGame->settings->player_speed);
+        moveBy(0, -newGame->settings->player_speed);
 }
 
 

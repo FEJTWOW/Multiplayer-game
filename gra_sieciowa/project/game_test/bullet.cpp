@@ -18,6 +18,9 @@ Bullet::Bullet()
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));
 
     timer->start(newGame->settings->bullet_timer_in_ms);
+
+    this->setBrush(newGame->settings->bullet_color);
+    this->setPen(QPen(newGame->settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
 }
 
 void Bullet::move()
