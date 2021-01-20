@@ -4,6 +4,7 @@ ServerSocket::ServerSocket(const QHostAddress &address, quint16 port,
                            QObject *parent) : Socket(parent)
 {
      tcpSocket->connectToHost(address, port);
+     tcpSocket->waitForConnected();
      connect(this,SIGNAL(message(const QString&)), this, SLOT(onMessage(const QString&)));
      connect(this,SIGNAL(message(const QByteArray&)), this, SLOT(onMessage(const QByteArray&)));
 }

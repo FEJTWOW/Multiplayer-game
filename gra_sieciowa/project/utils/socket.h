@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QTcpSocket>
+#include <QDataStream>
 
 
 class Socket : public QObject

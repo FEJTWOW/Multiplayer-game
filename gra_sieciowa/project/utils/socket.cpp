@@ -21,7 +21,6 @@ void Socket::onReadyRead()
 {
     qDebug() << "Czytam se";
     emit message(tcpSocket->readAll());
-    return;
 }
 
 void Socket::onDisconnected() const
@@ -32,12 +31,13 @@ void Socket::onDisconnected() const
 
 void Socket::sendString(const QString& string)
 {
+    qDebug() << "lel";
     this->tcpSocket->write(string.toUtf8().constData(),string.length());
-    return;
 }
-
 
 void Socket::sendData(const QByteArray& data)
 {
-    tcpSocket->write(data, data.size()); //write the data itself
+    qDebug() << "Wysyłanie" << data;
+
+    tcpSocket->write(data);
 }

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "serversocket.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +16,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void send();
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    ServerSocket* sock;
 };
 #endif // MAINWINDOW_H

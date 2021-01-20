@@ -45,7 +45,7 @@ void Network::sendAll(const QString &message) const
 
 void Network::onMessage(const QString& message) const
 {
-    sendAll(message);
+    //sendAll(message);
     qDebug() << "String" << message;
 }
 
