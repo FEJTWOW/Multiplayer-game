@@ -7,6 +7,7 @@
 
 #include <QKeyEvent>
 #include <QGraphicsScene>
+#include <settings.h>
 
 extern Game * newGame;
 
@@ -23,6 +24,8 @@ Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
     //QImage image(filename);
     //QPixmap item( QPixmap::fromImage(image));
     //scene()->addPixmap(item);
+    //this->setFlag(QGraphicsItem::ItemIsFocusable, true);
+    //this->setFocus();
 }
 
 
@@ -71,21 +74,21 @@ void Player::keyReleaseEvent(QKeyEvent *event)
 
 void Player::movePlayer() {
     if (this->movementDirection[UP] && this->movementDirection[RIGHT])
-        setPos(x()+10, y()-10);
-    else if (this->movementDirection[DOWN] && this->movementDirection[LEFT])
-        setPos(x()-10, y()+10);
-    else if (this->movementDirection[UP] && this->movementDirection[LEFT])
-        setPos(x()-10, y()-10);
-    else if (this->movementDirection[DOWN] && this->movementDirection[RIGHT])
-        setPos(x()+10, y()+10);
-    else if (this->movementDirection[RIGHT])
-        setPos(x()+10, y());
-    else if (this->movementDirection[LEFT])
-        setPos(x()-10, y());
-    else if (this->movementDirection[DOWN])
-        setPos(x(), y()+10);
-    else if (this->movementDirection[UP])
-        setPos(x(), y()-10);
+        setPos(x()+newGame->settings->player_speed, y()-newGame->settings->player_speed);
+    else if (this->movementDirection[DOWN] && this->movementDirection[LEFT] && pos().x() > 0 && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
+        setPos(x()-newGame->settings->player_speed, y()+newGame->settings->player_speed);
+    else if (this->movementDirection[UP] && this->movementDirection[LEFT] && pos().x() > 0)
+        setPos(x()-newGame->settings->player_speed, y()-newGame->settings->player_speed);
+    else if (this->movementDirection[DOWN] && this->movementDirection[RIGHT] && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width() && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
+        setPos(x()+newGame->settings->player_speed, y()+newGame->settings->player_speed);
+    else if (this->movementDirection[RIGHT] && pos().x() + newGame->settings->player_size.width() < newGame->settings->screen_size.width())
+        setPos(x()+newGame->settings->player_speed, y());
+    else if (this->movementDirection[LEFT] && pos().x() > 0)
+        setPos(x()-newGame->settings->player_speed, y());
+    else if (this->movementDirection[DOWN] && pos().x() > 0 && pos().y() + newGame->settings->player_size.height() < newGame->settings->screen_size.height())
+        setPos(x(), y()+newGame->settings->player_speed);
+    else if (this->movementDirection[UP] && pos().x() > 0)
+        setPos(x(), y()-newGame->settings->player_speed);
 }
 
 

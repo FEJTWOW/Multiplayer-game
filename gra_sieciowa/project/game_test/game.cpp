@@ -53,3 +53,4 @@ void Game::generateObstacles(int count)
         graphicsScene->addItem(newObstacle);
     }
 }
+

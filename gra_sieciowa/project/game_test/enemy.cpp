@@ -3,6 +3,7 @@
 #include <QGraphicsScene>
 #include <QTimer>
 #include <stdlib.h>
+#include <QDebug>
 
 Enemy::Enemy()
 {
