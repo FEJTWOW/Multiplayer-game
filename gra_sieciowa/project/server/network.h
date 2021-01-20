@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include "clientsocket.h"
+#include "playeraction.h"
 
 class Network : public QTcpServer
 {
@@ -11,7 +12,7 @@ class Network : public QTcpServer
 public:
     explicit Network(quint16 port = 0); // port jest 2 bajtowa liczba
     quint16 port() const { return serverPort(); }
-
+    PlayerAction parsePlayerAction(const QByteArray& data) const;
 
 signals:
 

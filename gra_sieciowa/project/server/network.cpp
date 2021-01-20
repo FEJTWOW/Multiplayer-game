@@ -53,4 +53,15 @@ void Network::onMessage(const QString& message) const
 void Network::onMessage(const QByteArray& data) const
 {
     qDebug() << "Data" << data;
+    parsePlayerAction(data);
+}
+
+PlayerAction Network::parsePlayerAction(const QByteArray& data) const
+{
+    PlayerAction playerAction;
+
+    memcpy(&playerAction,data.data(), sizeof(playerAction));
+    qDebug() << playerAction.actions << playerAction.posX << playerAction.posY;
+    return playerAction;
+
 }

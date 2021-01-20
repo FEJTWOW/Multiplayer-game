@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "socket.h"
-
+#include "playeraction.h"
 
 class ServerSocket : public Socket
 {
@@ -11,6 +11,8 @@ class ServerSocket : public Socket
 public:
     ServerSocket(const QHostAddress &address, quint16 port,
             QObject *parent);
+
+    void sendPlayerAction(const PlayerAction& playerAction) const;
 
 
 signals:
