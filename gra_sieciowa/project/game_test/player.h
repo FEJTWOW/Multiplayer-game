@@ -11,14 +11,11 @@ class Player : public QObject, public QGraphicsRectItem
     Q_OBJECT
 public:
     Player(QPoint x, QSize h);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
     Bullet * playerBullets;
     int bulletMax;
     int xPos;
     int yPos;
     int movingX, movingY;
-    void movePlayer();
     bool movementDirection[4] = {false};
 public slots:
     void spawn();
