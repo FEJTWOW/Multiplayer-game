@@ -18,7 +18,7 @@ public:
     void sendAll(const QByteArray& data) const;
     void sendAll(const GameState& gameState) const;
 signals:
-
+    void playerAction(const PlayerAction& playerAction) const;
 public slots:
     void onNewConnection();
     void onDisconnected();

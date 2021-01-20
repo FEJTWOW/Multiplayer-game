@@ -18,7 +18,8 @@ void ServerSocket::onMessage(const QString& message) const
 void ServerSocket::onMessage(const QByteArray& data) const
 {
     qDebug() << "Jestę klientem i czytam se data!";
-    parseGameState(data);
+    GameState gameState = parseGameState(data);
+    emit newGameState(gameState);
     qDebug() << data;
 }
 

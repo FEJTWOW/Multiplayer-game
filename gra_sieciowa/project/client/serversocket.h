@@ -18,6 +18,8 @@ public:
 
 
 signals:
+    void newGameState(const GameState& gameState) const;
+
 public slots:
     void onMessage(const QString& message) const;
     void onMessage(const QByteArray& data) const;

@@ -71,8 +71,9 @@ void Network::onMessage(const QByteArray& data) const
 {
     qDebug() << "Data" << data;
 
-    parsePlayerAction(data);
+    PlayerAction pA = parsePlayerAction(data);
     GameState test{1,2,3,4,200,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    emit playerAction(pA);
     sendAll(test);
 }
 
