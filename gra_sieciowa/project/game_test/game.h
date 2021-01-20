@@ -10,7 +10,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QTimer>
-
+#include <player.h>
 
 // Generalnie jest zrobione bardzo na szypko i jest bardzo źle
 // Trzeba:
@@ -41,11 +41,16 @@ public:
     void initGame();
     void addNewPlayer(QPoint point, QSize size);
     void generateObstacles(int count);
+    void movePlayer();
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
     Settings * settings;
     int numOfPlayers;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 };
 
 #endif // GAME_H
