@@ -15,9 +15,12 @@ public:
     int shootingDirection;
     bool shotFired = true;
     bool isShooting = false;
+    bool dead = false;
     int id;
+    QTimer * respawnTimer;
 public slots:
     void canShoot();
+    void respawn();
 };
 
 #endif // PLAYER_H

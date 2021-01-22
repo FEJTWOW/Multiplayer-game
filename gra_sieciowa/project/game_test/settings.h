@@ -17,6 +17,7 @@ public:
 
     // Game settings
          int game_timer_res;
+         int respawn_time_in_ms;
 
     // Player settings
          int player_speed;

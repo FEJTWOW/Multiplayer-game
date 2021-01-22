@@ -8,13 +8,14 @@ Settings::Settings()
 
     // Game settings
     game_timer_res = 5;
+    respawn_time_in_ms = 5000;
 
     // Player settings
      player_speed = 10;
      player_size = {35,35};
      player_point = {0,0};
      player_color = Qt::red;//Qt::cyan
-     player_shot_cd_in_ms = 300;
+     player_shot_cd_in_ms = 1000;
      player_max_count = 5;
      player_spawns[0] = QPointF(125, screen_size.height()-player_size.height());
      player_spawns[1] = QPointF(250, screen_size.height()-player_size.height());

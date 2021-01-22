@@ -70,38 +70,42 @@ void Game::keyPressEvent(QKeyEvent *event)
     // for now :
     int player_id = 0;
 
-    if(event->key() == Qt::Key_Left)
-        players[player_id]->movementDirection[LEFT] = true;
-    else if(event->key() == Qt::Key_Right)
-        players[player_id]->movementDirection[RIGHT] = true;
-    else if(event->key() == Qt::Key_Up)
-        players[player_id]->movementDirection[UP] = true;
-    else if(event->key() == Qt::Key_Down)
-        players[player_id]->movementDirection[DOWN] = true;
-    else if(event->key() == Qt::Key_W)
+    if(!players[player_id]->dead)
     {
-            players[player_id]->isShooting = true;
-            players[player_id]->shootingDirection = 0;
+        if(event->key() == Qt::Key_Left)
+            players[player_id]->movementDirection[LEFT] = true;
+        else if(event->key() == Qt::Key_Right)
+            players[player_id]->movementDirection[RIGHT] = true;
+        else if(event->key() == Qt::Key_Up)
+            players[player_id]->movementDirection[UP] = true;
+        else if(event->key() == Qt::Key_Down)
+            players[player_id]->movementDirection[DOWN] = true;
+        else if(event->key() == Qt::Key_W)
+        {
+                players[player_id]->isShooting = true;
+                players[player_id]->shootingDirection = 0;
+        }
+        else if(event->key() == Qt::Key_A)
+        {
+                players[player_id]->isShooting = true;
+                players[player_id]->shootingDirection = 1;
+        }
+        else if(event->key() == Qt::Key_S)
+        {
+                players[player_id]->isShooting = true;
+                players[player_id]->shootingDirection = 2;
+        }
+        else if(event->key() == Qt::Key_D)
+        {
+                players[player_id]->isShooting = true;
+                players[player_id]->shootingDirection = 3;
+        }
+        else if(event->key() == Qt::Key_Escape)
+        {
+            exit(EXIT_SUCCESS);
+        }
     }
-    else if(event->key() == Qt::Key_A)
-    {
-            players[player_id]->isShooting = true;
-            players[player_id]->shootingDirection = 1;
-    }
-    else if(event->key() == Qt::Key_S)
-    {
-            players[player_id]->isShooting = true;
-            players[player_id]->shootingDirection = 2;
-    }
-    else if(event->key() == Qt::Key_D)
-    {
-            players[player_id]->isShooting = true;
-            players[player_id]->shootingDirection = 3;
-    }
-    else if(event->key() == Qt::Key_Escape)
-    {
-        exit(EXIT_SUCCESS);
-    }
+
     //movePlayer();
 }
 
@@ -111,28 +115,30 @@ void Game::playerAction() {
 
     for(int i = 0; i < numOfPlayers; i++)
     {
-        if(players[i]->movementDirection[UP] && players[i]->pos().y() > 0)
+        if(!players[i]->dead)   // Bandaid, prob can disable keyEvents altogether
         {
-            players[i]->moveBy(0, -playerSpeed);
-        }
-        if(players[i]->movementDirection[DOWN] && players[i]->pos().y() + settings->player_size.height()< settings->screen_size.height())
-        {
-            players[i]->moveBy(0, playerSpeed);
-        }
-        if(players[i]->movementDirection[LEFT] && players[i]->pos().x() > 0)
-        {
-            players[i]->moveBy(-playerSpeed, 0);
-        }
-        if(players[i]->movementDirection[RIGHT] && players[i]->pos().x() + settings->player_size.width() < settings->screen_size.width())
-        {
-            players[i]->moveBy(playerSpeed, 0);
-        }
-        if(players[i]->isShooting && !players[i]->shotFired)
-        {
-            fireBullet(players[i]);
+            if(players[i]->movementDirection[UP] && players[i]->pos().y() > 0)
+            {
+                players[i]->moveBy(0, -playerSpeed);
+            }
+            if(players[i]->movementDirection[DOWN] && players[i]->pos().y() + settings->player_size.height()< settings->screen_size.height())
+            {
+                players[i]->moveBy(0, playerSpeed);
+            }
+            if(players[i]->movementDirection[LEFT] && players[i]->pos().x() > 0)
+            {
+                players[i]->moveBy(-playerSpeed, 0);
+            }
+            if(players[i]->movementDirection[RIGHT] && players[i]->pos().x() + settings->player_size.width() < settings->screen_size.width())
+            {
+                players[i]->moveBy(playerSpeed, 0);
+            }
+            if(players[i]->isShooting && !players[i]->shotFired)
+            {
+                fireBullet(players[i]);
+            }
         }
     }
-
 }
 
 void Game::spawnEnemy()
@@ -145,28 +151,30 @@ void Game::spawnEnemy()
 void Game::keyReleaseEvent(QKeyEvent *event)
 {
     // In final cut this would be changed on server based on clients sending input (not local keyEvents)
-    switch ( event->key() )
+    if(!players[0]->dead)
     {
-    case Qt::Key_Up:
-        players[0]->movementDirection[UP] = 0;
-        break;
-    case Qt::Key_Left:
-        players[0]->movementDirection[LEFT] = 0;
-        break;
-    case Qt::Key_Down:
-        players[0]->movementDirection[DOWN] = 0;
-        break;
-    case Qt::Key_Right:
-        players[0]->movementDirection[RIGHT] = 0;
-        break;
-    case Qt::Key_W:
-    case Qt::Key_A:
-    case Qt::Key_S:
-    case Qt::Key_D:
-        players[0]->isShooting = false;
-        break;
+        switch ( event->key() )
+        {
+        case Qt::Key_Up:
+            players[0]->movementDirection[UP] = 0;
+            break;
+        case Qt::Key_Left:
+            players[0]->movementDirection[LEFT] = 0;
+            break;
+        case Qt::Key_Down:
+            players[0]->movementDirection[DOWN] = 0;
+            break;
+        case Qt::Key_Right:
+            players[0]->movementDirection[RIGHT] = 0;
+            break;
+        case Qt::Key_W:
+        case Qt::Key_A:
+        case Qt::Key_S:
+        case Qt::Key_D:
+            players[0]->isShooting = false;
+            break;
+        }
     }
-
 }
 
 void Game::gameLoop() {
@@ -235,11 +243,38 @@ void Game::checkAllCollisions() {
             }
 
         }
+        if(typeid(*(all_items[i])) == typeid(Player))
+        {
+            QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
+            for(int i = 0; i < colliding_items.size(); i++)
+            {
+                if(typeid(*(colliding_items[i])) == typeid(Obstacle) || typeid(*(colliding_items[i])) == typeid(Enemy))
+                {
+                    if(!players[0]->dead)
+                    {
+
+                        players[0]->dead = true;
+                        qDebug() << "Killing player!";
+                        graphicsScene->removeItem(players[0]);
+                        players[0]->respawnTimer = new QTimer();
+                        QObject::connect(players[0]->respawnTimer, SIGNAL(timeout()), players[0], SLOT(respawn()));
+                        players[0]->respawnTimer->start(settings->respawn_time_in_ms);
+                        //Player * player = dynamic_cast<Player *>(all_items[i]);
+                        //player->dead = true;
+                        //graphicsScene->removeItem(player);
+                        //player->respawnTimer = new QTimer();
+                        //QObject::connect(player->respawnTimer, SIGNAL(timeout()), player, SLOT(respawn()));
+                        //player->respawnTimer->start(settings->respawn_time_in_ms);
+                    }
+                }
+            }
+        }
     }
 
     QSet<QGraphicsItem *>::iterator i;
     for (i = toBeDeleted.begin(); i != toBeDeleted.end(); ++i)
     {
+        qDebug() << "del from set";
         scene()->removeItem(*i);
         delete *i;
     }

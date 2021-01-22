@@ -40,7 +40,7 @@ void Game::initGame()
 }
 
 void Game::handlePlayerAction(const PlayerAction& playerAction) {
-    qDebug() << playerAction.newX << playerAction.newY << playerAction.shootingDirection;
+//    qDebug() << playerAction.newX << playerAction.newY << playerAction.shootingDirection;
 }
 
 void Game::addNewPlayer(QPoint point, QSize size)

@@ -36,3 +36,17 @@ void Player::canShoot()
 {
     this->shotFired = false;
 }
+
+void Player::respawn()
+{
+    qDebug() << "Doing respawn!";
+    delete respawnTimer;
+    dead = false;
+    movementDirection[0] = false;
+    movementDirection[1] = false;
+    movementDirection[2] = false;
+    movementDirection[3] = false;
+    this->setPos(newGame->settings->player_spawns[id]);
+    newGame->graphicsScene->addItem(this);
+    qDebug() << "Respawned!";
+}
