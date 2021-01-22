@@ -11,14 +11,14 @@ class Network : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Network(quint16 port = 0); // port jest 2 bajtowa liczba
+    explicit Network(quint16 port = 0, QObject* parent = nullptr); // port jest 2 bajtowa liczba
     quint16 port() const { return serverPort(); }
     PlayerAction parsePlayerAction(const QByteArray& data) const;
     void sendAll(const QString &message) const;
     void sendAll(const QByteArray& data) const;
     void sendAll(const GameState& gameState) const;
 signals:
-    void playerAction(const PlayerAction& playerAction) const;
+    void playerMadeAction(const PlayerAction& playerAction) const;
 public slots:
     void onNewConnection();
     void onDisconnected();
