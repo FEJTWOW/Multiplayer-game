@@ -15,12 +15,13 @@ Bullet::Bullet()
     setRect(QRectF(newGame->settings->bullet_point, newGame->settings->bullet_size));
 
     auto timer = new QTimer();
-    connect(timer,SIGNAL(timeout()), this, SLOT(move()));
+    connect(timer,SIGNAL(timeout()), newGame, SLOT(newGame->checkAllCollistions()));
 
     timer->start(newGame->settings->bullet_timer_in_ms);
 
     this->setBrush(newGame->settings->bullet_color);
     this->setPen(QPen(newGame->settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
+
 }
 
 void Bullet::move()

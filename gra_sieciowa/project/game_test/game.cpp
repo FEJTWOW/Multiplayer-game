@@ -120,3 +120,37 @@ void Game::keyReleaseEvent(QKeyEvent *event)
         break;
     }
 }
+
+
+void Game::checkAllCollistions() {
+    QList<QGraphicsItem *> all_items = graphicsScene->items();
+    for(int i =0; i < all_items.length(); i++) {
+        if(typeid(*(all_items[i])) == typeid(Bullet)) {
+            QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
+            for(int i = 0, n = colliding_items.size(); i < n; ++i)
+            {
+                if(typeid(*(colliding_items[i])) == typeid(Enemy))
+                {
+                    //newGame->curr_score->increase();
+                    scene()->removeItem(colliding_items[i]);
+                    scene()->removeItem(all_items[i]);
+                    delete all_items[i];
+                    delete all_items[i];
+                    return;
+                }
+                else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
+                {
+                    delete all_items[i];
+                    return;
+                }
+                else break;
+            }
+        }
+        all_items[i]->setPos(all_items[i]->x(), all_items[i]->y()-newGame->settings->bullet_speed);
+        if(all_items[i]->pos().y() + this->settings->bullet_size < 0)
+        {
+            scene()->removeItem(all_items[i]);
+            delete all_items[i];
+        }
+    }
+}

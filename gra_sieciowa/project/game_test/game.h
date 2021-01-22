@@ -10,7 +10,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QTimer>
-#include <player.h>
+#include "bullet.h"
 
 // Generalnie jest zrobione bardzo na szypko i jest bardzo źle
 // Trzeba:
@@ -51,6 +51,9 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+
+public slots:
+    void checkAllCollistions();
 };
 
 #endif // GAME_H
