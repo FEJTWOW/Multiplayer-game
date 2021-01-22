@@ -15,15 +15,18 @@ public:
         QSize screen_size;
         QPoint screen_point;
 
+    // Game settings
+         int game_timer_res;
+
     // Player settings
          int player_speed;
          QSize player_size;
          QPoint player_point;
          QColor player_color;
+         int player_shot_cd_in_ms;
 
     // Bullet settings
         int bullet_speed;
-        int bullet_timer_in_ms;
         QSize bullet_size;
         QPoint bullet_point;
         QColor bullet_color;

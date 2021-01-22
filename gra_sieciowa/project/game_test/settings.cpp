@@ -6,15 +6,18 @@ Settings::Settings()
     screen_size = {800,600};
     screen_point = {0,0};
 
+    // Game settings
+    game_timer_res = 5;
+
     // Player settings
      player_speed = 10;
      player_size = {35,35};
      player_point = {0,0};
      player_color = Qt::red;//Qt::cyan
+     player_shot_cd_in_ms = 300;
 
     // Bullet settings
-     bullet_speed = 10;
-     bullet_timer_in_ms = 20;
+     bullet_speed = 3;
      bullet_size = {5,20};
      bullet_point = {0,0} ;
      bullet_color = Qt::blue;

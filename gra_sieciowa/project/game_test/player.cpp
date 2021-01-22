@@ -12,7 +12,7 @@
 extern Game * newGame;
 
 
-Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
+Player::Player(QPoint point, QSize size)
 {
     this->setRect(QRectF(point, size));
     this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
@@ -26,17 +26,18 @@ Player::Player(QPoint point, QSize size) : xPos(point.x()), yPos(point.y())
     //scene()->addPixmap(item);
     //this->setFlag(QGraphicsItem::ItemIsFocusable, true);
     //this->setFocus();
-}
-
-void Player::spawn()
-{
-    // This needs to go
-    auto new_enemy = new Enemy();
-    scene()->addItem(new_enemy);
+    auto timer = new QTimer();
+    connect(timer,SIGNAL(timeout()), this, SLOT(canShoot()));
+    timer->start(newGame->settings->player_shot_cd_in_ms);
 }
 
 void Player::takeOver()
 {
     //this->setFlag(QGraphicsItem::ItemIsFocusable);
     //this->setFocus();
+}
+
+void Player::canShoot()
+{
+    this->shotFired = false;
 }

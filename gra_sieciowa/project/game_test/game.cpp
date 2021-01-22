@@ -26,6 +26,14 @@ void Game::initGame()
 
     //this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->setFocus();
+
+    timer = new QTimer();
+    connect(timer,SIGNAL(timeout()), this, SLOT(gameLoop()));
+    timer->start(this->settings->game_timer_res);
+
+    auto enemyTimer = new QTimer();
+    QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
+    enemyTimer->start(2000);
 }
 
 void Game::addNewPlayer(QPoint point, QSize size)
@@ -42,10 +50,6 @@ void Game::addNewPlayer(QPoint point, QSize size)
     graphicsScene->addItem(playerScores[numOfPlayers]);
     //numOfPlayers++;
 
-    auto timer = new QTimer();
-    QObject::connect(timer, SIGNAL(timeout()), players[numOfPlayers], SLOT(spawn()));
-    timer->start(2000);
-
     show();
 
 }
@@ -56,51 +60,61 @@ void Game::generateObstacles(int count)
     {
         auto newObstacle = new Obstacle();
         graphicsScene->addItem(newObstacle);
+        qDebug() << "Obstacle address: " << &newObstacle;
     }
 }
 
 
 void Game::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Left && pos().x() > 0)
+    if(event->key() == Qt::Key_Left)
         players[0]->movementDirection[LEFT] = true;
-    else if(event->key() == Qt::Key_Right && pos().x() + this->settings->player_size.width() < this->settings->screen_size.width())
+    else if(event->key() == Qt::Key_Right)
         players[0]->movementDirection[RIGHT] = true;
-    else if(event->key() == Qt::Key_Up  && pos().y() > 0)
+    else if(event->key() == Qt::Key_Up)
         players[0]->movementDirection[UP] = true;
-    else if(event->key() == Qt::Key_Down  && pos().y() + this->settings->player_size.height() < this->settings->screen_size.height())
+    else if(event->key() == Qt::Key_Down)
         players[0]->movementDirection[DOWN] = true;
     else if(event->key() == Qt::Key_Space)
     {
-        auto newBullet = new Bullet();
-        newBullet->setPos(players[0]->x()+(this->settings->player_size.width()/2),players[0]->y()-(this->settings->player_size.height()+1));
-        this->graphicsScene->addItem(newBullet);
+            players[0]->isShooting = true;
     }
     else if(event->key() == Qt::Key_Escape)
     {
         exit(EXIT_SUCCESS);
     }
-    movePlayer();
+    //movePlayer();
 }
 
 
-void Game::movePlayer() {
-    if (players[0]->movementDirection[UP] && players[0]->movementDirection[RIGHT] && pos().x() > 0 && pos().x() + this->settings->player_size.width() < this->settings->screen_size.width())
-        players[0]->moveBy(this->settings->player_speed, -this->settings->player_speed);
-    else if (players[0]->movementDirection[DOWN] && players[0]->movementDirection[LEFT] && pos().x() > 0 && pos().y() + this->settings->player_size.height() < this->settings->screen_size.height())
-        players[0]->moveBy(-this->settings->player_speed, this->settings->player_speed);
-    else if (players[0]->movementDirection[UP] && players[0]->movementDirection[LEFT] && pos().x() > 0)
-        players[0]->moveBy(-this->settings->player_speed, -this->settings->player_speed);
-    else if (players[0]->movementDirection[DOWN] && players[0]->movementDirection[RIGHT] && pos().x() + this->settings->player_size.width() < this->settings->screen_size.width() && pos().y() + this->settings->player_size.height() < this->settings->screen_size.height())
-        players[0]->moveBy(this->settings->player_speed, this->settings->player_speed);
-    else if (players[0]->movementDirection[RIGHT] && pos().x() + this->settings->player_size.width() < this->settings->screen_size.width())
-        players[0]->moveBy(this->settings->player_speed, 0);
-    else if (players[0]->movementDirection[LEFT] && pos().x() > 0)
-        players[0]->moveBy(-this->settings->player_speed, 0);
-    else if (players[0]->movementDirection[DOWN] && pos().x() > 0 && pos().y() + this->settings->player_size.height() < this->settings->screen_size.height())
-        players[0]->moveBy(0, this->settings->player_speed);
-    else if (players[0]->movementDirection[UP] && pos().x() > 0)
-        players[0]->moveBy(0, -this->settings->player_speed);
+void Game::playerAction() {
+    int playerSpeed = this->settings->player_speed;
+
+    if(players[0]->movementDirection[UP] && players[0]->pos().y() > 0) {
+        players[0]->moveBy(0, -playerSpeed);
+    }
+    if(players[0]->movementDirection[DOWN] && players[0]->pos().y() + settings->player_size.height()< settings->screen_size.height()) {
+        players[0]->moveBy(0, playerSpeed);
+    }
+    if(players[0]->movementDirection[LEFT] && players[0]->pos().x() > 0) {
+        players[0]->moveBy(-playerSpeed, 0);
+    }
+    if(players[0]->movementDirection[RIGHT] && players[0]->pos().x() + settings->player_size.width() < settings->screen_size.width()) {
+        players[0]->moveBy(playerSpeed, 0);
+    }
+    if(players[0]->isShooting && !players[0]->shotFired) {
+        auto newBullet = new Bullet();
+        newBullet->setPos(players[0]->x()+(this->settings->player_size.width()/2),players[0]->y()-(this->settings->player_size.height()+1));
+        this->graphicsScene->addItem(newBullet);
+        players[0]->shotFired = true;
+    }
+}
+
+void Game::spawnEnemy()
+{
+    auto newEnemy = new Enemy();
+    scene()->addItem(newEnemy);
+    qDebug() << "Should be spawned (Enemy)";
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event)
@@ -119,39 +133,123 @@ void Game::keyReleaseEvent(QKeyEvent *event)
     case Qt::Key_Right:
         players[0]->movementDirection[RIGHT] = 0;
         break;
+    case Qt::Key_Space:
+        players[0]->isShooting = false;
+        break;
     }
+
 }
 
+void Game::gameLoop() {
+    playerAction();
+    moveAssets();
+    checkAllCollisions();
+}
 
-void Game::checkAllCollistions() {
+void Game::moveAssets() {
     QList<QGraphicsItem *> all_items = graphicsScene->items();
     for(int i =0; i < all_items.length(); i++) {
         if(typeid(*(all_items[i])) == typeid(Bullet)) {
-            QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
-            for(int i = 0, n = colliding_items.size(); i < n; ++i)
+            all_items[i]->moveBy(0, -this->settings->bullet_speed);
+            if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0)
             {
-                if(typeid(*(colliding_items[i])) == typeid(Enemy))
-                {
-                    //newGame->curr_score->increase();
-                    scene()->removeItem(colliding_items[i]);
-                    scene()->removeItem(all_items[i]);
-                    delete all_items[i];
-                    delete all_items[i];
-                    return;
-                }
-                else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
-                {
-                    delete all_items[i];
-                    return;
-                }
-                else break;
+                //qDebug() << "remove bullet";
+                graphicsScene->removeItem(all_items[i]);
+                delete all_items[i];
+                continue;
             }
         }
-        all_items[i]->setPos(all_items[i]->x(), all_items[i]->y() + this->settings->bullet_speed);
-        if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0)
+        else if(typeid(*(all_items[i])) == typeid(Enemy))
         {
-            scene()->removeItem(all_items[i]);
-            delete all_items[i];
+            all_items[i]->moveBy(0, 5);
+            //qDebug() << "Enemy +5y";
+            if(all_items[i]->pos().y() > settings->screen_size.height())
+            {
+                //qDebug() << "remove Enemy";
+                graphicsScene->removeItem(all_items[i]);
+                delete all_items[i];
+            }
+
         }
     }
+}
+
+void Game::checkAllCollisions() {
+    QSet<QGraphicsItem *> toBeDeleted;
+
+    QList<QGraphicsItem *> all_items = graphicsScene->items();
+    //qDebug() << "Size: " << all_items.size();
+    for(int i =0; i < all_items.length(); i++) {
+        if(typeid(*(all_items[i])) == typeid(Bullet)) {
+            QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
+            if(!colliding_items.size()) {   // nie ma zadnych kolidujacych
+                continue;
+            }
+            qDebug() << "There is a collision!";
+            if(typeid(*(colliding_items[0])) == typeid(Bullet) || typeid(*(colliding_items[0])) == typeid(Enemy)) {
+                toBeDeleted.insert(all_items[i]);
+                toBeDeleted.insert(colliding_items[0]);
+            } else if(typeid(*(colliding_items[0])) == typeid(Score)) {
+                continue;
+            }
+            else {
+                toBeDeleted.insert(all_items[i]);
+            }
+
+        }
+    }
+
+    QSet<QGraphicsItem *>::iterator i;
+    for (i = toBeDeleted.begin(); i != toBeDeleted.end(); ++i) {
+        scene()->removeItem(*i);
+        delete *i;
+    }
+
+
+
+
+//    for(int i =0; i < all_items.length(); i++)
+//    {
+//        if(typeid(*(all_items[i])) == typeid(Bullet))
+//        {
+//            QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
+//            for(int i = 0, n = colliding_items.size(); i < n; ++i)
+//            {
+//                if(typeid(*(colliding_items[i])) == typeid(Enemy))
+//                {
+//                    //newGame->curr_score->increase();
+//                    qDebug() << "if";
+//                    graphicsScene->removeItem(colliding_items[i]);
+//                    qDebug() << "if2";
+//                    graphicsScene->removeItem(all_items[i]);
+//                    qDebug() << "after if2";
+//                    delete colliding_items[i];
+//                    qDebug() << "after delete if2";
+//                    delete all_items[i];
+//                    qDebug() << "after delete2 if2";
+//                    break;
+//                }
+//                else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
+//                {
+//                    qDebug() << "Coliding item address: " << &colliding_items[i];
+//                    graphicsScene->removeItem(all_items[i]);
+
+//                    delete all_items[i];
+//                    break;
+//                }
+//                else if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0)
+//                {
+//                    qDebug() << "else if";
+//                    graphicsScene->removeItem(all_items[i]);
+//                    delete all_items[i];
+//                    break;
+//                }
+//                else break;
+//            }
+
+//            if(colliding_items.size() == 0) {
+//                all_items[i]->setPos(all_items[i]->x(), all_items[i]->y() - this->settings->bullet_speed);
+//            }
+//        }
+//    }
 }

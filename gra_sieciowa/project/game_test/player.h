@@ -13,13 +13,12 @@ public:
     Player(QPoint x, QSize h);
     Bullet * playerBullets;
     int bulletMax;
-    int xPos;
-    int yPos;
-    int movingX, movingY;
     bool movementDirection[4] = {false};
+    bool shotFired = true;
+    bool isShooting = false;
 public slots:
-    void spawn();
     void takeOver();
+    void canShoot();
 };
 
 #endif // PLAYER_H

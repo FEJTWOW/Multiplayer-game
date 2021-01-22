@@ -36,24 +36,29 @@
 
 class Game: public QGraphicsView
 {
+    Q_OBJECT
 public:
     Game(QWidget * parent =0);
     void initGame();
     void addNewPlayer(QPoint point, QSize size);
     void generateObstacles(int count);
-    void movePlayer();
+    void moveAssets();
+    void checkAllCollisions();
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
     Settings * settings;
     int numOfPlayers;
+    QTimer* timer;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 public slots:
-    void checkAllCollistions();
+    void gameLoop();
+    void playerAction();
+    void spawnEnemy();
 };
 
 #endif // GAME_H
