@@ -10,45 +10,21 @@
 
 extern Game * newGame;
 
-Bullet::Bullet()
+Bullet::Bullet(QPointF moveSet, int player_id) : moveSet(moveSet), player_id(player_id)
 {
-    setRect(QRectF(newGame->settings->bullet_point, newGame->settings->bullet_size));
-
-    //auto timer = new QTimer();
-    //connect(timer,SIGNAL(timeout()), newGame, SLOT(newGame->checkAllCollistions()));
-    //timer->start(newGame->settings->bullet_timer_in_ms);
-
+    QSize bulletShape;
+    if(moveSet.x()) // Going LEFT/RIGHT
+    {
+        bulletShape.setWidth(newGame->settings->bullet_size.height());
+        bulletShape.setHeight(newGame->settings->bullet_size.width());
+    }
+    else
+    {
+        bulletShape.setWidth(newGame->settings->bullet_size.width());
+        bulletShape.setHeight(newGame->settings->bullet_size.height());
+    }
+    setRect(QRectF(newGame->settings->bullet_point, bulletShape));
     this->setBrush(newGame->settings->bullet_color);
     this->setPen(QPen(newGame->settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
-
-}
-
-void Bullet::move()
-{
-    QList<QGraphicsItem *> colliding_items = collidingItems();
-    for(int i = 0, n = colliding_items.size(); i < n; ++i)
-    {
-        if(typeid(*(colliding_items[i])) == typeid(Enemy))
-        {
-            //newGame->curr_score->increase();
-            scene()->removeItem(colliding_items[i]);
-            scene()->removeItem(this);
-            delete colliding_items[i];
-            delete this;
-            return;
-        }
-        else if(typeid(*(colliding_items[i])) == typeid(Obstacle))
-        {
-            delete this;
-            return;
-        }
-        else break;
-    }
-
-    setPos(x(), y()-newGame->settings->bullet_speed);
-    if(pos().y() + rect().height() < 0)
-    {
-        scene()->removeItem(this);
-        delete this;
-    }
+    // TODO: tutaj jeszcze zaleznie od moveSet wypada zmienic grafike bulleta (zeby lecial w dobra strone [;d])
 }

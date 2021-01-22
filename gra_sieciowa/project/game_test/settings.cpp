@@ -15,6 +15,12 @@ Settings::Settings()
      player_point = {0,0};
      player_color = Qt::red;//Qt::cyan
      player_shot_cd_in_ms = 300;
+     player_max_count = 5;
+     player_spawns[0] = QPointF(125, screen_size.height()-player_size.height());
+     player_spawns[1] = QPointF(250, screen_size.height()-player_size.height());
+     player_spawns[2] = QPointF(375, screen_size.height()-player_size.height());
+     player_spawns[3] = QPointF(500, screen_size.height()-player_size.height());
+     player_spawns[4] = QPointF(625, screen_size.height()-player_size.height());
 
     // Bullet settings
      bullet_speed = 3;

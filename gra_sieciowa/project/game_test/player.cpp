@@ -12,10 +12,11 @@
 extern Game * newGame;
 
 
-Player::Player(QPoint point, QSize size)
+Player::Player(QPoint point, QSize size, int id) : id(id)
 {
     this->setRect(QRectF(point, size));
-    this->setPos(newGame->graphicsScene->width()/2, newGame->graphicsScene->height()-this->rect().height());
+    //this->setPos(125, newGame->settings->screen_size.height()-newGame->settings->player_size.height());
+    this->setPos(newGame->settings->player_spawns[id]);
 
     this->setBrush(newGame->settings->player_color);
     this->setPen(QPen(newGame->settings->player_color, 15, Qt::DashDotLine, Qt::RoundCap));    // TRZEBA JAKOS SAMEMU ZROBIC FAJNA GRAFIKE
@@ -29,12 +30,6 @@ Player::Player(QPoint point, QSize size)
     auto timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(canShoot()));
     timer->start(newGame->settings->player_shot_cd_in_ms);
-}
-
-void Player::takeOver()
-{
-    //this->setFlag(QGraphicsItem::ItemIsFocusable);
-    //this->setFocus();
 }
 
 void Player::canShoot()

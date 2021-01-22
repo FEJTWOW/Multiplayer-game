@@ -44,6 +44,7 @@ public:
     void generateObstacles(int count);
     void moveAssets();
     void checkAllCollisions();
+    void fireBullet(Player*);  // This might need to be refactored to player or sth
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;

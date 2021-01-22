@@ -20,9 +20,11 @@ public:
 
     // Player settings
          int player_speed;
+         int player_max_count;
          QSize player_size;
          QPoint player_point;
          QColor player_color;
+         QPointF player_spawns[5];
          int player_shot_cd_in_ms;
 
     // Bullet settings

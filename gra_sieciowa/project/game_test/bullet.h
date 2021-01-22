@@ -9,10 +9,9 @@ class Bullet: public QObject, public QGraphicsRectItem
     Q_OBJECT
 
 public:
-    Bullet();
-
-public slots:
-    void move();
+    Bullet(QPointF moveSet, int player_id);
+    QPointF moveSet;
+    int player_id;
 
 };
 
