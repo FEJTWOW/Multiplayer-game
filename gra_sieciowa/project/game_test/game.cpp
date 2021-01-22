@@ -1,6 +1,7 @@
 #include "game.h"
 #include <QDebug>
 #include <QKeyEvent>
+#include <enemy.h>
 
 
 Game::Game(QWidget *parent)
@@ -146,8 +147,8 @@ void Game::checkAllCollistions() {
                 else break;
             }
         }
-        all_items[i]->setPos(all_items[i]->x(), all_items[i]->y()-newGame->settings->bullet_speed);
-        if(all_items[i]->pos().y() + this->settings->bullet_size < 0)
+        all_items[i]->setPos(all_items[i]->x(), all_items[i]->y() + this->settings->bullet_speed);
+        if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0)
         {
             scene()->removeItem(all_items[i]);
             delete all_items[i];
