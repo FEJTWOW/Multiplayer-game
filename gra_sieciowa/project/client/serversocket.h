@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include "socket.h"
-
+#include "playeraction.h"
+#include "gamestate.h"
 
 class ServerSocket : public Socket
 {
@@ -12,8 +13,13 @@ public:
     ServerSocket(const QHostAddress &address, quint16 port,
             QObject *parent);
 
+    void sendPlayerAction(const PlayerAction& playerAction) const;
+    GameState parseGameState(const QByteArray& data) const;
+
 
 signals:
+    void newGameState(const GameState& gameState) const;
+
 public slots:
     void onMessage(const QString& message) const;
     void onMessage(const QByteArray& data) const;

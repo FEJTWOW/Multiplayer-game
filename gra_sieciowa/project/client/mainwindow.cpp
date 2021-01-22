@@ -29,8 +29,10 @@ void MainWindow::send() {
 
 void MainWindow::on_pushButton_clicked()
 {
-    QTimer *timer = new QTimer(this);
+//    QTimer *timer = new QTimer(this);
 
-    connect(timer, SIGNAL(timeout()), this, SLOT(send()));
-    timer->start(1000);
+//    connect(timer, SIGNAL(timeout()), this, SLOT(send()));
+//    timer->start(1000);
+    PlayerAction gracz{.actions=moveLeft,.posX = 2, .posY = 3 };
+    sock->sendPlayerAction(gracz);
 }

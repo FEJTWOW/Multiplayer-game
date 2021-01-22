@@ -14,7 +14,8 @@ public:
     explicit Socket(QObject *parent = nullptr, QTcpSocket* socket = nullptr);
     virtual ~Socket() { }
     virtual void sendString(const QString& string);
-    virtual void sendData(const QByteArray& data);
+    virtual void sendData(const QByteArray& data) const;
+
 
 
 signals:

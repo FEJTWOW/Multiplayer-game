@@ -5,7 +5,9 @@ enum action { moveUp, moveDown, moveLeft, moveRight, shoot };
 
 struct PlayerAction
 {
-    action action;
+    action actions;
+    int posX;
+    int posY;
 };
 
 #endif // PLAYERACTION_H

@@ -18,5 +18,28 @@ void ServerSocket::onMessage(const QString& message) const
 void ServerSocket::onMessage(const QByteArray& data) const
 {
     qDebug() << "Jestę klientem i czytam se data!";
+    GameState gameState = parseGameState(data);
+    emit newGameState(gameState);
     qDebug() << data;
+}
+
+void ServerSocket::sendPlayerAction(const PlayerAction &playerAction) const
+{
+//    QByteArray byteArray;
+
+//    QDataStream stream(&byteArray, QIODevice::WriteOnly);
+//    stream.setVersion(QDataStream::Qt_5_9);
+
+//    stream << playerAction.action << playerAction.posX << playerAction.posY;
+    sendData(QByteArray(static_cast<char*>((void*)&playerAction), sizeof(playerAction)));
+
+}
+
+GameState ServerSocket::parseGameState(const QByteArray& data) const
+{
+    GameState gameState;
+
+    memcpy(&gameState,data.data(), sizeof(gameState));
+    qDebug() << gameState.bulletPosition[1][1] << gameState.playerPosition[1][2];
+    return gameState;
 }
