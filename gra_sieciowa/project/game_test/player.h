@@ -16,11 +16,14 @@ public:
     bool shotFired = true;
     bool isShooting = false;
     bool dead = false;
+    bool invulnerable = false;
     int id;
     QTimer * respawnTimer;
+    QTimer * invulTimer;
 public slots:
     void canShoot();
     void respawn();
+    void resetInvulnerability();
 };
 
 #endif // PLAYER_H

@@ -27,6 +27,7 @@ public:
          QColor player_color;
          QPointF player_spawns[5];
          int player_shot_cd_in_ms;
+         int player_invul_time_in_ms;
 
     // Bullet settings
         int bullet_speed;
@@ -37,6 +38,9 @@ public:
     // Score settings
         QColor score_color;
         QFont score_font;
+        int score_passive_interval_in_ms;
+        int score_passive_value;
+        int score_kill_value;
 
 
     // Obstacles settings
@@ -46,7 +50,8 @@ public:
         //
         //
     // Enemy settings
-        //
+        int enemy_speed;
+        QSize enemy_size;
         //
         //
         //

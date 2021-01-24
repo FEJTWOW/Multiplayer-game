@@ -31,6 +31,10 @@ void Game::initGame()
     connect(timer,SIGNAL(timeout()), this, SLOT(gameLoop()));
     timer->start(this->settings->game_timer_res);
 
+    auto scoreTimer = new QTimer();
+    QObject::connect(scoreTimer, SIGNAL(timeout()), this, SLOT(updatePoints()));
+    scoreTimer->start(settings->score_passive_interval_in_ms);
+
     auto enemyTimer = new QTimer();
     QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
     enemyTimer->start(2000);
@@ -38,31 +42,16 @@ void Game::initGame()
 
 void Game::addNewPlayer(QPoint point, QSize size)
 {
-    // This does not really use the given arguments. (raeds from settings for now)
-    // A theoretical method to abstract from a single player concept
-
     players.append(new Player(settings->player_point, settings->player_size,numOfPlayers));
     graphicsScene->addItem(players[numOfPlayers]);
     playerScores.append(new Score());
-    playerScores[numOfPlayers]->setupScore();
-
     graphicsScene->addItem(playerScores[numOfPlayers]);
+    playerScores[numOfPlayers]->setupScore();
     numOfPlayers++;
 
     show();
 
 }
-
-void Game::generateObstacles(int count)
-{
-    for(int i = 0; i < count; i++)
-    {
-        auto newObstacle = new Obstacle();
-        graphicsScene->addItem(newObstacle);
-        qDebug() << "Obstacle address: " << &newObstacle;
-    }
-}
-
 
 void Game::keyPressEvent(QKeyEvent *event)
 {
@@ -145,7 +134,16 @@ void Game::spawnEnemy()
 {
     auto newEnemy = new Enemy();
     scene()->addItem(newEnemy);
-    qDebug() << "Should be spawned (Enemy)";
+
+}
+
+void Game::updatePoints()
+{
+    for(int i = 0; i < numOfPlayers; i++)
+    {
+        if(!players[i]->dead)
+            playerScores[i]->increasePassive();
+    }
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event)
@@ -181,6 +179,7 @@ void Game::gameLoop() {
     playerAction();
     moveAssets();
     checkAllCollisions();
+    //updatePoints();
 }
 
 void Game::moveAssets() {
@@ -196,7 +195,6 @@ void Game::moveAssets() {
             bullet->moveBy(bullet->moveSet.x(), bullet->moveSet.y());
             if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0)
             {
-                //qDebug() << "remove bullet";
                 graphicsScene->removeItem(all_items[i]);
                 delete all_items[i];
                 continue;
@@ -204,7 +202,7 @@ void Game::moveAssets() {
         }
         else if(typeid(*(all_items[i])) == typeid(Enemy))
         {
-            all_items[i]->moveBy(0, 5);
+            all_items[i]->moveBy(0, settings->enemy_speed);
             if(all_items[i]->pos().y() > settings->screen_size.height())
             {
                 graphicsScene->removeItem(all_items[i]);
@@ -250,11 +248,10 @@ void Game::checkAllCollisions() {
             {
                 if(typeid(*(colliding_items[i])) == typeid(Obstacle) || typeid(*(colliding_items[i])) == typeid(Enemy))
                 {
-                    if(!players[0]->dead)
+                    if(!players[0]->dead && !players[0]->invulnerable)
                     {
 
                         players[0]->dead = true;
-                        qDebug() << "Killing player!";
                         graphicsScene->removeItem(players[0]);
                         players[0]->respawnTimer = new QTimer();
                         QObject::connect(players[0]->respawnTimer, SIGNAL(timeout()), players[0], SLOT(respawn()));
@@ -274,7 +271,6 @@ void Game::checkAllCollisions() {
     QSet<QGraphicsItem *>::iterator i;
     for (i = toBeDeleted.begin(); i != toBeDeleted.end(); ++i)
     {
-        qDebug() << "del from set";
         scene()->removeItem(*i);
         delete *i;
     }
@@ -307,8 +303,6 @@ void Game::fireBullet(Player* player)
 
     }
     auto newBullet = new Bullet(directions, player->id);
-    qDebug() << "Created a new bullet: " << directions.x() << " " << directions.y() << " ";
-//    newBullet->setPos(100,100);
     switch (player->shootingDirection)
     {
         case 0:
@@ -327,7 +321,42 @@ void Game::fireBullet(Player* player)
             break;
 
     }
-    //newBullet->setPos(players[i]->x()+(this->settings->player_size.width()/2),players[i]->y()-(this->settings->player_size.height()+1));
     this->graphicsScene->addItem(newBullet);
     player->shotFired = true;
+}
+
+void Game::generateLayoutOne()
+{
+    // Needs proper scaling
+
+    QList<Obstacle *> obstacleLayout;
+    QSize size = {20,50};
+
+    int screenWidth = settings->screen_size.width();
+    int screenHeight = settings->screen_size.height();
+
+
+    for(int i = 0.2*screenWidth; i <= screenWidth; i+= 0.2*screenWidth)
+    {
+        for(int j = 1; j < 4; j++)
+        {
+            auto obstacle = new Obstacle(QPoint(i,screenHeight -j*size.height()), size);
+            graphicsScene->addItem(obstacle);
+        }
+
+    }
+
+
+    for(int i = 0.33 *screenWidth; i <= screenWidth-size.width(); i+= 0.33*screenWidth)
+    {
+        for(int j = 1; j < 5; j++)
+        {
+            auto obstacle = new Obstacle(QPoint(i,0.4*screenHeight -j*size.height()), size);
+            graphicsScene->addItem(obstacle);
+        }
+
+
+    }
+
+
 }
