@@ -15,7 +15,7 @@ Settings::Settings()
      player_size = {35,35};
      player_point = {0,0};
      player_color = Qt::red;//Qt::cyan
-     player_shot_cd_in_ms = 300;
+     player_shot_cd_in_ms = 350;
      player_max_count = 5;
      player_invul_time_in_ms = 800;
      player_spawns[0] = QPointF(75, screen_size.height()-player_size.height());
@@ -25,7 +25,7 @@ Settings::Settings()
      player_spawns[4] = QPointF(625, screen_size.height()-player_size.height());
 
     // Bullet settings
-     bullet_speed = 10;
+     bullet_speed = 14;
      bullet_size = {5,20};
      bullet_point = {0,0} ;
      bullet_color = Qt::blue;
@@ -43,7 +43,7 @@ Settings::Settings()
         //
         //
     // Enemy settings
-     enemy_speed = 3;
+     enemy_speed = 1;
      enemy_size = {50,50};
         //
         //

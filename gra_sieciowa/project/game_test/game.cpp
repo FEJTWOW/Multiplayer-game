@@ -205,6 +205,7 @@ void Game::moveAssets() {
             all_items[i]->moveBy(0, settings->enemy_speed);
             if(all_items[i]->pos().y() > settings->screen_size.height())
             {
+                qDebug() << "I am deleted (enemy)";
                 graphicsScene->removeItem(all_items[i]);
                 delete all_items[i];
             }
@@ -228,6 +229,7 @@ void Game::checkAllCollisions() {
             }
             if(typeid(*(colliding_items[0])) == typeid(Bullet) || typeid(*(colliding_items[0])) == typeid(Enemy))
             {
+
                 toBeDeleted.insert(all_items[i]);
                 toBeDeleted.insert(colliding_items[0]);
             }
@@ -235,33 +237,55 @@ void Game::checkAllCollisions() {
             {
                 continue;
             }
+            else if (typeid(*(colliding_items[0])) == typeid(Player))
+            {
+                qDebug() << "1";
+                Player * player = dynamic_cast<Player *>(colliding_items[0]);
+                qDebug() << "2";
+                Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
+                qDebug() << "3";
+                if(player->dead)
+                {
+                    qDebug() << "4";
+                    continue;
+                }
+                else if(player->invulnerable)
+                {
+                    qDebug() << "5";
+                    toBeDeleted.insert(all_items[i]);
+                    continue;
+                }
+                else
+                {
+                    qDebug() << "6";
+                    playerScores[bullet->player_id]->increaseKill();
+                    toBeDeleted.insert(all_items[i]);
+                    killPlayer(player);
+                    continue;
+                }
+                qDebug() << "7";
+
+            }
             else
             {
                 toBeDeleted.insert(all_items[i]);
             }
 
+
         }
         if(typeid(*(all_items[i])) == typeid(Player))
         {
             QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
-            for(int i = 0; i < colliding_items.size(); i++)
+            for(int j = 0; j < colliding_items.size(); j++)
             {
-                if(typeid(*(colliding_items[i])) == typeid(Obstacle) || typeid(*(colliding_items[i])) == typeid(Enemy))
+                if(typeid(*(colliding_items[j])) == typeid(Obstacle) || typeid(*(colliding_items[j])) == typeid(Enemy))
                 {
-                    if(!players[0]->dead && !players[0]->invulnerable)
+                    Player * player = dynamic_cast<Player *>(all_items[i]);
+                    if(!player->dead && !player->invulnerable)
                     {
-
-                        players[0]->dead = true;
-                        graphicsScene->removeItem(players[0]);
-                        players[0]->respawnTimer = new QTimer();
-                        QObject::connect(players[0]->respawnTimer, SIGNAL(timeout()), players[0], SLOT(respawn()));
-                        players[0]->respawnTimer->start(settings->respawn_time_in_ms);
-                        //Player * player = dynamic_cast<Player *>(all_items[i]);
-                        //player->dead = true;
-                        //graphicsScene->removeItem(player);
-                        //player->respawnTimer = new QTimer();
-                        //QObject::connect(player->respawnTimer, SIGNAL(timeout()), player, SLOT(respawn()));
-                        //player->respawnTimer->start(settings->respawn_time_in_ms);
+                        qDebug() << "erroer3";
+                        killPlayer(player);
+                        qDebug() << "erroer4";
                     }
                 }
             }
@@ -276,6 +300,21 @@ void Game::checkAllCollisions() {
     }
 
 }
+
+void Game::killPlayer(Player * player)
+{
+    qDebug() << "Im here1";
+    player->dead = true;
+    qDebug() << "Im here2";
+    graphicsScene->removeItem(player);
+    qDebug() << "Im here3";
+    player->respawnTimer = new QTimer();
+    qDebug() << "Im here4";
+    QObject::connect(player->respawnTimer, SIGNAL(timeout()), player, SLOT(respawn()));
+    qDebug() << "Im here5";
+    player->respawnTimer->start(settings->respawn_time_in_ms);
+}
+
 
 void Game::fireBullet(Player* player)
 {
@@ -360,3 +399,4 @@ void Game::generateLayoutOne()
 
 
 }
+

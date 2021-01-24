@@ -23,6 +23,7 @@ public:
     void checkAllCollisions();
     void fireBullet(Player*);  // This might need to be refactored to player or sth
     void generateLayoutOne();
+    void killPlayer(Player *);
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
