@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <enemy.h>
+#include "network.h"
+
 
 
 Game::Game(QWidget *parent)

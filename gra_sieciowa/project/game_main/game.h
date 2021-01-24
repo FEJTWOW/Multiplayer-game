@@ -11,9 +11,6 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QTimer>
-#include "gamestate.h"
-#include "network.h"
-#include "playeraction.h"
 
 class Game: public QGraphicsView
 {
@@ -33,21 +30,16 @@ public:
     Settings * settings;
     int numOfPlayers;
     QTimer* timer;
-    GameState gameInfo;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-    GameState dumpGameInfo();
 
 public slots:
     void gameLoop();
     void playerAction();
     void spawnEnemy();
     void updatePoints();
-    void handlePlayerAction(const PlayerAction& playerAction);
-private:
-    Network* network;
 };
 
 #endif // GAME_H

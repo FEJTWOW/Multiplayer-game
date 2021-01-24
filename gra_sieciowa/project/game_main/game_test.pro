@@ -34,7 +34,6 @@ SOURCES += \
     obstacle.cpp
 
 HEADERS += \
-    gamestate.h \
     player.h \
     bullet.h \
     enemy.h \

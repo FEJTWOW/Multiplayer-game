@@ -1,13 +1,13 @@
-#ifndef PLAYERACTION_H
-#define PLAYERACTION_H
+//#ifndef PLAYERACTION_H
+//#define PLAYERACTION_H
 
-enum action { moveUp, moveDown, moveLeft, moveRight, shoot };
+//enum action { moveUp, moveDown, moveLeft, moveRight, shoot };
 
-struct PlayerAction
-{
-    action actions;
-    int posX;
-    int posY;
-};
+//struct PlayerAction
+//{
+//    action actions;
+//    int posX;
+//    int posY;
+//};
 
-#endif // PLAYERACTION_H
+//#endif // PLAYERACTION_H

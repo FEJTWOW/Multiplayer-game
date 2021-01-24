@@ -7,7 +7,6 @@
 Game::Game(QWidget *parent)
 {
     numOfPlayers = 0;
-    network = new Network(12345, this);
 }
 
 void Game::initGame()
@@ -27,8 +26,6 @@ void Game::initGame()
 
     //this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->setFocus();
-
-     connect(network, SIGNAL(playerMadeAction(const PlayerAction&)), this, SLOT(handlePlayerAction(const PlayerAction&)));
 
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(gameLoop()));
@@ -147,7 +144,6 @@ void Game::updatePoints()
         if(!players[i]->dead)
             playerScores[i]->increasePassive();
     }
-    this->dumpGameInfo();
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event)
@@ -402,50 +398,5 @@ void Game::generateLayoutOne()
     }
 
 
-}
-
-GameState Game::dumpGameInfo()
-{
-    QList<QGraphicsItem*> allItems = graphicsScene->items();
-    GameState gameInfo;
-//    qDebug() << "elo";
-    for (auto* i : allItems)
-    {
-
-        if (typeid(*i) == typeid(Bullet))
-        {
-            Bullet* tempBullet = dynamic_cast<Bullet*>(i);
-            BulletInfo bulletInfo = { .pos = tempBullet->pos(), .direction = tempBullet->moveSet };
-            gameInfo.bullet.push_back(bulletInfo);
-//            qDebug() << "Bullet: " << bulletInfo.pos.x() << bulletInfo.pos.y();
-        }
-        if (typeid(*i) == typeid(Player))
-        {
-            Player* tempPlayer = dynamic_cast<Player*>(i);
-            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playerScores[tempPlayer->id]->getScore() };
-            gameInfo.player.push_back(playerInfo);
-//            qDebug() << "Player: " << playerInfo.pos.x() << playerInfo.pos.y();
-        }
-        if (typeid(*i) == typeid(Obstacle))
-        {
-            Obstacle* tempObstacle = dynamic_cast<Obstacle*>(i);
-            QPointF point(tempObstacle->rect().x(), tempObstacle->rect().y());
-            ObstacleInfo obstacleInfo = { .pos = point};
-            gameInfo.obstacle.push_back(obstacleInfo);
-
-        }
-        if (typeid(*i) == typeid(Enemy))
-        {
-            Enemy* tempEnemy = dynamic_cast<Enemy*>(i);
-            QPointF point(tempEnemy->rect().x(),tempEnemy->pos().y());
-            EnemyInfo enemyInfo = { .pos = point };
-            gameInfo.enemy.push_back(enemyInfo);
-            //qDebug() << "Enemy: " << enemyInfo.pos.x() << enemyInfo.pos.y();
-        }
-    }
-
-
-
-    return gameInfo;
 }
 
