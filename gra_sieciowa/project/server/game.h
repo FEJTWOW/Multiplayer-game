@@ -5,15 +5,15 @@
 #include "score.h"
 #include "settings.h"
 #include "obstacle.h"
+#include "bullet.h"
 
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QTimer>
-#include "bullet.h"
+#include "gamestate.h"
 #include "network.h"
-
-// Generalnie jest zrobione bardzo na szypko i jest bardzo źle
+#include "playeraction.h"
 
 class Game: public QGraphicsView
 {
@@ -22,28 +22,31 @@ public:
     Game(QWidget * parent =0);
     void initGame();
     void addNewPlayer(QPoint point, QSize size);
-    void generateObstacles(int count);
     void moveAssets();
     void checkAllCollisions();
     void fireBullet(Player*);  // This might need to be refactored to player or sth
+    void generateLayoutOne();
+    void killPlayer(Player *);
     QGraphicsScene * graphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
     Settings * settings;
     int numOfPlayers;
     QTimer* timer;
+    GameState gameInfo;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+    GameState dumpGameInfo();
 
 public slots:
     void gameLoop();
     void playerAction();
     void spawnEnemy();
+    void updatePoints();
     void handlePlayerAction(const PlayerAction& playerAction);
-
-public:
+private:
     Network* network;
 };
 

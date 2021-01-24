@@ -9,8 +9,7 @@ extern Game * newGame;
 
 Score::Score(QGraphicsItem *parent): QGraphicsTextItem(parent)
 {
-
-
+    curr_score = 0;
 }
 
 void Score::setupScore()
@@ -20,11 +19,17 @@ void Score::setupScore()
     newGame->playerScores[newGame->numOfPlayers]->setFont(newGame->settings->score_font);
 }
 
-void Score::increase()
+void Score::increasePassive()
 {
-    curr_score += 10;
+    curr_score += newGame->settings->score_passive_value;
     setPlainText(QString("Current score:") + QString::number(curr_score));
 
+}
+
+void Score::increaseKill()
+{
+    curr_score += newGame->settings->score_kill_value;
+    setPlainText(QString("Current score:") + QString::number(curr_score));
 }
 
 int Score::getScore()

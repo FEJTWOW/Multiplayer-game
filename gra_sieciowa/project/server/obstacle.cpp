@@ -7,12 +7,8 @@
 
 extern Game * newGame;
 
-Obstacle::Obstacle()
+Obstacle::Obstacle(QPoint point, QSize size)
 {
-    int randsizeX = newGame->settings->obstacle_min_size + (rand() & newGame->settings->obstacle_max_size);
-    int randsizeY = newGame->settings->obstacle_min_size + (rand() & newGame->settings->obstacle_max_size);
-    int randposX = randsizeX + rand() % (newGame->settings->screen_size.width() - randsizeX);
-    int randposY = randsizeY + rand() % (newGame->settings->screen_size.height() - randsizeY);
-    setPos(randposX, randposY);
-    setRect(0,0,randsizeX,randsizeY);
+    setPos(0,0);
+    setRect(point.x(),point.y(),size.width(),size.height());
 }
