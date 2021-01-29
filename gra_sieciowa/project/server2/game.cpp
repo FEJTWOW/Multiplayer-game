@@ -125,7 +125,6 @@ void Game::playerAction() {
             {
                 players[i]->moveBy(playerSpeed, 0);
             }
-            qDebug() << players[i]->isShooting << " " << players[i]->shotFired <<players[i]->playerBullets.size();
             if(players[i]->isShooting && !players[i]->shotFired)
             {
                 fireBullet(players[i]);
@@ -262,7 +261,7 @@ void Game::moveAssets() {
             Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
             bullet->moveBy(bullet->moveSet.x(), bullet->moveSet.y());
             if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0 || all_items[i]->pos().y() > this->settings->screen_size.height()
-                    || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > this->settings->screen_size.width() )
+                    || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > this->settings->screen_size.width() )       // If out of bounds
             {
                 graphicsScene->removeItem(all_items[i]);               
                 auto index = players[bullet->player_id]->playerBullets.indexOf(bullet);
@@ -369,40 +368,13 @@ void Game::checkAllCollisions() {
 
         if( typeid(*(toBeDeleted[i])) == typeid(Bullet))
         {
-            qDebug() << "Me here!";
             Bullet * bullet = dynamic_cast<Bullet *>(toBeDeleted[i]);
-            qDebug() << "Me here1!";
             auto index = players[bullet->player_id]->playerBullets.indexOf(bullet);
-            qDebug() << "Me here2!";
             players[bullet->player_id]->playerBullets.takeAt(index);
         }
         else delete toBeDeleted[i];
     }
 
-//    QSet<QGraphicsItem *>::iterator i;
-//    for (i = toBeDeleted.begin(); i != toBeDeleted.end(); ++i)
-//    {
-//        qDebug() << typeid(*i).name();
-//        qDebug() << typeid(Bullet).name();
-//        qDebug() << strcmp(typeid(*i).name(), "P13QGraphicsItem" );
-//        scene()->removeItem(*i);
-
-//        if( strcmp(typeid(*i).name(), "P13QGraphicsItem" ) == 0)
-//        {
-//            qDebug() << "Me here!";
-//            Bullet * bullet = dynamic_cast<Bullet *>(*i);
-//            qDebug() << "Me here1!";
-//            auto index = players[bullet->player_id]->playerBullets.indexOf(bullet);
-//            qDebug() << "Me here2!";
-//            //players[bullet->player_id]->playerBullets.erase(index);
-//            players[bullet->player_id]->playerBullets.takeAt(index);
-//        }
-//        if(typeid(*i) == typeid(Enemy))
-//        {
-//            qDebug() << "AAAAaa";
-//        }
-//        else delete *i;
-//    }
 }
 
 void Game::killPlayer(Player * player)
@@ -440,7 +412,6 @@ void Game::fireBullet(Player* player)
             break;
 
     }
-    qDebug() << player->playerBullets.size() << "BULLET";
     if(player->playerBullets.size() < settings->player_max_bullets)
     {
         auto newBullet = new Bullet(directions, player->id);
@@ -517,7 +488,6 @@ GameState Game::dumpGameInfo()
             BulletInfo bulletInfo = { .pos = tempBullet->pos(), .direction = tempBullet->moveSet };
             gameInfo.bullet[bulletCount] = bulletInfo;
             bulletCount++;
-//            qDebug() << "Bullet: " << bulletInfo.pos.x() << bulletInfo.pos.y();
         }
         if (typeid(*i) == typeid(Player))
         {
@@ -525,7 +495,6 @@ GameState Game::dumpGameInfo()
             PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playerScores[tempPlayer->id]->getScore() };
             gameInfo.player[playerCount] = playerInfo;
             playerCount++;
-//            qDebug() << "Player: " << playerInfo.pos.x() << playerInfo.pos.y();
         }
         if (typeid(*i) == typeid(Obstacle))
         {
