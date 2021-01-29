@@ -7,6 +7,7 @@
 Game::Game(QWidget *parent)
 {
     numOfPlayers = 0;
+    numOfEnemies = 0;
     network = new Network(12345, this);
 }
 
@@ -135,9 +136,13 @@ void Game::playerAction() {
 
 void Game::spawnEnemy()
 {
-    auto newEnemy = new Enemy();
-    scene()->addItem(newEnemy);
-
+    if(numOfEnemies < 9)
+    {
+        auto newEnemy = new Enemy();
+        scene()->addItem(newEnemy);
+        numOfEnemies++;
+    }
+    qDebug() << "On spawn: " << numOfEnemies;
 }
 
 void Game::updatePoints()
@@ -152,10 +157,13 @@ void Game::updatePoints()
 
 void Game::handlePlayerAction(const PlayerAction &playerAction)
 {
+    qDebug() << "Handle player action!";
+    qDebug() << playerAction.id << " " << playerAction.key << " " << playerAction.mode;
     if(playerAction.mode == QEvent::KeyRelease)
     {
         if(!players[playerAction.id]->dead)
         {
+            qDebug() << "Not dead!";
             switch ( playerAction.key )
             {
             case Qt::Key_Up:
@@ -275,6 +283,8 @@ void Game::moveAssets() {
             all_items[i]->moveBy(0, settings->enemy_speed);
             if(all_items[i]->pos().y() > settings->screen_size.height())
             {
+                numOfEnemies--;
+                qDebug() << "On delete(move): " << numOfEnemies;
                 graphicsScene->removeItem(all_items[i]);
                 delete all_items[i];
             }
@@ -297,10 +307,6 @@ void Game::checkAllCollisions() {
             }
             if(typeid(*(colliding_items[0])) == typeid(Bullet))
             {
-                Bullet * bullet1 = dynamic_cast<Bullet *>(all_items[i]);
-                Bullet * bullet2 = dynamic_cast<Bullet *>(colliding_items[0]);
-                if(bullet1->player_id == bullet2->player_id)
-                    continue;
                 if(!toBeDeleted.contains(all_items[i]))
                     toBeDeleted.push_back(all_items[i]);
                 if(!toBeDeleted.contains(colliding_items[0]))
@@ -366,6 +372,11 @@ void Game::checkAllCollisions() {
     for(int i =0; i < toBeDeleted.size(); i++)
     {
         scene()->removeItem(toBeDeleted[i]);
+        if( typeid(*(toBeDeleted[i])) == typeid(Enemy))
+        {
+            numOfEnemies--;
+            qDebug() << "On delete: " << numOfEnemies;
+        }
 
         if( typeid(*(toBeDeleted[i])) == typeid(Bullet))
         {
@@ -511,12 +522,13 @@ GameState Game::dumpGameInfo()
         }
         if (typeid(*i) == typeid(Enemy))
         {
-//            Enemy* tempEnemy = dynamic_cast<Enemy*>(i);
-//            QPointF point(tempEnemy->rect().x(),tempEnemy->pos().y());
-//            EnemyInfo enemyInfo = { .pos = point };
-//            gameInfo.enemy[enemyCount] = enemyInfo;
-//            enemyCount++;
-            //qDebug() << "Enemy: " << enemyInfo.pos.x() << enemyInfo.pos.y();
+            Enemy* tempEnemy = dynamic_cast<Enemy*>(i);
+            QPointF point(tempEnemy->rect().x(),tempEnemy->pos().y());
+            qDebug() << tempEnemy->rect().x() << tempEnemy->pos().y() << "IS THE ENEMY";
+            EnemyInfo enemyInfo = { .pos = point };
+            gameInfo.enemy[enemyCount] = enemyInfo;
+            enemyCount++;
+
         }
     }
     return gameInfo;

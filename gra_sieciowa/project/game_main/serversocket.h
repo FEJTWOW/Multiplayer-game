@@ -16,7 +16,6 @@ public:
     void sendPlayerAction(const PlayerAction& playerAction) const;
     GameState parseGameState(const QByteArray& data) const;
 
-
 signals:
     void newGameState(const QByteArray& data) const;
     void newPlayerId(const int& playerId) const;

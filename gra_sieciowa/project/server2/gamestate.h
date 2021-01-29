@@ -32,7 +32,7 @@ public:
     ObstacleInfo obstacle[20];
     PlayerInfo player[5];
     BulletInfo bullet[25];
-//    EnemyInfo enemy[10];
+    EnemyInfo enemy[10];
 //    QList<PlayerInfo> player;
 //    QList<BulletInfo> bullet;
 //    QList<EnemyInfo> enemy;

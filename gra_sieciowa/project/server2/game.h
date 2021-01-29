@@ -32,6 +32,7 @@ public:
     QList <Score*> playerScores;
     Settings * settings;
     int numOfPlayers;
+    int numOfEnemies;
     QTimer* timer;
     GameState gameInfo;
 
