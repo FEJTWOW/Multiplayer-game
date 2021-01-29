@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +32,9 @@ SOURCES += \
     score.cpp \
     game.cpp \
     settings.cpp \
-    obstacle.cpp
+    obstacle.cpp \
+    network.cpp \
+    clientsocket.cpp
 
 HEADERS += \
     gamestate.h \
@@ -41,12 +44,14 @@ HEADERS += \
     score.h \
     game.h \
     settings.h \
-    obstacle.h
+    obstacle.h \
+    network.h \
+    clientsocket.h
 
 FORMS +=
 
-RESOURCES += \
-    PlayersResources.qrc
+#RESOURCES += \
+#    PlayersResources.qrc
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils

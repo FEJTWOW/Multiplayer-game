@@ -45,7 +45,7 @@ public slots:
     void playerAction();
     void spawnEnemy();
     void updatePoints();
-    void handlePlayerAction(const PlayerAction& playerAction);
+//    void handlePlayerAction(const PlayerAction& playerAction);
 private:
     Network* network;
 };

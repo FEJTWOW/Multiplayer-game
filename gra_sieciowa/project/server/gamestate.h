@@ -26,7 +26,7 @@ struct EnemyInfo
     QPointF pos;
 };
 
-struct PlayerAction
+struct PlayerActionAaaa
 {
     QPointF pos;
 };

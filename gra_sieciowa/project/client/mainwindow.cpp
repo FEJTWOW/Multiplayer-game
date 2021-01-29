@@ -33,6 +33,6 @@ void MainWindow::on_pushButton_clicked()
 
 //    connect(timer, SIGNAL(timeout()), this, SLOT(send()));
 //    timer->start(1000);
-    PlayerAction gracz{.actions=moveLeft,.posX = 2, .posY = 3 };
-    sock->sendPlayerAction(gracz);
+    //PlayerAction gracz{.actions=moveLeft,.posX = 2, .posY = 3 };
+    //sock->sendPlayerAction(gracz);
 }

@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,10 +18,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    bullet.cpp \
+    enemy.cpp \
+    game.cpp \
+    obstacle.cpp \
+    player.cpp \
+    score.cpp \
+    settings.cpp \
+    clientsocket.cpp \
+    network.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    bullet.h \
+    enemy.h \
+    game.h \
+    gamestate.h \
+    obstacle.h \
+    player.h \
+    score.h \
+    settings.h \
+    clientsocket.h \
+    network.h
 
 FORMS += \
     mainwindow.ui
@@ -29,3 +49,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
+else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
+
+INCLUDEPATH += $$PWD/../utils
+DEPENDPATH += $$PWD/../utils

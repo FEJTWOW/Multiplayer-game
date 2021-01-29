@@ -1,13 +1,13 @@
 #ifndef PLAYERACTION_H
 #define PLAYERACTION_H
 
-enum action { moveUp, moveDown, moveLeft, moveRight, shoot };
+#include <QEvent>
 
 struct PlayerAction
 {
-    action actions;
-    int posX;
-    int posY;
+    int mode;
+    int key;
+    int id;
 };
 
 #endif // PLAYERACTION_H

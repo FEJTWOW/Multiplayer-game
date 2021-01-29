@@ -41,11 +41,12 @@ protected:
     GameState dumpGameInfo();
 
 public slots:
+    void onConnection(int id);
     void gameLoop();
     void playerAction();
     void spawnEnemy();
     void updatePoints();
-    //void handlePlayerAction(const PlayerAction& playerAction);
+    void handlePlayerAction(const PlayerAction& playerAction);
 private:
     Network* network;
 };

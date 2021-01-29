@@ -65,8 +65,8 @@ DEPENDPATH += $$PWD/../utils
 SUBDIRS += \
     game_test.pro
 
-RESOURCES += \
-    PlayersResources.qrc
+#RESOURCES += \
+#    PlayersResources.qrc
 
 DISTFILES += \
     packman.png

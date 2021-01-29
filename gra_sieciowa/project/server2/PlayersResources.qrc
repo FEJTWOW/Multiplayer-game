@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/Player">
+        <file alias="PackmanPng">packman.png</file>
+    </qresource>
+</RCC>

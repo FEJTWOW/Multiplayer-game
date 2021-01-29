@@ -26,14 +26,17 @@ struct EnemyInfo
     QPointF pos;
 };
 
-
 class GameState
 {
 public:
-    QList<PlayerInfo> player;
-    QList<BulletInfo> bullet;
-    QList<EnemyInfo> enemy;
-    QList<ObstacleInfo> obstacle;
+    ObstacleInfo obstacle[20];
+    PlayerInfo player[5];
+    BulletInfo bullet[25];
+//    EnemyInfo enemy[10];
+//    QList<PlayerInfo> player;
+//    QList<BulletInfo> bullet;
+//    QList<EnemyInfo> enemy;
+//    QList<ObstacleInfo> obstacle;
 
 };
 
