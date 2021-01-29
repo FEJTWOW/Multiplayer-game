@@ -22,6 +22,7 @@ public:
     // Player settings
          int player_speed;
          int player_max_count;
+         int player_max_bullets;
          QSize player_size;
          QPoint player_point;
          QColor player_color;
@@ -44,8 +45,7 @@ public:
 
 
     // Obstacles settings
-        int obstacle_min_size;
-        int obstacle_max_size;
+        QSize obstacle_size;
         //
         //
         //

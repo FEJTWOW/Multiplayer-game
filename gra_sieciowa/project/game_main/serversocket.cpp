@@ -11,16 +11,26 @@ ServerSocket::ServerSocket(const QHostAddress &address, quint16 port,
 
 void ServerSocket::onMessage(const QString& message) const
 {
-    qDebug() << "Jestę klientem i czytam!";
+    qDebug() << "CZYTAM STRINGA";
     qDebug() << message;
 }
 
 void ServerSocket::onMessage(const QByteArray& data) const
 {
-    qDebug() << "Jestę klientem i czytam se data!";
-    GameState gameState = parseGameState(data);
-    emit newGameState(gameState);
-    qDebug() << data;
+    if(data.size() == 4)
+    {
+        int ourId = 5;
+        memcpy(&ourId, data.data(), data.size());
+        emit newPlayerId(ourId);
+        qDebug() << "Got id from server" << ourId;
+    }
+    else
+    {
+        //GameState gameState = parseGameState(data);
+        emit newGameState(data);
+        //qDebug() << "Received gameState";
+    }
+
 }
 
 void ServerSocket::sendPlayerAction(const PlayerAction &playerAction) const

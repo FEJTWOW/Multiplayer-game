@@ -45,8 +45,7 @@ public:
 
 
     // Obstacles settings
-        int obstacle_min_size;
-        int obstacle_max_size;
+        QSize obstacle_size;
         //
         //
         //

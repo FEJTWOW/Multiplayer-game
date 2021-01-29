@@ -6,6 +6,7 @@
 #include "settings.h"
 #include "obstacle.h"
 #include "bullet.h"
+#include "serversocket.h"
 
 #include <QWidget>
 #include <QGraphicsView>
@@ -24,18 +25,25 @@ public:
     void fireBullet(Player*);  // This might need to be refactored to player or sth
     void generateLayoutOne();
     void killPlayer(Player *);
+    void renderGameState();
     QGraphicsScene * graphicsScene;
+    QGraphicsScene * clientGraphicsScene;
     QList <Player*> players;
     QList <Score*> playerScores;
     Settings * settings;
+    ServerSocket* sock;
     int numOfPlayers;
     QTimer* timer;
+    int myPlayerId;
+    GameState gameState;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 public slots:
+    void parseGameState(const QByteArray& data);
+    void receivedPlayerId(const int&);
     void gameLoop();
     void playerAction();
     void spawnEnemy();

@@ -29,7 +29,7 @@ void Game::initGame()
     this->setFocus();
 
     connect(network, SIGNAL(playerMadeAction(const PlayerAction&)), this, SLOT(handlePlayerAction(const PlayerAction&)));
-    connect(network, SIGNAL(newPlayerConnecter(int)), this, SLOT(onConnection(int)));
+    connect(network, SIGNAL(newClientConnected(int)), this, SLOT(onConnection(int)));
 
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(gameLoop()));
@@ -249,6 +249,7 @@ void Game::gameLoop() {
     moveAssets();
     checkAllCollisions();
     GameState gameState = dumpGameInfo();
+    network->sendAll(gameState);
 }
 
 void Game::moveAssets() {
@@ -445,27 +446,31 @@ void Game::generateLayoutOne()
     // Needs proper scaling
 
     QList<Obstacle *> obstacleLayout;
-    QSize size = {20,50};
+    QSize size = settings->obstacle_size;
 
     int screenWidth = settings->screen_size.width();
     int screenHeight = settings->screen_size.height();
 
-
-    for(int i = 0.2*screenWidth; i <= screenWidth; i+= 0.2*screenWidth)
+    int count = 0;
+    for(int i = 0.2*screenWidth; i < screenWidth; i+= 0.2*screenWidth)
     {
         for(int j = 1; j < 4; j++)
         {
+            count++;
             auto obstacle = new Obstacle(QPoint(i,screenHeight -j*size.height()), size);
             graphicsScene->addItem(obstacle);
+                qDebug() << "Created : " << count;
         }
 
     }
-    for(int i = 0.33 *screenWidth; i <= screenWidth-size.width(); i+= 0.33*screenWidth)
+    for(int i = 0.33 *screenWidth; i < screenWidth-size.width(); i+= 0.33*screenWidth)
     {
         for(int j = 1; j < 5; j++)
         {
+            count++;
             auto obstacle = new Obstacle(QPoint(i,0.4*screenHeight -j*size.height()), size);
             graphicsScene->addItem(obstacle);
+                qDebug() << "Created : " << count;
         }
     }
 }
@@ -519,6 +524,7 @@ GameState Game::dumpGameInfo()
 
 void Game::onConnection(int id)
 {
+    qDebug() << "Im here" << id;
     network->send(id, numOfPlayers);
     addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size));
 }

@@ -39,8 +39,7 @@ Settings::Settings()
      score_kill_value = 5000;
 
     // Obstacles settings
-     obstacle_min_size = 5;
-     obstacle_max_size = 30;
+     obstacle_size = {20,50};
         //
         //
     // Enemy settings

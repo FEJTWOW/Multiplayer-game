@@ -62,7 +62,8 @@ void Network::sendAll(const GameState& gameState) const
 
 void Network::send(const int id, const int game_id) const
 {
-   clients.at(id)->sendData(QByteArray(static_cast<char *>((void*)&game_id), sizeof(game_id)));
+    clients.at(id)->sendData(QByteArray(static_cast<char *>((void*)&game_id), sizeof(game_id)));
+    //clients.at(id)->sendString(QString::number(game_id));
 }
 
 

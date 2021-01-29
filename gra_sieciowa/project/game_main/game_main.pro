@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,7 +25,8 @@ SOURCES += \
     obstacle.cpp \
     player.cpp \
     score.cpp \
-    settings.cpp
+    settings.cpp \
+    serversocket.cpp
 
 HEADERS += \
     bullet.h \
@@ -34,7 +36,8 @@ HEADERS += \
     obstacle.h \
     player.h \
     score.h \
-    settings.h
+    settings.h \
+    serversocket.h
 
 FORMS += \
     mainwindow.ui
@@ -43,3 +46,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
+else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
+
+INCLUDEPATH += $$PWD/../utils
+DEPENDPATH += $$PWD/../utils

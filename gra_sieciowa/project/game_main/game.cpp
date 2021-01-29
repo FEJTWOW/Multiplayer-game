@@ -1,6 +1,8 @@
 #include "game.h"
 #include <QDebug>
 #include <QKeyEvent>
+#include <QHostAddress>
+#include <QtAlgorithms>
 #include <enemy.h>
 
 
@@ -11,13 +13,19 @@ Game::Game(QWidget *parent)
 
 void Game::initGame()
 {
+    sock = new ServerSocket(QHostAddress::LocalHost,12345, this);
+    connect(sock, SIGNAL(newPlayerId(int)), this, SLOT(receivedPlayerId(int)));
+    connect(sock, SIGNAL(newGameState(const QByteArray&)), this, SLOT(parseGameState(const QByteArray&)));
+
     settings = new Settings();
     // Create the game map
     graphicsScene = new QGraphicsScene();
+    clientGraphicsScene = new QGraphicsScene();
     // Set the size of the map
     graphicsScene->setSceneRect(QRectF(settings->screen_point, settings->screen_size));
+    clientGraphicsScene->setSceneRect(QRectF(settings->screen_point, settings->screen_size));
     // Create our view
-    setScene(graphicsScene);
+    setScene(clientGraphicsScene);
     // Disable sidebars
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -173,6 +181,69 @@ void Game::keyReleaseEvent(QKeyEvent *event)
             break;
         }
     }
+}
+
+void Game::parseGameState(const QByteArray &data)
+{
+    qDebug() << "1";
+    GameState receivedGameState;
+    memcpy(&receivedGameState,data.data(), sizeof(receivedGameState));
+    for(int i=0; i < 20; i++)
+    {
+        //qDebug() << "Obstacle[" << i << "] :" << gameState.obstacle[i].pos.x() << " " << gameState.obstacle[i].pos.y();
+        this->gameState.obstacle[i] = receivedGameState.obstacle[i];
+    }
+    qDebug() << "2";
+    for(int i =0; i < 5; i++)
+    {
+
+        this->gameState.player[i] = receivedGameState.player[i];
+    }
+    qDebug() << "3";
+    for(int i =0; i < 25; i++)
+    {
+        this->gameState.bullet[i] = receivedGameState.bullet[i];
+    }
+    qDebug() << "4";
+    renderGameState();
+}
+
+void Game::renderGameState()
+{
+
+    for(int i=0; i < 20; i++)
+    {
+
+        QGraphicsRectItem* obstacle = new QGraphicsRectItem();
+        obstacle->setRect(QRectF(gameState.obstacle[i].pos, settings->obstacle_size));
+        //qDebug() << "Rendering: " << obstacle->rect().x() << " " << obstacle->rect().y();
+        clientGraphicsScene->addItem(obstacle);
+    }
+    for(int i =0; i< 5; i++)
+    {
+
+        if(gameState.player[i].pos.x() == 0 && gameState.player[i].pos.y() == 0)
+            continue;
+
+        QGraphicsRectItem* player = new QGraphicsRectItem();
+        player->setRect(QRectF(gameState.player[i].pos, settings->player_size));
+        clientGraphicsScene->addItem(player);
+    }
+    for(int i =0; i< 25; i++)
+    {
+        if(gameState.bullet[i].pos.x() == 0 && gameState.bullet[i].pos.y() == 0)
+            continue;
+
+        QGraphicsRectItem* bullet = new QGraphicsRectItem();
+        bullet->setRect(QRectF(gameState.bullet[i].pos, settings->bullet_size));
+        clientGraphicsScene->addItem(bullet);
+    }
+}
+
+
+void Game::receivedPlayerId(const int &id)
+{
+    myPlayerId = id;
 }
 
 void Game::gameLoop() {
