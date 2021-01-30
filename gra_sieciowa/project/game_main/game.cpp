@@ -31,49 +31,9 @@ void Game::keyPressEvent(QKeyEvent *event)
     action.key = event->key();
     action.mode = event->type();
     action.id = this->myPlayerId;
-
     sock->sendPlayerAction(action);
-    // Player id (players[id]) will be received from the client through the socket
-    // for now :
-//    int player_id = 0;
 
-//    if(!players[player_id]->dead)
-//    {
-//        if(event->key() == Qt::Key_Left)
-//            players[player_id]->movementDirection[LEFT] = true;
-//        else if(event->key() == Qt::Key_Right)
-//            players[player_id]->movementDirection[RIGHT] = true;
-//        else if(event->key() == Qt::Key_Up)
-//            players[player_id]->movementDirection[UP] = true;
-//        else if(event->key() == Qt::Key_Down)
-//            players[player_id]->movementDirection[DOWN] = true;
-//        else if(event->key() == Qt::Key_W)
-//        {
-//                players[player_id]->isShooting = true;
-//                players[player_id]->shootingDirection = 0;
-//        }
-//        else if(event->key() == Qt::Key_A)
-//        {
-//                players[player_id]->isShooting = true;
-//                players[player_id]->shootingDirection = 1;
-//        }
-//        else if(event->key() == Qt::Key_S)
-//        {
-//                players[player_id]->isShooting = true;
-//                players[player_id]->shootingDirection = 2;
-//        }
-//        else if(event->key() == Qt::Key_D)
-//        {
-//                players[player_id]->isShooting = true;
-//                players[player_id]->shootingDirection = 3;
-//        }
-//        else if(event->key() == Qt::Key_Escape)
-//        {
-//            exit(EXIT_SUCCESS);
-//        }
-//    }
     qDebug() << "Pressed:" << action.key << " " << action.mode << " " << action.id;
-    //movePlayer();
 }
 
 
@@ -85,31 +45,6 @@ void Game::keyReleaseEvent(QKeyEvent *event)
     action.id = this->myPlayerId;
 
     sock->sendPlayerAction(action);
-    // In final cut this would be changed on server based on clients sending input (not local keyEvents)
-//    if(!players[0]->dead)
-//    {
-//        switch ( event->key() )
-//        {
-//        case Qt::Key_Up:
-//            players[0]->movementDirection[UP] = 0;
-//            break;
-//        case Qt::Key_Left:
-//            players[0]->movementDirection[LEFT] = 0;
-//            break;
-//        case Qt::Key_Down:
-//            players[0]->movementDirection[DOWN] = 0;
-//            break;
-//        case Qt::Key_Right:
-//            players[0]->movementDirection[RIGHT] = 0;
-//            break;
-//        case Qt::Key_W:
-//        case Qt::Key_A:
-//        case Qt::Key_S:
-//        case Qt::Key_D:
-//            players[0]->isShooting = false;
-//            break;
-//        }
-//    }
     qDebug() << "Released:" << action.key << " " << action.mode << " " << action.id;
 }
 

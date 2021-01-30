@@ -55,7 +55,6 @@ void Game::addNewPlayer(QPoint point, QSize size)
     numOfPlayers++;
 
     show();
-
 }
 
 void Game::keyPressEvent(QKeyEvent *event)
@@ -208,12 +207,15 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
             case Qt::Key_W:
                 players[playerAction.id]->isShooting = true;
                 players[playerAction.id]->shootingDirection = 0;
+                break;
             case Qt::Key_A:
                 players[playerAction.id]->isShooting = true;
                 players[playerAction.id]->shootingDirection = 1;
+                break;
             case Qt::Key_S:
                 players[playerAction.id]->isShooting = true;
                 players[playerAction.id]->shootingDirection = 2;
+                break;
             case Qt::Key_D:
                 players[playerAction.id]->isShooting = true;
                 players[playerAction.id]->shootingDirection = 3;
