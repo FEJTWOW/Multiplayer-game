@@ -7,7 +7,6 @@
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QTimer>
 
 class Game: public QGraphicsView
 {
@@ -19,7 +18,6 @@ public:
     QGraphicsScene * clientGraphicsScene;
     Settings * settings;
     ServerSocket* sock;
-    QTimer* timer;
     int myPlayerId;
     GameState gameState;
 
