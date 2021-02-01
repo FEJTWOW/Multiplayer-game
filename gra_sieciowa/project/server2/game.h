@@ -31,7 +31,7 @@ public:
     QList <Player*> players;
     QList <Score*> playerScores;
     Settings * settings;
-    int numOfPlayers;
+    //int numOfPlayers;
     int numOfEnemies;
     QTimer* timer;
     GameState gameInfo;
@@ -48,7 +48,7 @@ public slots:
     void spawnEnemy();
     void updatePoints();
     void handlePlayerAction(const PlayerAction& playerAction);
-private:
+public:
     Network* network;
 };
 

@@ -27,7 +27,7 @@ public slots:
     void onMessage(const QString& message) const;
     void onMessage(const QByteArray& data) const;
 
-protected:
+public:
     QList<ClientSocket*> clients;
 };
 

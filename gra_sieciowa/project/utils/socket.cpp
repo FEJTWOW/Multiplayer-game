@@ -25,7 +25,8 @@ void Socket::onReadyRead()
 
 void Socket::onDisconnected() const
 {
-    qDebug() << "disconnected!";
+    qDebug() << "Socket::onDisconnected!";
+    emit disconnected();
 }
 
 

@@ -6,7 +6,6 @@
 
 Game::Game(QWidget *parent)
 {
-    numOfPlayers = 0;
     numOfEnemies = 0;
     network = new Network(12345, this);
 }
@@ -47,12 +46,12 @@ void Game::initGame()
 
 void Game::addNewPlayer(QPoint point, QSize size)
 {
+    int numOfPlayers = network->clients.length()-1;
     players.append(new Player(settings->player_point, settings->player_size,numOfPlayers));
     graphicsScene->addItem(players[numOfPlayers]);
     playerScores.append(new Score());
     //graphicsScene->addItem(playerScores[numOfPlayers]);
     playerScores[numOfPlayers]->setupScore();
-    numOfPlayers++;
 
     show();
 }
@@ -105,7 +104,7 @@ void Game::keyPressEvent(QKeyEvent *event)
 void Game::playerAction() {
     int playerSpeed = this->settings->player_speed;
 
-    for(int i = 0; i < numOfPlayers; i++)
+    for(int i = 0; i < network->clients.length(); i++)
     {
         if(!players[i]->dead)   // Bandaid, prob can disable keyEvents altogether
         {
@@ -141,12 +140,12 @@ void Game::spawnEnemy()
         scene()->addItem(newEnemy);
         numOfEnemies++;
     }
-    qDebug() << "On spawn: " << numOfEnemies;
+    //qDebug() << "On spawn: " << numOfEnemies;
 }
 
 void Game::updatePoints()
 {
-    for(int i = 0; i < numOfPlayers; i++)
+    for(int i = 0; i < network->clients.length(); i++)
     {
         if(!players[i]->dead)
             playerScores[i]->increasePassive();
@@ -286,7 +285,7 @@ void Game::moveAssets() {
             if(all_items[i]->pos().y() > settings->screen_size.height())
             {
                 numOfEnemies--;
-                qDebug() << "On delete(move): " << numOfEnemies;
+                //qDebug() << "On delete(move): " << numOfEnemies;
                 graphicsScene->removeItem(all_items[i]);
                 delete all_items[i];
             }
@@ -526,7 +525,7 @@ GameState Game::dumpGameInfo()
         {
             Enemy* tempEnemy = dynamic_cast<Enemy*>(i);
             QPointF point(tempEnemy->rect().x(),tempEnemy->pos().y());
-            qDebug() << tempEnemy->rect().x() << tempEnemy->pos().y() << "IS THE ENEMY";
+            //qDebug() << tempEnemy->rect().x() << tempEnemy->pos().y() << "IS THE ENEMY";
             EnemyInfo enemyInfo = { .pos = point };
             gameInfo.enemy[enemyCount] = enemyInfo;
             enemyCount++;
@@ -538,8 +537,9 @@ GameState Game::dumpGameInfo()
 
 void Game::onConnection(int id)
 {
-    qDebug() << "Im here" << id;
-    network->send(id, numOfPlayers);
+    qDebug() << "New player with id " << id;
+
+    network->send(id, network->clients.length()-1);
     addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size));
 }
 
