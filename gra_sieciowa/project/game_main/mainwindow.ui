@@ -40,7 +40,7 @@
      </font>
     </property>
     <property name="autoFillBackground">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="styleSheet">
      <string notr="true"/>
@@ -96,7 +96,7 @@
      <pixmap>../animation.gif</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="background">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -108,6 +108,9 @@
     <property name="text">
      <string/>
     </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
     <property name="pixmap">
      <pixmap>../background.jpeg</pixmap>
     </property>
@@ -115,7 +118,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <zorder>label_2</zorder>
+   <zorder>background</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
    <zorder>movieLabel</zorder>

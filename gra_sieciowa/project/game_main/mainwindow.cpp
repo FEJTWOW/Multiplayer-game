@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     QMovie *movie = new QMovie("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/animation.gif");
     ui->movieLabel->setMovie(movie);
     movie->start();
-    setStyleSheet("background-image: /home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/background.jpeg");
+    QPixmap *pixmap = new QPixmap("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/background.jpeg");
+    ui->background->setPixmap(*pixmap);
+
 }
 
 MainWindow::~MainWindow()
