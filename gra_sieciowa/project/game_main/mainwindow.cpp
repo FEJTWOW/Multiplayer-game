@@ -2,12 +2,18 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include "game.h"
+#include <QMovie>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QMovie *movie = new QMovie("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/animation.gif");
+    ui->movieLabel->setMovie(movie);
+    movie->start();
+    setStyleSheet("background-image: /home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/background.jpeg");
 }
 
 MainWindow::~MainWindow()

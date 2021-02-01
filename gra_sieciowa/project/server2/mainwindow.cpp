@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     newGame->show();
     newGame->setFocusPolicy(Qt::NoFocus);
     ui->setupUi(this);
+    MainWindow::hide();
 }
 
 MainWindow::~MainWindow()
