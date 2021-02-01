@@ -1,4 +1,5 @@
 #include "network.h"
+#include "settings.h"
 
 Network::Network(quint16 port, QObject* parent) : QTcpServer(parent)
 {
@@ -18,6 +19,11 @@ void Network::onNewConnection()
     QTcpSocket* clientSock = nextPendingConnection();
     ClientSocket* sockHandle = new ClientSocket(clientSock);
 
+    if(this->clients.length() >= Settings::player_max_count) {
+        qDebug() << "Max players limit has been reached!";
+        delete sockHandle;
+    }
+
     this->clients.push_back(sockHandle);
     qDebug() << "New connection, with id: " << clients.indexOf(sockHandle);
     emit newClientConnected(clients.indexOf(sockHandle));
@@ -25,12 +31,11 @@ void Network::onNewConnection()
     connect(sockHandle, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
     connect(sockHandle, SIGNAL(message(const QString&)), this, SLOT(onMessage(const QString&)));
     connect(sockHandle, SIGNAL(message(const QByteArray&)), this, SLOT(onMessage(const QByteArray&)));
-
 }
 
-void Network::onDisconnected()
+void Network::onDisconnected()  // cos tu jest zle
 {
-    qDebug() << "ServerNetwork::onDisconnected" << endl;
+    qDebug() << "ServerNetwork::onDisconnected, clientsLen:" << clients.length() << endl;
     auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
     clients.removeOne(client);
     delete client;

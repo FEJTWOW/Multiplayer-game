@@ -12,6 +12,8 @@ class ClientSocket : public Socket
     public:
         explicit ClientSocket(QTcpSocket* socket, QObject *parent = nullptr) : Socket(parent, socket) {}
         void sendGameState(const GameState& gameState) const;
+
+//    void onDisconnected() Q_DECL_OVERRIDE;
 };
 
 #endif // CLIENTSOCKET_H

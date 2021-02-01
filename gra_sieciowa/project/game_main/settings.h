@@ -26,6 +26,7 @@ public:
          QSize player_size;
          QPoint player_point;
          QColor player_color;
+         QColor player_colors[6] = {Qt::red, Qt::cyan, Qt::blue, Qt::green, Qt::darkYellow, Qt::darkRed};
          QPointF player_spawns[5];
          int player_shot_cd_in_ms;
          int player_invul_time_in_ms;

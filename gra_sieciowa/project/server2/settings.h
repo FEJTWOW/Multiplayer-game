@@ -21,7 +21,7 @@ public:
 
     // Player settings
          int player_speed;
-         int player_max_count;
+         static const int player_max_count = 5;
          int player_max_bullets;
          QSize player_size;
          QPoint player_point;

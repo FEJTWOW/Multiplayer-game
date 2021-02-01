@@ -91,6 +91,7 @@ void Game::renderGameState()
 
         QGraphicsRectItem* player = new QGraphicsRectItem();
         player->setRect(QRectF(gameState.player[i].pos, settings->player_size));
+        player->setBrush(settings->player_colors[gameState.player[i].id]);
         clientGraphicsScene->addItem(player);
     }
     for(int i =0; i< 25; i++)
