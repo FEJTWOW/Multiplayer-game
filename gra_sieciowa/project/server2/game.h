@@ -48,6 +48,7 @@ public slots:
     void spawnEnemy();
     void updatePoints();
     void handlePlayerAction(const PlayerAction& playerAction);
+    void onGameDisconnected();
 public:
     Network* network;
 };

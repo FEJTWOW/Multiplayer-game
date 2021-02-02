@@ -33,12 +33,13 @@ void Network::onNewConnection()
     connect(sockHandle, SIGNAL(message(const QByteArray&)), this, SLOT(onMessage(const QByteArray&)));
 }
 
-void Network::onDisconnected()  // cos tu jest zle
+void Network::onDisconnected()
 {
     qDebug() << "ServerNetwork::onDisconnected, clientsLen:" << clients.length() << endl;
     auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
     clients.removeOne(client);
     delete client;
+    emit gameDisconnect();
 }
 
 void Network::sendAll(const QString &message) const

@@ -21,6 +21,8 @@ public:
 signals:
     void newClientConnected(int id);
     void playerMadeAction(const PlayerAction& playerAction) const;
+    void gameDisconnect();
+
 public slots:
     void onNewConnection();
     void onDisconnected();

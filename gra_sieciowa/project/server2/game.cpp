@@ -42,6 +42,8 @@ void Game::initGame()
     auto enemyTimer = new QTimer();
     QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
     enemyTimer->start(2000);
+
+    connect(network, SIGNAL(gameDisconnect()), this, SLOT(onGameDisconnected()));
 }
 
 void Game::addNewPlayer(QPoint point, QSize size)
@@ -541,5 +543,10 @@ void Game::onConnection(int id)
 
     network->send(id, network->clients.length()-1);
     addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size));
+}
+
+
+void Game::onGameDisconnected() {
+    qDebug() << " Game::onDisconnected";
 }
 
