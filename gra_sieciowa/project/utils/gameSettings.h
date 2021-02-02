@@ -23,6 +23,7 @@ constexpr QPointF player_spawns[5] = {
     { 625, screen_size.height()-player_size.height() }
 };
 
+constexpr int respawn_time = 5000;
 
 
 #endif // SETTINGS_H

@@ -324,17 +324,13 @@ void Game::checkAllCollisions() {
 
 void Game::killPlayer(Player * player)
 {
-    player->dead = true;
+    player->kill();
     graphicsScene->removeItem(player);
-    player->respawnTimer = new QTimer();
-    QObject::connect(player->respawnTimer, SIGNAL(timeout()), player, SLOT(respawn()));
-    player->respawnTimer->start(settings->respawn_time_in_ms);
+    connect(player, SIGNAL(respawn(Player*)), this, SLOT(respawnPlayer(Player*)));
 }
 
 void Game::respawnPlayer(Player* player) {
-    qDebug() << "kekeke";
-    /*player->respawn();
-    graphicsScene->addItem(player);*/
+    graphicsScene->addItem(player);
 }
 
 

@@ -1,24 +1,13 @@
 #include "player.h"
-#include "bullet.h"
-#include "enemy.h"
-#include "score.h"
-#include "game.h"
-#include <QDebug>
 
-#include <QKeyEvent>
-#include <QGraphicsScene>
-#include <settings.h>
-
-#include "gameSettings.h"
-
-extern Game * newGame;
+#include <QColor>
 
 Player::Player(QPoint point, QSize size, int id) : id(id)
 {
     this->setRect(QRectF(point, size));
     this->setPos(player_spawns[id]);
 
-    this->setBrush(Qt::red);
+    //this->setBrush(Qt::red);
     //this->setPen(QPen(newGame->settings->player_color, 15, Qt::DashDotLine, Qt::RoundCap));
 
     auto timer = new QTimer(this);
@@ -34,7 +23,14 @@ void Player::canShoot()
     this->shotFired = false;
 }
 
-void Player::respawn()
+void Player::kill() {
+    dead = true;
+    respawnTimer = new QTimer(this);
+    QObject::connect(respawnTimer, SIGNAL(timeout()), this, SLOT(onRespawn()));
+    respawnTimer->start(respawn_time);
+}
+
+void Player::onRespawn()
 {
     delete respawnTimer;
     dead = false;
@@ -45,9 +41,9 @@ void Player::respawn()
     connect(invulTimer,SIGNAL(timeout()), this, SLOT(resetInvulnerability()));
     invulTimer->start(player_invul_time);
     this->setOpacity(0.2);
-
     this->setPos(player_spawns[id]);
-    newGame->graphicsScene->addItem(this);
+
+    emit respawn(this);
 }
 
 void Player::resetInvulnerability()
@@ -58,7 +54,7 @@ void Player::resetInvulnerability()
 }
 
 void Player::move(int speed) {
-    qDebug() << "Ruch" << horizontalMove << verticalMove;
+    //qDebug() << "Ruch" << horizontalMove << verticalMove;
     this->moveBy(horizontalMove*speed, verticalMove*speed);
 
     if(pos().x() < 0)

@@ -1,8 +1,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QGraphicsRectItem>
+#include <QGraphicsItem>
+#include <QColor>
+#include <QTimer>
 #include "bullet.h"
+#include "gameSettings.h"
+
 
 enum DIRECTION { UP, DOWN, LEFT, RIGHT};
 
@@ -26,9 +30,13 @@ public:
     int verticalMove;
     void move(int speed);
 
+    void kill();
+signals:
+    void respawn(Player* player);
+
 public slots:
     void canShoot();
-    void respawn();
+    void onRespawn();
     void resetInvulnerability();
 };
 
