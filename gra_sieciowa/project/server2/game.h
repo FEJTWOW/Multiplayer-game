@@ -30,7 +30,7 @@ public:
     QGraphicsScene * graphicsScene;
     //QList <Player*> players;
     QMap<int, Player*> playersMap;  // int jest takie same jak int w clientsMap w network.h; dzieki temu mamy polaczenie player-client
-    QList <Score*> playerScores;
+    QMap<int, Score*> playerScoresMap;
     Settings * settings;
     //int numOfPlayers;
     int numOfEnemies;

@@ -14,9 +14,9 @@ Score::Score(QGraphicsItem *parent): QGraphicsTextItem(parent)
 
 void Score::setupScore(int playerID)
 {
-    newGame->playerScores[playerID]->setPlainText(QString("Current score:") + QString::number((newGame->playerScores[playerID]->curr_score)));
-    newGame->playerScores[playerID]->setDefaultTextColor(newGame->settings->score_color);
-    newGame->playerScores[playerID]->setFont(newGame->settings->score_font);
+    newGame->playerScoresMap[playerID]->setPlainText(QString("Current score:") + QString::number((newGame->playerScoresMap[playerID]->curr_score)));
+    newGame->playerScoresMap[playerID]->setDefaultTextColor(newGame->settings->score_color);
+    newGame->playerScoresMap[playerID]->setFont(newGame->settings->score_font);
 }
 
 void Score::increasePassive()

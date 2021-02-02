@@ -50,13 +50,13 @@ void Game::addNewPlayer(QPoint point, QSize size, int playerID)
 {
     playersMap[playerID] = new Player(settings->player_point, settings->player_size,playerID);
     graphicsScene->addItem(playersMap[playerID]);
-    playerScores.append(new Score());
-    playerScores[playerID]->setupScore(playerID);
+    playerScoresMap[playerID] = new Score();
+    playerScoresMap[playerID]->setupScore(playerID);
 
     show();
 }
 
-void Game::keyPressEvent(QKeyEvent *event)
+void Game::keyPressEvent(QKeyEvent *event)  // TODO delete
 {
     // Player id (players[id]) will be received from the client through the socket
     // for now :
@@ -101,7 +101,7 @@ void Game::keyPressEvent(QKeyEvent *event)
     //movePlayer();
 }
 
-void Game::keyReleaseEvent(QKeyEvent *event)
+void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
 {
     // In final cut this would be changed on server based on clients sending input (not local keyEvents)
     Player* player = playersMap[0];
@@ -134,9 +134,9 @@ void Game::keyReleaseEvent(QKeyEvent *event)
 void Game::playerAction() {
     int playerSpeed = this->settings->player_speed;
 
-    for(int i = 0; i < playersMap.size(); i++)
+    for(const auto& id : playersMap.keys())
     {
-        Player* player = playersMap[i];
+        Player* player = playersMap[id];
         if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
         {
             if(player->movementDirection[UP] && player->pos().y() > 0)
@@ -176,10 +176,10 @@ void Game::spawnEnemy()
 
 void Game::updatePoints()
 {
-    for(int i = 0; i < playersMap.size(); i++)
+    for(const auto& id : playersMap.keys())
     {
-        if(!playersMap[i]->dead)
-            playerScores[i]->increasePassive();
+        if(!playersMap[id]->dead)
+            playerScoresMap[id]->increasePassive();
     }
     this->dumpGameInfo();
 }
@@ -261,7 +261,9 @@ void Game::gameLoop() {
     moveAssets();
     checkAllCollisions();
     GameState gameState = dumpGameInfo();
+    //qDebug() << "gameLoop before sendAll";
     network->sendAll(gameState);
+    //qDebug() << "gameLoop aftersendAll";
 }
 
 void Game::moveAssets() {
@@ -343,7 +345,7 @@ void Game::checkAllCollisions() {
                 }
                 else
                 {
-                    playerScores[bullet->player_id]->increaseKill();
+                    playerScoresMap[bullet->player_id]->increaseKill();
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
                     killPlayer(player);
@@ -512,7 +514,8 @@ GameState Game::dumpGameInfo()
         if (typeid(*i) == typeid(Player))
         {
             Player* tempPlayer = dynamic_cast<Player*>(i);
-            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playerScores[tempPlayer->id]->getScore() };
+            // sth is crashing here after disconnect
+            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playerScoresMap[tempPlayer->id]->getScore() };
             gameInfo.player[playerCount] = playerInfo;
             playerCount++;
         }
@@ -550,9 +553,11 @@ void Game::onConnection(int id)
 void Game::onPlayerDisconnected(int playerID) {
     qDebug() << " Game::onDisconnected, playerID: " << playerID;
 
-    playerScores.removeAt(playerID);
-    graphicsScene->removeItem(playersMap[playerID]);
+    playerScoresMap.remove(playerID);
+    if(playersMap[playerID])
+        graphicsScene->removeItem(playersMap[playerID]);
     playersMap.remove(playerID);
-
+    network->clientsMap.remove(playerID);
+    qDebug() << "Removed from playersMap & clientMap";
 }
 

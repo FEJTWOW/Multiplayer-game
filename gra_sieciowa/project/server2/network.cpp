@@ -49,7 +49,6 @@ int Network::addClientToMap(ClientSocket* clientSocket) {
 
 void Network::onDisconnected()
 {
-    // TODO do przerobki
     qDebug() << "ServerNetwork::onDisconnected, clientsLen:" << clientsMap.size() << endl;
 
     int disconnecteSocketID = getDisconnectedSocketID();
@@ -63,7 +62,7 @@ void Network::onDisconnected()
     //delete client;
     emit gameDisconnect(disconnecteSocketID);
 
-    clientsMap.remove(disconnecteSocketID);
+    //clientsMap.remove(disconnecteSocketID);
 }
 
 int Network::getDisconnectedSocketID() {
