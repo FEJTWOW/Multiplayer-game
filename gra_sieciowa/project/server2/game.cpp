@@ -43,17 +43,15 @@ void Game::initGame()
     QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
     enemyTimer->start(2000);
 
-    connect(network, SIGNAL(gameDisconnect()), this, SLOT(onGameDisconnected()));
+    connect(network, SIGNAL(gameDisconnect()), this, SLOT(onPlayerDisconnected(int)));
 }
 
-void Game::addNewPlayer(QPoint point, QSize size)
+void Game::addNewPlayer(QPoint point, QSize size, int playerID)
 {
-    int numOfPlayers = network->clients.length()-1;
-    players.append(new Player(settings->player_point, settings->player_size,numOfPlayers));
-    graphicsScene->addItem(players[numOfPlayers]);
+    playersMap[playerID] = new Player(settings->player_point, settings->player_size,playerID);
+    graphicsScene->addItem(playersMap[playerID]);
     playerScores.append(new Score());
-    //graphicsScene->addItem(playerScores[numOfPlayers]);
-    playerScores[numOfPlayers]->setupScore();
+    playerScores[playerID]->setupScore(playerID);
 
     show();
 }
@@ -63,35 +61,36 @@ void Game::keyPressEvent(QKeyEvent *event)
     // Player id (players[id]) will be received from the client through the socket
     // for now :
     int player_id = 0;
-    if(!players[player_id]->dead)
+    Player* player = playersMap[player_id];
+    if(!player->dead)
     {
         if(event->key() == Qt::Key_Left)
-            players[player_id]->movementDirection[LEFT] = true;
+            player->movementDirection[LEFT] = true;
         else if(event->key() == Qt::Key_Right)
-            players[player_id]->movementDirection[RIGHT] = true;
+            player->movementDirection[RIGHT] = true;
         else if(event->key() == Qt::Key_Up)
-            players[player_id]->movementDirection[UP] = true;
+            player->movementDirection[UP] = true;
         else if(event->key() == Qt::Key_Down)
-            players[player_id]->movementDirection[DOWN] = true;
+            player->movementDirection[DOWN] = true;
         else if(event->key() == Qt::Key_W)
         {
-                players[player_id]->isShooting = true;
-                players[player_id]->shootingDirection = 0;
+                player->isShooting = true;
+                player->shootingDirection = 0;
         }
         else if(event->key() == Qt::Key_A)
         {
-                players[player_id]->isShooting = true;
-                players[player_id]->shootingDirection = 1;
+                player->isShooting = true;
+                player->shootingDirection = 1;
         }
         else if(event->key() == Qt::Key_S)
         {
-                players[player_id]->isShooting = true;
-                players[player_id]->shootingDirection = 2;
+                player->isShooting = true;
+                player->shootingDirection = 2;
         }
         else if(event->key() == Qt::Key_D)
         {
-                players[player_id]->isShooting = true;
-                players[player_id]->shootingDirection = 3;
+                player->isShooting = true;
+                player->shootingDirection = 3;
         }
         else if(event->key() == Qt::Key_Escape)
         {
@@ -102,33 +101,63 @@ void Game::keyPressEvent(QKeyEvent *event)
     //movePlayer();
 }
 
+void Game::keyReleaseEvent(QKeyEvent *event)
+{
+    // In final cut this would be changed on server based on clients sending input (not local keyEvents)
+    Player* player = playersMap[0];
+    if(!player->dead)
+    {
+        switch ( event->key() )
+        {
+        case Qt::Key_Up:
+            player->movementDirection[UP] = 0;
+            break;
+        case Qt::Key_Left:
+            player->movementDirection[LEFT] = 0;
+            break;
+        case Qt::Key_Down:
+            player->movementDirection[DOWN] = 0;
+            break;
+        case Qt::Key_Right:
+            player->movementDirection[RIGHT] = 0;
+            break;
+        case Qt::Key_W:
+        case Qt::Key_A:
+        case Qt::Key_S:
+        case Qt::Key_D:
+            player->isShooting = false;
+            break;
+        }
+    }
+}
 
 void Game::playerAction() {
     int playerSpeed = this->settings->player_speed;
 
-    for(int i = 0; i < network->clients.length(); i++)
+    for(int i = 0; i < playersMap.size(); i++)
     {
-        if(!players[i]->dead)   // Bandaid, prob can disable keyEvents altogether
+        Player* player = playersMap[i];
+        if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
         {
-            if(players[i]->movementDirection[UP] && players[i]->pos().y() > 0)
+            if(player->movementDirection[UP] && player->pos().y() > 0)
             {
-                players[i]->moveBy(0, -playerSpeed);
+                player->moveBy(0, -playerSpeed);
             }
-            if(players[i]->movementDirection[DOWN] && players[i]->pos().y() + settings->player_size.height()< settings->screen_size.height())
+            if(player->movementDirection[DOWN] && player->pos().y() + settings->player_size.height()< settings->screen_size.height())
             {
-                players[i]->moveBy(0, playerSpeed);
+                player->moveBy(0, playerSpeed);
             }
-            if(players[i]->movementDirection[LEFT] && players[i]->pos().x() > 0)
+            if(player->movementDirection[LEFT] && player->pos().x() > 0)
             {
-                players[i]->moveBy(-playerSpeed, 0);
+                player->moveBy(-playerSpeed, 0);
             }
-            if(players[i]->movementDirection[RIGHT] && players[i]->pos().x() + settings->player_size.width() < settings->screen_size.width())
+            if(player->movementDirection[RIGHT] && player->pos().x() + settings->player_size.width() < settings->screen_size.width())
             {
-                players[i]->moveBy(playerSpeed, 0);
+                player->moveBy(playerSpeed, 0);
             }
-            if(players[i]->isShooting && !players[i]->shotFired)
+            if(player->isShooting && !player->shotFired)
             {
-                fireBullet(players[i]);
+                fireBullet(player);
             }
         }
     }
@@ -147,9 +176,9 @@ void Game::spawnEnemy()
 
 void Game::updatePoints()
 {
-    for(int i = 0; i < network->clients.length(); i++)
+    for(int i = 0; i < playersMap.size(); i++)
     {
-        if(!players[i]->dead)
+        if(!playersMap[i]->dead)
             playerScores[i]->increasePassive();
     }
     this->dumpGameInfo();
@@ -159,98 +188,70 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
 {
     qDebug() << "Handle player action!";
     qDebug() << playerAction.id << " " << playerAction.key << " " << playerAction.mode;
+    Player* player = playersMap[playerAction.id];
     if(playerAction.mode == QEvent::KeyRelease)
     {
-        if(!players[playerAction.id]->dead)
+        if(!player->dead)
         {
             qDebug() << "Not dead!";
             switch ( playerAction.key )
             {
             case Qt::Key_Up:
-                players[playerAction.id]->movementDirection[UP] = 0;
+                player->movementDirection[UP] = 0;
                 break;
             case Qt::Key_Left:
-                players[playerAction.id]->movementDirection[LEFT] = 0;
+                player->movementDirection[LEFT] = 0;
                 break;
             case Qt::Key_Down:
-                players[playerAction.id]->movementDirection[DOWN] = 0;
+                player->movementDirection[DOWN] = 0;
                 break;
             case Qt::Key_Right:
-                players[playerAction.id]->movementDirection[RIGHT] = 0;
+                player->movementDirection[RIGHT] = 0;
                 break;
             case Qt::Key_W:
             case Qt::Key_A:
             case Qt::Key_S:
             case Qt::Key_D:
-                players[playerAction.id]->isShooting = false;
+                player->isShooting = false;
                 break;
             }
         }
     }
     else if(playerAction.mode == QEvent::KeyPress)
     {
-        if(!players[playerAction.id]->dead)
+        if(!player->dead)
         {
             switch ( playerAction.key )
             {
             case Qt::Key_Up:
-                players[playerAction.id]->movementDirection[UP] = true;
+                player->movementDirection[UP] = true;
                 break;
             case Qt::Key_Left:
-                players[playerAction.id]->movementDirection[LEFT] = true;
+                player->movementDirection[LEFT] = true;
                 break;
             case Qt::Key_Down:
-                players[playerAction.id]->movementDirection[DOWN] = true;
+                player->movementDirection[DOWN] = true;
                 break;
             case Qt::Key_Right:
-                players[playerAction.id]->movementDirection[RIGHT] = true;
+                player->movementDirection[RIGHT] = true;
                 break;
             case Qt::Key_W:
-                players[playerAction.id]->isShooting = true;
-                players[playerAction.id]->shootingDirection = 0;
+                player->isShooting = true;
+                player->shootingDirection = 0;
                 break;
             case Qt::Key_A:
-                players[playerAction.id]->isShooting = true;
-                players[playerAction.id]->shootingDirection = 1;
+                player->isShooting = true;
+                player->shootingDirection = 1;
                 break;
             case Qt::Key_S:
-                players[playerAction.id]->isShooting = true;
-                players[playerAction.id]->shootingDirection = 2;
+                player->isShooting = true;
+                player->shootingDirection = 2;
                 break;
             case Qt::Key_D:
-                players[playerAction.id]->isShooting = true;
-                players[playerAction.id]->shootingDirection = 3;
+                player->isShooting = true;
+                player->shootingDirection = 3;
                 break;
             }
-        }
-    }
-}
-
-void Game::keyReleaseEvent(QKeyEvent *event)
-{
-    // In final cut this would be changed on server based on clients sending input (not local keyEvents)
-    if(!players[0]->dead)
-    {
-        switch ( event->key() )
-        {
-        case Qt::Key_Up:
-            players[0]->movementDirection[UP] = 0;
-            break;
-        case Qt::Key_Left:
-            players[0]->movementDirection[LEFT] = 0;
-            break;
-        case Qt::Key_Down:
-            players[0]->movementDirection[DOWN] = 0;
-            break;
-        case Qt::Key_Right:
-            players[0]->movementDirection[RIGHT] = 0;
-            break;
-        case Qt::Key_W:
-        case Qt::Key_A:
-        case Qt::Key_S:
-        case Qt::Key_D:
-            players[0]->isShooting = false;
-            break;
         }
     }
 }
@@ -276,8 +277,8 @@ void Game::moveAssets() {
                     || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > this->settings->screen_size.width() )       // If out of bounds
             {
                 graphicsScene->removeItem(all_items[i]);               
-                auto index = players[bullet->player_id]->playerBullets.indexOf(bullet);
-                players[bullet->player_id]->playerBullets.takeAt(index);
+                auto index = playersMap[bullet->player_id]->playerBullets.indexOf(bullet);
+                playersMap[bullet->player_id]->playerBullets.takeAt(index);
                 continue;
             }
         }
@@ -384,8 +385,8 @@ void Game::checkAllCollisions() {
         if( typeid(*(toBeDeleted[i])) == typeid(Bullet))
         {
             Bullet * bullet = dynamic_cast<Bullet *>(toBeDeleted[i]);
-            auto index = players[bullet->player_id]->playerBullets.indexOf(bullet);
-            players[bullet->player_id]->playerBullets.takeAt(index);
+            auto index = playersMap[bullet->player_id]->playerBullets.indexOf(bullet);
+            playersMap[bullet->player_id]->playerBullets.takeAt(index);
         }
         else delete toBeDeleted[i];
     }
@@ -541,12 +542,17 @@ void Game::onConnection(int id)
 {
     qDebug() << "New player with id " << id;
 
-    network->send(id, network->clients.length()-1);
-    addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size));
+    network->send(id);
+    addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size), id);
 }
 
 
-void Game::onGameDisconnected() {
-    qDebug() << " Game::onDisconnected";
+void Game::onPlayerDisconnected(int playerID) {
+    qDebug() << " Game::onDisconnected, playerID: " << playerID;
+
+    playerScores.removeAt(playerID);
+    graphicsScene->removeItem(playersMap[playerID]);
+    playersMap.remove(playerID);
+
 }
 

@@ -12,12 +12,11 @@ Score::Score(QGraphicsItem *parent): QGraphicsTextItem(parent)
     curr_score = 0;
 }
 
-void Score::setupScore()
+void Score::setupScore(int playerID)
 {
-    int numOfPlayers = newGame->network->clients.length()-1;
-    newGame->playerScores[numOfPlayers]->setPlainText(QString("Current score:") + QString::number((newGame->playerScores[numOfPlayers]->curr_score)));
-    newGame->playerScores[numOfPlayers]->setDefaultTextColor(newGame->settings->score_color);
-    newGame->playerScores[numOfPlayers]->setFont(newGame->settings->score_font);
+    newGame->playerScores[playerID]->setPlainText(QString("Current score:") + QString::number((newGame->playerScores[playerID]->curr_score)));
+    newGame->playerScores[playerID]->setDefaultTextColor(newGame->settings->score_color);
+    newGame->playerScores[playerID]->setFont(newGame->settings->score_font);
 }
 
 void Score::increasePassive()

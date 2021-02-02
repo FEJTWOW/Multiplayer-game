@@ -21,14 +21,15 @@ class Game: public QGraphicsView
 public:
     Game(QWidget * parent =0);
     void initGame();
-    void addNewPlayer(QPoint point, QSize size);
+    void addNewPlayer(QPoint point, QSize size, int playerID);
     void moveAssets();
     void checkAllCollisions();
     void fireBullet(Player*);  // This might need to be refactored to player or sth
     void generateLayoutOne();
     void killPlayer(Player *);
     QGraphicsScene * graphicsScene;
-    QList <Player*> players;
+    //QList <Player*> players;
+    QMap<int, Player*> playersMap;  // int jest takie same jak int w clientsMap w network.h; dzieki temu mamy polaczenie player-client
     QList <Score*> playerScores;
     Settings * settings;
     //int numOfPlayers;
@@ -48,7 +49,7 @@ public slots:
     void spawnEnemy();
     void updatePoints();
     void handlePlayerAction(const PlayerAction& playerAction);
-    void onGameDisconnected();
+    void onPlayerDisconnected(int playerID);
 public:
     Network* network;
 };

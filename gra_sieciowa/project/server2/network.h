@@ -17,11 +17,13 @@ public:
     void sendAll(const QString &message) const;
     void sendAll(const QByteArray& data) const;
     void sendAll(const GameState& gameState) const;
-    void send(const int id, const int game_id) const;
+    void send(const int playerID) const;
+    int addClientToMap(ClientSocket* clientSocket);
+    int getDisconnectedSocketID();
 signals:
     void newClientConnected(int id);
     void playerMadeAction(const PlayerAction& playerAction) const;
-    void gameDisconnect();
+    void gameDisconnect(int playerID);
 
 public slots:
     void onNewConnection();
@@ -30,7 +32,8 @@ public slots:
     void onMessage(const QByteArray& data) const;
 
 public:
-    QList<ClientSocket*> clients;
+    //QList<ClientSocket*> clients;
+    QMap<int, ClientSocket*> clientsMap;    // slabe rozwiazanie ale lepiej zrobic jeszcze jeden krok w tym bagnie niz wróćić się do początku
 };
 
 #endif // NETWORK_H

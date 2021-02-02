@@ -29,7 +29,7 @@ protected slots:
     void onDisconnected() const;
 
 
-protected:
+public:
     QTcpSocket *tcpSocket;
 };
 

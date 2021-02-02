@@ -7,7 +7,7 @@ class Score: public QGraphicsTextItem
 {
 public:
     Score(QGraphicsItem * parent = 0);
-    void setupScore();
+    void setupScore(int playerID);
     void increasePassive();
     void increaseKill();
     int getScore();
