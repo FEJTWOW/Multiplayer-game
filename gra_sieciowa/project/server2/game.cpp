@@ -56,7 +56,7 @@ void Game::addNewPlayer(QPoint point, QSize size, int playerID)
     show();
 }
 
-void Game::keyPressEvent(QKeyEvent *event)  // TODO delete
+/*void Game::keyPressEvent(QKeyEvent *event)  // TODO delete
 {
     // Player id (players[id]) will be received from the client through the socket
     // for now :
@@ -129,7 +129,7 @@ void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
             break;
         }
     }
-}
+}*/
 
 void Game::playerAction() {
     int playerSpeed = this->settings->player_speed;
@@ -139,26 +139,12 @@ void Game::playerAction() {
         Player* player = playersMap[id];
         if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
         {
-            if(player->movementDirection[UP] && player->pos().y() > 0)
-            {
-                player->moveBy(0, -playerSpeed);
-            }
-            if(player->movementDirection[DOWN] && player->pos().y() + settings->player_size.height()< settings->screen_size.height())
-            {
-                player->moveBy(0, playerSpeed);
-            }
-            if(player->movementDirection[LEFT] && player->pos().x() > 0)
-            {
-                player->moveBy(-playerSpeed, 0);
-            }
-            if(player->movementDirection[RIGHT] && player->pos().x() + settings->player_size.width() < settings->screen_size.width())
-            {
-                player->moveBy(playerSpeed, 0);
-            }
             if(player->isShooting && !player->shotFired)
             {
                 fireBullet(player);
             }
+
+            player->move(playerSpeed);
         }
     }
 }
@@ -187,107 +173,13 @@ void Game::updatePoints()
 void Game::handlePlayerAction(const PlayerAction &playerAction)
 {
     qDebug() << "Handle player action!";
-    qDebug() << playerAction.id << " " << playerAction.key << " " << playerAction.mode;
     Player* player = playersMap[playerAction.id];
 
-    switch(playerAction.horizontal) {
-        case 0:
-            player->movementDirection[LEFT] = 0;
-            player->movementDirection[RIGHT] = 0;
-            break;
-        case 1:
-            player->movementDirection[LEFT] = 0;
-            player->movementDirection[RIGHT] = 1;
-            break;
-        case -1:
-            player->movementDirection[LEFT] = 1;
-            player->movementDirection[RIGHT] = 0;
-            break;
-    }
-
-    switch(playerAction.vertical) {
-        case 0:
-            player->movementDirection[UP] = 0;
-            player->movementDirection[DOWN] = 0;
-            break;
-        case 1:
-            player->movementDirection[UP] = 1;
-            player->movementDirection[DOWN] = 0;
-            break;
-        case -1:
-            player->movementDirection[UP] = 0;
-            player->movementDirection[DOWN] = 1;
-            break;
-    }
+    player->horizontalMove = playerAction.horizontal;
+    player->verticalMove = playerAction.vertical;
 
     player->isShooting = playerAction.shooting;
     player->shootingDirection = playerAction.shootDirection;
-
-    if(playerAction.mode == QEvent::KeyRelease)
-    {
-        if(!player->dead)
-        {
-            qDebug() << "Not dead!";
-            switch ( playerAction.key )
-            {
-            case Qt::Key_Up:
-                player->movementDirection[UP] = 0;
-                break;
-            case Qt::Key_Left:
-                player->movementDirection[LEFT] = 0;
-                break;
-            case Qt::Key_Down:
-                player->movementDirection[DOWN] = 0;
-                break;
-            case Qt::Key_Right:
-                player->movementDirection[RIGHT] = 0;
-                break;
-            case Qt::Key_W:
-            case Qt::Key_A:
-            case Qt::Key_S:
-            case Qt::Key_D:
-                player->isShooting = false;
-                break;
-            }
-        }
-    }
-    else if(playerAction.mode == QEvent::KeyPress)
-    {
-        if(!player->dead)
-        {
-            switch ( playerAction.key )
-            {
-            case Qt::Key_Up:
-                player->movementDirection[UP] = true;
-                break;
-            case Qt::Key_Left:
-                player->movementDirection[LEFT] = true;
-                break;
-            case Qt::Key_Down:
-                player->movementDirection[DOWN] = true;
-                break;
-            case Qt::Key_Right:
-                player->movementDirection[RIGHT] = true;
-                break;
-            case Qt::Key_W:
-                player->isShooting = true;
-                player->shootingDirection = 0;
-                break;
-            case Qt::Key_A:
-                player->isShooting = true;
-                player->shootingDirection = 1;
-                break;
-            case Qt::Key_S:
-                player->isShooting = true;
-                player->shootingDirection = 2;
-                break;
-            case Qt::Key_D:
-                player->isShooting = true;
-                player->shootingDirection = 3;
-                break;
-            }
-        }
-    }
 }
 
 void Game::gameLoop() {

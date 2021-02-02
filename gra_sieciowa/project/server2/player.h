@@ -21,6 +21,11 @@ public:
     int id;
     QTimer * respawnTimer;
     QTimer * invulTimer;
+
+    int horizontalMove;
+    int verticalMove;
+    void move(int speed);
+
 public slots:
     void canShoot();
     void respawn();
