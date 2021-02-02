@@ -111,9 +111,9 @@ void Game::parseGameState(const QByteArray &data)
     {
         this->gameState.bullet[i] = receivedGameState.bullet[i];
     }
-    for(int i=0; i<25; i++)
+    for(int i=0; i<10; i++)
     {
-        //this->gameState.enemy[i] = receivedGameState.enemy[i];
+        this->gameState.enemy[i] = receivedGameState.enemy[i];
     }
     //this->gameState.player[this->myPlayerId].currentScore = receivedGameState.player[this->myPlayerId].currentScore;
     renderGameState();
@@ -147,11 +147,6 @@ void Game::renderGameState()
             continue;
 
         createBullet(gameState.bullet[i].pos);
-//        QGraphicsRectItem* bullet = new QGraphicsRectItem();
-//        bullet->setRect(QRectF(gameState.bullet[i].pos, settings->bullet_size));
-//        bullet->setBrush(settings->bullet_color);
-//        bullet->setPen(QPen(settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));
-//        clientGraphicsScene->addItem(bullet);
     }
     for(int i =0; i <10; i++)
     {
