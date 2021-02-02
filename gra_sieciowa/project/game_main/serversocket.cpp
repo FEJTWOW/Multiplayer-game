@@ -31,8 +31,7 @@ void ServerSocket::onMessage(const QByteArray& data) const
     {
 //        qDebug() << "Rozmiar gameState!" << data.size();
         emit newGameState(data);
-    }
-    else
+    } else
     {
        qDebug() << "Dostalem kupe i nie dzialam!" << data.size();
     }

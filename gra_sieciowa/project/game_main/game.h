@@ -24,6 +24,12 @@ public:
     GameState gameState;
     void showScore(int currentScore);
 
+    QTimer* timer;
+    int horizontal;
+    int vertical;
+    int shooting;
+    int shootDirection;
+    QMap<int, bool> keys;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -32,6 +38,7 @@ protected:
 public slots:
     void parseGameState(const QByteArray& data);
     void receivedPlayerId(const int&);
+    void move();
 };
 
 #endif // GAME_H

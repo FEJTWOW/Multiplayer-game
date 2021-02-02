@@ -189,6 +189,40 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
     qDebug() << "Handle player action!";
     qDebug() << playerAction.id << " " << playerAction.key << " " << playerAction.mode;
     Player* player = playersMap[playerAction.id];
+
+    switch(playerAction.horizontal) {
+        case 0:
+            player->movementDirection[LEFT] = 0;
+            player->movementDirection[RIGHT] = 0;
+            break;
+        case 1:
+            player->movementDirection[LEFT] = 0;
+            player->movementDirection[RIGHT] = 1;
+            break;
+        case -1:
+            player->movementDirection[LEFT] = 1;
+            player->movementDirection[RIGHT] = 0;
+            break;
+    }
+
+    switch(playerAction.vertical) {
+        case 0:
+            player->movementDirection[UP] = 0;
+            player->movementDirection[DOWN] = 0;
+            break;
+        case 1:
+            player->movementDirection[UP] = 1;
+            player->movementDirection[DOWN] = 0;
+            break;
+        case -1:
+            player->movementDirection[UP] = 0;
+            player->movementDirection[DOWN] = 1;
+            break;
+    }
+
+    player->isShooting = playerAction.shooting;
+    player->shootingDirection = playerAction.shootDirection;
+
     if(playerAction.mode == QEvent::KeyRelease)
     {
         if(!player->dead)
@@ -259,7 +293,7 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
 void Game::gameLoop() {
     playerAction();
     moveAssets();
-    checkAllCollisions();
+    //checkAllCollisions();
     GameState gameState = dumpGameInfo();
     //qDebug() << "gameLoop before sendAll";
     network->sendAll(gameState);

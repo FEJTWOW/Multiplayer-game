@@ -3,10 +3,14 @@
 #include <QKeyEvent>
 #include <QHostAddress>
 #include <QtAlgorithms>
-
+#include <QTimer>
 
 Game::Game(QWidget *parent)
 {
+    timer = new QTimer(this);
+
+    connect(timer,SIGNAL(timeout()), this, SLOT(move()));
+    timer->start(30);
 }
 
 void Game::initGame()
@@ -14,6 +18,11 @@ void Game::initGame()
     sock = new ServerSocket(QHostAddress::LocalHost,12345, this);
     connect(sock, SIGNAL(newPlayerId(int)), this, SLOT(receivedPlayerId(int)));
     connect(sock, SIGNAL(newGameState(const QByteArray&)), this, SLOT(parseGameState(const QByteArray&)));
+
+    horizontal = 0;
+    vertical = 0;
+    shooting = 0;
+    shootDirection = 0;
 
     settings = new Settings();
     clientGraphicsScene = new QGraphicsScene();
@@ -25,27 +34,66 @@ void Game::initGame()
     this->setFocus();
 }
 
+void Game::move() {
+    int newHorizontal = 0;
+    int newVertical = 0;
+    int newShooting = 0;
+    int newShootDirection = 0;
+
+    if(keys[Qt::Key_Up])
+        newVertical = 1;
+    if(keys[Qt::Key_Down])
+        newVertical = -1;
+    if(keys[Qt::Key_Left])
+        newHorizontal = -1;
+    if(keys[Qt::Key_Right])
+        newHorizontal = 1;
+    if(keys[Qt::Key_W]) {
+        newShooting = 1;
+        newShootDirection = 0;
+    }
+    if(keys[Qt::Key_S]) {
+        newShooting = 1;
+        newShootDirection = 2;
+    }
+    if(keys[Qt::Key_A]) {
+        newShooting = 1;
+        newShootDirection = 1;
+    }
+    if(keys[Qt::Key_D]) {
+        newShooting = 1;
+        newShootDirection = 3;
+    }
+
+    if(horizontal != newHorizontal || vertical != newVertical || shooting != newShooting || shootDirection != newShootDirection) {
+        vertical = newVertical;
+        horizontal = newHorizontal;
+        shooting = newShooting;
+        shootDirection = newShootDirection;
+
+        PlayerAction action;
+        action.key = 1;
+        action.mode = 1;
+        action.id = this->myPlayerId;
+        action.horizontal = horizontal;
+        action.vertical = vertical;
+        action.shooting = shooting;
+        action.shootDirection = shootDirection;
+        sock->sendPlayerAction(action);
+
+        qDebug() << "ZMiana";
+    }
+}
+
 void Game::keyPressEvent(QKeyEvent *event)
 {
-    PlayerAction action;
-    action.key = event->key();
-    action.mode = event->type();
-    action.id = this->myPlayerId;
-    sock->sendPlayerAction(action);
-
-//    qDebug() << "Pressed:" << action.key << " " << action.mode << " " << action.id;
+    keys[event->key()] = true;
 }
 
 
 void Game::keyReleaseEvent(QKeyEvent *event)
 {
-    PlayerAction action;
-    action.key = event->key();
-    action.mode = event->type();
-    action.id = this->myPlayerId;
-
-    sock->sendPlayerAction(action);
-//    qDebug() << "Released:" << action.key << " " << action.mode << " " << action.id;
+    keys[event->key()] = false;
 }
 
 void Game::parseGameState(const QByteArray &data)
@@ -67,9 +115,9 @@ void Game::parseGameState(const QByteArray &data)
     }
     for(int i=0; i<25; i++)
     {
-        this->gameState.enemy[i] = receivedGameState.enemy[i];
+        //this->gameState.enemy[i] = receivedGameState.enemy[i];
     }
-    this->gameState.player[this->myPlayerId].currentScore = receivedGameState.player[this->myPlayerId].currentScore;
+    //this->gameState.player[this->myPlayerId].currentScore = receivedGameState.player[this->myPlayerId].currentScore;
     renderGameState();
 }
 
