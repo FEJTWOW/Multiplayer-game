@@ -3,6 +3,7 @@
 
 #include "settings.h"
 #include "serversocket.h"
+#include "score.h"
 
 #include <QWidget>
 #include <QGraphicsView>
@@ -11,6 +12,7 @@
 class Game: public QGraphicsView
 {
     Q_OBJECT
+
 public:
     Game(QWidget * parent =0);
     void initGame();
@@ -20,7 +22,7 @@ public:
     ServerSocket* sock;
     int myPlayerId;
     GameState gameState;
-
+    Score* playerScore;
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

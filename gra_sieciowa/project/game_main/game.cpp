@@ -16,6 +16,7 @@ void Game::initGame()
     connect(sock, SIGNAL(newGameState(const QByteArray&)), this, SLOT(parseGameState(const QByteArray&)));
 
     settings = new Settings();
+    playerScore = new Score();
     clientGraphicsScene = new QGraphicsScene();
     clientGraphicsScene->setSceneRect(QRectF(settings->screen_point, settings->screen_size));
     setScene(clientGraphicsScene);
@@ -69,6 +70,7 @@ void Game::parseGameState(const QByteArray &data)
     {
         this->gameState.enemy[i] = receivedGameState.enemy[i];
     }
+    this->gameState.player[this->myPlayerId].currentScore = receivedGameState.player[this->myPlayerId].currentScore;
     renderGameState();
 }
 
@@ -112,6 +114,11 @@ void Game::renderGameState()
         enemy->setRect(QRectF(gameState.enemy[i].pos, settings->enemy_size));
         clientGraphicsScene->addItem(enemy);
     }
+      this->playerScore->setupScore(gameState.player[this->myPlayerId].currentScore);
+//    this->setPlainText(QString("Current score:") + QString::number(gameState.player[this->myPlayerId].currentScore));
+//    newGame->playerScores[newGame->numOfPlayers]->setDefaultTextColor(newGame->settings->score_color);
+//    newGame->playerScores[newGame->numOfPlayers]->setFont(newGame->settings->score_font);
+
 }
 
 

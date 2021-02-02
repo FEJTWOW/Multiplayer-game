@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->movieLabel->setMovie(movie);
     movie->start();
     QPixmap *pixmap = new QPixmap("../../../gra_sieciowa/project/background.jpeg");
-    qDebug() << QDir::currentPath();
     QPixmap *pixmap2 = new QPixmap("../../../gra_sieciowa/project/gamepad.png");
     ui->background->setPixmap(*pixmap);
     ui->gamepad_1->setPixmap(*pixmap2);
