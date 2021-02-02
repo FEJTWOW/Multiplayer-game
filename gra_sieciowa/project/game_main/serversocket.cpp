@@ -27,10 +27,14 @@ void ServerSocket::onMessage(const QByteArray& data) const
         emit newPlayerId(ourId);
 //        qDebug() << "Got id from server" << ourId;
     }
-    if (data.size() == sizeof(GameState))
+    else if (data.size() == sizeof(GameState))
     {
 //        qDebug() << "Rozmiar gameState!" << data.size();
         emit newGameState(data);
+    }
+    else
+    {
+       qDebug() << "Dostalem kupe i nie dzialam!" << data.size();
     }
 
 }
