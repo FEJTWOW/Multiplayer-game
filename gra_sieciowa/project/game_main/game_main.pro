@@ -20,14 +20,12 @@ SOURCES += \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
-    score.cpp \
     settings.cpp \
     serversocket.cpp
 
 HEADERS += \
     game.h \
     mainwindow.h \
-    score.h \
     settings.h \
     serversocket.h
 

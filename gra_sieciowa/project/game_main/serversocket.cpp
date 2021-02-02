@@ -13,29 +13,24 @@ ServerSocket::ServerSocket(const QHostAddress &address, quint16 port,
 
 void ServerSocket::onMessage(const QString& message) const
 {
-    qDebug() << "CZYTAM STRINGA";
+//    qDebug() << "CZYTAM STRINGA";
     qDebug() << message;
 }
 
 void ServerSocket::onMessage(const QByteArray& data) const
 {
 
-    if(data.size() == 4)
+    if (data.size() == 4)
     {
         int ourId = 5;
         memcpy(&ourId, data.data(), data.size());
         emit newPlayerId(ourId);
-        qDebug() << "Got id from server" << ourId;
+//        qDebug() << "Got id from server" << ourId;
     }
-    else if (data.size() == sizeof(GameState))
+    if (data.size() == sizeof(GameState))
     {
-        qDebug() << "Rozmiar gameState!" << data.size();
+//        qDebug() << "Rozmiar gameState!" << data.size();
         emit newGameState(data);
-    }
-    else
-    {
-
-        qDebug() << "Dostalem kupe! o rozmiarze" << data.size();
     }
 
 }
@@ -47,7 +42,7 @@ void ServerSocket::sendPlayerAction(const PlayerAction &playerAction) const
 //    QDataStream stream(&byteArray, QIODevice::WriteOnly);
 //    stream.setVersion(QDataStream::Qt_5_9);
 
-//    stream << playerAction.action << playerAction.posX << playerAction.posY;
+//    stream << playerAction.action << playerAction.posX << playerAction.posY;w
     sendData(QByteArray(static_cast<char*>((void*)&playerAction), sizeof(playerAction)));
 
 }

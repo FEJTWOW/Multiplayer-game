@@ -7,7 +7,7 @@ Settings::Settings()
     screen_point = {0,0};
 
     // Game settings
-    game_timer_res = 20;
+    game_timer_res = 50;
     respawn_time_in_ms = 5000;
 
     // Player settings
