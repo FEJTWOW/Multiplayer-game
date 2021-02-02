@@ -43,7 +43,7 @@ void Game::initGame()
     QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
     enemyTimer->start(2000);
 
-    connect(network, SIGNAL(gameDisconnect()), this, SLOT(onPlayerDisconnected(int)));
+    connect(network, SIGNAL(gameDisconnect(int)), this, SLOT(onPlayerDisconnected(int)));
 }
 
 void Game::addNewPlayer(QPoint point, QSize size, int playerID)

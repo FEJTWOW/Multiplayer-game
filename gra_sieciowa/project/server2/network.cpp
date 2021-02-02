@@ -57,12 +57,13 @@ void Network::onDisconnected()
         qDebug() << "disconnecteSocketID == -1!";
         exit(EXIT_FAILURE);
     }
-    clientsMap.remove(disconnecteSocketID);
 
     auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
     //clients.removeOne(client);
     //delete client;
     emit gameDisconnect(disconnecteSocketID);
+
+    clientsMap.remove(disconnecteSocketID);
 }
 
 int Network::getDisconnectedSocketID() {
