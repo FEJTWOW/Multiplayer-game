@@ -114,6 +114,7 @@ void Game::renderGameState()
         enemy->setRect(QRectF(gameState.enemy[i].pos, settings->enemy_size));
         clientGraphicsScene->addItem(enemy);
     }
+    qDebug() << gameState.player[this->myPlayerId].currentScore << " ESZKERE";
       this->playerScore->setupScore(gameState.player[this->myPlayerId].currentScore);
 //    this->setPlainText(QString("Current score:") + QString::number(gameState.player[this->myPlayerId].currentScore));
 //    newGame->playerScores[newGame->numOfPlayers]->setDefaultTextColor(newGame->settings->score_color);

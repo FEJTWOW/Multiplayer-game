@@ -1,5 +1,5 @@
 #include "score.h"
-
+#include <QDebug>
 Score::Score(QGraphicsItem *parent) : QGraphicsTextItem(parent)
 {
 
@@ -7,5 +7,6 @@ Score::Score(QGraphicsItem *parent) : QGraphicsTextItem(parent)
 
 void Score::setupScore(int currentScore)
 {
-    this->setPlainText(QString("Current score:") + QString::number(currentScore));
+    qDebug() << "Kurwa " << currentScore;
+//    this->setPlainText(QString("Current score:") + QString::number(currentScore));
 }

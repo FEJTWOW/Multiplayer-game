@@ -1,12 +1,14 @@
 #include "serversocket.h"
-
+#include <QDebug>
 ServerSocket::ServerSocket(const QHostAddress &address, quint16 port,
                            QObject *parent) : Socket(parent)
 {
+
      tcpSocket->connectToHost(address, port);
      tcpSocket->waitForConnected();
      connect(this,SIGNAL(message(const QString&)), this, SLOT(onMessage(const QString&)));
      connect(this,SIGNAL(message(const QByteArray&)), this, SLOT(onMessage(const QByteArray&)));
+     qDebug() << "Debuguje Server Socket koniec!";
 }
 
 void ServerSocket::onMessage(const QString& message) const
@@ -17,6 +19,7 @@ void ServerSocket::onMessage(const QString& message) const
 
 void ServerSocket::onMessage(const QByteArray& data) const
 {
+
     if(data.size() == 4)
     {
         int ourId = 5;
@@ -24,11 +27,15 @@ void ServerSocket::onMessage(const QByteArray& data) const
         emit newPlayerId(ourId);
         qDebug() << "Got id from server" << ourId;
     }
+    else if (data.size() == sizeof(GameState))
+    {
+        qDebug() << "Rozmiar gameState!" << data.size();
+        emit newGameState(data);
+    }
     else
     {
-        //GameState gameState = parseGameState(data);
-        emit newGameState(data);
-        //qDebug() << "Received gameState";
+
+        qDebug() << "Dostalem kupe! o rozmiarze" << data.size();
     }
 
 }

@@ -7,11 +7,11 @@ Settings::Settings()
     screen_point = {0,0};
 
     // Game settings
-    game_timer_res = 20;
+    game_timer_res = 50;
     respawn_time_in_ms = 5000;
 
     // Player settings
-     player_speed = 7;
+     player_speed = 10;
      player_size = {35,35};
      player_point = {0,0};
      player_color = Qt::red;//Qt::cyan
