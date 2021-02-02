@@ -33,3 +33,7 @@ unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+#TARGET = utils
+#TEMPLATE = lib
+#CONFIG += staticlib
