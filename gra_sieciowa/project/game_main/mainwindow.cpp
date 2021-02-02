@@ -3,6 +3,7 @@
 #include <QDebug>
 #include "game.h"
 #include <QMovie>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,11 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QMovie *movie = new QMovie("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/animation.gif");
+    QMovie *movie = new QMovie("../../../gra_sieciowa/project/animation.gif");
     ui->movieLabel->setMovie(movie);
     movie->start();
-    QPixmap *pixmap = new QPixmap("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/background.jpeg");
-    QPixmap *pixmap2 = new QPixmap("/home/student/oop_2020_gra_sieciowa/gra_sieciowa/project/gamepad.png");
+    QPixmap *pixmap = new QPixmap("../../../gra_sieciowa/project/background.jpeg");
+    qDebug() << QDir::currentPath();
+    QPixmap *pixmap2 = new QPixmap("../../../gra_sieciowa/project/gamepad.png");
     ui->background->setPixmap(*pixmap);
     ui->gamepad_1->setPixmap(*pixmap2);
     ui->gamepad_2->setPixmap(*pixmap2);
