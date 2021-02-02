@@ -293,7 +293,7 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
 void Game::gameLoop() {
     playerAction();
     moveAssets();
-    //checkAllCollisions();
+    checkAllCollisions();
     GameState gameState = dumpGameInfo();
     //qDebug() << "gameLoop before sendAll";
     network->sendAll(gameState);
@@ -379,6 +379,7 @@ void Game::checkAllCollisions() {
                 }
                 else
                 {
+                    qDebug() << "Player o id: " << bullet->player_id << "zabil!";
                     playerScoresMap[bullet->player_id]->increaseKill();
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
@@ -510,7 +511,7 @@ void Game::generateLayoutOne()
             count++;
             auto obstacle = new Obstacle(QPoint(i,screenHeight -j*size.height()), size);
             graphicsScene->addItem(obstacle);
-                qDebug() << "Created : " << count;
+//                qDebug() << "Created : " << count;
         }
 
     }
@@ -521,7 +522,7 @@ void Game::generateLayoutOne()
             count++;
             auto obstacle = new Obstacle(QPoint(i,0.4*screenHeight -j*size.height()), size);
             graphicsScene->addItem(obstacle);
-                qDebug() << "Created : " << count;
+//                qDebug() << "Created : " << count;
         }
     }
 }

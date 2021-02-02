@@ -19,10 +19,10 @@ void ServerSocket::onMessage(const QString& message) const
 
 void ServerSocket::onMessage(const QByteArray& data) const
 {
-
+    int ourId = 5;
     if (data.size() == 4)
     {
-        int ourId = 5;
+
         memcpy(&ourId, data.data(), data.size());
         emit newPlayerId(ourId);
 //        qDebug() << "Got id from server" << ourId;
@@ -31,10 +31,18 @@ void ServerSocket::onMessage(const QByteArray& data) const
     {
 //        qDebug() << "Rozmiar gameState!" << data.size();
         emit newGameState(data);
-    } else
-    {
-       qDebug() << "Dostalem kupe i nie dzialam!" << data.size();
     }
+    else if (data.size() == sizeof(GameState) + 4)
+    {
+
+       memcpy(&ourId, data.data(), 4);
+       emit newPlayerId(ourId);
+    }
+    else
+    {
+        qDebug() << "Dostałem kupe i nie działam" << data.size();
+    }
+
 
 }
 

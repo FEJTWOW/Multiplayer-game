@@ -22,14 +22,11 @@ void Score::setupScore(int playerID)
 void Score::increasePassive()
 {
     curr_score += newGame->settings->score_passive_value;
-    setPlainText(QString("Current score:") + QString::number(curr_score));
-
 }
 
 void Score::increaseKill()
 {
     curr_score += newGame->settings->score_kill_value;
-    setPlainText(QString("Current score:") + QString::number(curr_score));
 }
 
 int Score::getScore()

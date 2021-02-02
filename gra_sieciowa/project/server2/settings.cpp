@@ -7,7 +7,7 @@ Settings::Settings()
     screen_point = {0,0};
 
     // Game settings
-    game_timer_res = 50;
+    game_timer_res = 60;
     respawn_time_in_ms = 5000;
 
     // Player settings
@@ -33,7 +33,7 @@ Settings::Settings()
     // Score settings
      score_color = Qt::red;
      score_font = {"System", 14};
-     score_passive_interval_in_ms = 1000;   // This would need to setup another timer
+     score_passive_interval_in_ms = 10000;   // This would need to setup another timer
      score_passive_value = 30;
      score_kill_value = 5000;
 

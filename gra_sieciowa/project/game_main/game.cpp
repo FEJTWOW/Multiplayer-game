@@ -80,8 +80,6 @@ void Game::move() {
         action.shooting = shooting;
         action.shootDirection = shootDirection;
         sock->sendPlayerAction(action);
-
-        qDebug() << "ZMiana";
     }
 }
 
@@ -148,9 +146,12 @@ void Game::renderGameState()
         if(gameState.bullet[i].pos.x() == 0 && gameState.bullet[i].pos.y() == 0)
             continue;
 
-        QGraphicsRectItem* bullet = new QGraphicsRectItem();
-        bullet->setRect(QRectF(gameState.bullet[i].pos, settings->bullet_size));
-        clientGraphicsScene->addItem(bullet);
+        createBullet(gameState.bullet[i].pos);
+//        QGraphicsRectItem* bullet = new QGraphicsRectItem();
+//        bullet->setRect(QRectF(gameState.bullet[i].pos, settings->bullet_size));
+//        bullet->setBrush(settings->bullet_color);
+//        bullet->setPen(QPen(settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));
+//        clientGraphicsScene->addItem(bullet);
     }
     for(int i =0; i <10; i++)
     {
@@ -178,4 +179,13 @@ void Game::showScore(int currentScore)
     io->setDefaultTextColor(settings->score_color);
     io->setFont(settings->score_font);
     this->clientGraphicsScene->addItem(io);
+}
+
+void Game::createBullet(QPointF pos)
+{
+    QGraphicsRectItem* bullet = new QGraphicsRectItem();
+    bullet->setRect(QRectF(pos, settings->bullet_size));
+    bullet->setBrush(settings->bullet_color);
+    bullet->setPen(QPen(settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));
+    clientGraphicsScene->addItem(bullet);
 }

@@ -7,7 +7,7 @@ Settings::Settings()
     screen_point = {0,0};
 
     // Game settings
-    game_timer_res = 50;
+    game_timer_res = 20;
     respawn_time_in_ms = 5000;
 
     // Player settings
@@ -27,7 +27,7 @@ Settings::Settings()
 
     // Bullet settings
      bullet_speed = 8;
-     bullet_size = {5,20};
+     bullet_size = {10,10};
      bullet_point = {0,0} ;
      bullet_color = Qt::blue;
 

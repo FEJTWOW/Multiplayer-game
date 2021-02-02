@@ -23,6 +23,7 @@ public:
     int myPlayerId;
     GameState gameState;
     void showScore(int currentScore);
+    void createBullet(QPointF pos);
 
     QTimer* timer;
     int horizontal;
