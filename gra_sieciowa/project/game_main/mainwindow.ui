@@ -516,7 +516,7 @@
      <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffaaff;&quot;&gt;Fire Breathing Kittens&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffaaff;&quot;&gt;Fire Breathing Wolfie&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="textFormat">
      <enum>Qt::AutoText</enum>
