@@ -50,6 +50,7 @@ public slots:
     void updatePoints();
     void handlePlayerAction(const PlayerAction& playerAction);
     void onPlayerDisconnected(int playerID);
+    void respawnPlayer(Player* player);
 public:
     Network* network;
 };

@@ -1,5 +1,5 @@
 QT -= gui
-QT += network
+QT += network widgets
 
 TEMPLATE = lib
 DEFINES += UTILS_LIBRARY
@@ -22,6 +22,7 @@ SOURCES += \
     utils.cpp
 
 HEADERS += \
+    gameSettings.h \
     gamestate.h \
     playeraction.h \
     socket.h \

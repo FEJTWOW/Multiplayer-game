@@ -331,6 +331,12 @@ void Game::killPlayer(Player * player)
     player->respawnTimer->start(settings->respawn_time_in_ms);
 }
 
+void Game::respawnPlayer(Player* player) {
+    qDebug() << "kekeke";
+    /*player->respawn();
+    graphicsScene->addItem(player);*/
+}
+
 
 void Game::fireBullet(Player* player)
 {
