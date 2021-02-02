@@ -8,7 +8,6 @@
 Game::Game(QWidget *parent)
 {
     timer = new QTimer(this);
-
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));
     timer->start(30);
 }
@@ -41,9 +40,9 @@ void Game::move() {
     int newShootDirection = 0;
 
     if(keys[Qt::Key_Up])
-        newVertical = 1;
-    if(keys[Qt::Key_Down])
         newVertical = -1;
+    if(keys[Qt::Key_Down])
+        newVertical = 1;
     if(keys[Qt::Key_Left])
         newHorizontal = -1;
     if(keys[Qt::Key_Right])
@@ -72,8 +71,6 @@ void Game::move() {
         shootDirection = newShootDirection;
 
         PlayerAction action;
-        action.key = 1;
-        action.mode = 1;
         action.id = this->myPlayerId;
         action.horizontal = horizontal;
         action.vertical = vertical;

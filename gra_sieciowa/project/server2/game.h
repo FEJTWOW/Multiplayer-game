@@ -38,8 +38,8 @@ public:
     GameState gameInfo;
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
+    //void keyPressEvent(QKeyEvent *event) override;
+    //void keyReleaseEvent(QKeyEvent *event) override;
     GameState dumpGameInfo();
 
 public slots:

@@ -5,8 +5,6 @@
 
 struct PlayerAction
 {
-    int mode;
-    int key;
     int id;
     int horizontal;
     int vertical;
