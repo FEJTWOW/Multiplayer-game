@@ -50,8 +50,8 @@ void Game::addNewPlayer(QPoint point, QSize size, int playerID)
 {
     playersMap[playerID] = new Player(settings->player_point, settings->player_size,playerID);
     graphicsScene->addItem(playersMap[playerID]);
-    playerScoresMap[playerID] = new Score();
-    playerScoresMap[playerID]->setupScore(playerID);
+    playersMap[playerID]->score = 0; // niepotrzbne
+    //playersMap[playerID]->setupScore();    // bezsensu po stronie serwera
 
     show();
 }
@@ -154,6 +154,9 @@ void Game::spawnEnemy()
     if(numOfEnemies < 9)
     {
         auto newEnemy = new Enemy();
+        int randPos = rand() & 750;
+        newEnemy->setRect(QRectF(QPoint(randPos, 0), settings->enemy_size));
+
         scene()->addItem(newEnemy);
         numOfEnemies++;
     }
@@ -165,7 +168,7 @@ void Game::updatePoints()
     for(const auto& id : playersMap.keys())
     {
         if(!playersMap[id]->dead)
-            playerScoresMap[id]->increasePassive();
+            playersMap[id]->score += settings->score_passive_value;
     }
     this->dumpGameInfo();
 }
@@ -252,10 +255,6 @@ void Game::checkAllCollisions() {
                 if(!toBeDeleted.contains(colliding_items[0]))
                     toBeDeleted.push_back(colliding_items[0]);
             }
-            else if(typeid(*(colliding_items[0])) == typeid(Score))
-            {
-                continue;
-            }
             else if (typeid(*(colliding_items[0])) == typeid(Player))
             {
                 Player * player = dynamic_cast<Player *>(colliding_items[0]);
@@ -273,7 +272,7 @@ void Game::checkAllCollisions() {
                 else
                 {
                     qDebug() << "Player o id: " << bullet->player_id << "zabil!";
-                    playerScoresMap[bullet->player_id]->increaseKill();
+                    playersMap[bullet->player_id]->score -= settings->score_kill_value;
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
                     killPlayer(player);
@@ -363,9 +362,7 @@ void Game::generateLayoutOne()
         for(int j = 1; j < 4; j++)
         {
             count++;
-            auto obstacle = new Obstacle(QPoint(i,screenHeight -j*size.height()), size);
-            graphicsScene->addItem(obstacle);
-//                qDebug() << "Created : " << count;
+            generateObstacle(QPoint(i,screenHeight -j*size.height()), size);
         }
 
     }
@@ -374,11 +371,17 @@ void Game::generateLayoutOne()
         for(int j = 1; j < 5; j++)
         {
             count++;
-            auto obstacle = new Obstacle(QPoint(i,0.4*screenHeight -j*size.height()), size);
-            graphicsScene->addItem(obstacle);
-//                qDebug() << "Created : " << count;
+            generateObstacle(QPoint(i,0.4*screenHeight -j*size.height()), size);
         }
     }
+}
+
+
+void Game::generateObstacle(QPoint point, QSize size) {
+    auto obstacle = new Obstacle();
+    obstacle->setPos(0,0);
+    obstacle->setRect(point.x(),point.y(),size.width(),size.height());
+    graphicsScene->addItem(obstacle);
 }
 
 GameState Game::dumpGameInfo()
@@ -404,7 +407,7 @@ GameState Game::dumpGameInfo()
         {
             Player* tempPlayer = dynamic_cast<Player*>(i);
             // sth is crashing here after disconnect
-            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playerScoresMap[tempPlayer->id]->getScore() };
+            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playersMap[tempPlayer->id]->score };
             gameInfo.player[playerCount] = playerInfo;
             playerCount++;
         }
@@ -442,7 +445,6 @@ void Game::onConnection(int id)
 void Game::onPlayerDisconnected(int playerID) {
     qDebug() << " Game::onDisconnected, playerID: " << playerID;
 
-    playerScoresMap.remove(playerID);
     if(playersMap[playerID])
         graphicsScene->removeItem(playersMap[playerID]);
     playersMap.remove(playerID);

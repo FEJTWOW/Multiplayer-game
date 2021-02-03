@@ -23,6 +23,7 @@ public:
     bool dead = false;
     bool invulnerable = false;
     int id;
+    int score = 0;
     QTimer * respawnTimer;
     QTimer * invulTimer;
 

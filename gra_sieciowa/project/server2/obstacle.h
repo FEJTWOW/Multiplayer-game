@@ -8,7 +8,7 @@ class Obstacle : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
-    Obstacle(QPoint point, QSize size);
+    Obstacle();
 };
 
 #endif // OBSTACLE_H

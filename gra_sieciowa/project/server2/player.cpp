@@ -24,6 +24,7 @@ void Player::canShoot()
 }
 
 void Player::kill() {
+    //score = 0; TODO chcemy zerowac tutaj wynik?
     dead = true;
     respawnTimer = new QTimer(this);
     QObject::connect(respawnTimer, SIGNAL(timeout()), this, SLOT(onRespawn()));

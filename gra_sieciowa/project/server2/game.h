@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "player.h"
-#include "score.h"
 #include "settings.h"
 #include "obstacle.h"
 #include "bullet.h"
@@ -26,11 +25,11 @@ public:
     void checkAllCollisions();
     void fireBullet(Player*);  // This might need to be refactored to player or sth
     void generateLayoutOne();
+    void generateObstacle(QPoint point, QSize size);
     void killPlayer(Player *);
     QGraphicsScene * graphicsScene;
     //QList <Player*> players;
     QMap<int, Player*> playersMap;  // int jest takie same jak int w clientsMap w network.h; dzieki temu mamy polaczenie player-client
-    QMap<int, Score*> playerScoresMap;
     Settings * settings;
     //int numOfPlayers;
     int numOfEnemies;
