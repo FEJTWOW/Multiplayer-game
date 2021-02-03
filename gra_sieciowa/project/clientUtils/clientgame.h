@@ -16,7 +16,7 @@ class ClientGame: public QGraphicsView
 
 public:
     ClientGame(QWidget* parent =0);
-    void initGame();
+    void initGame(const QHostAddress& address, quint16 port);
     void renderGameState();
     QGraphicsScene * clientGraphicsScene;
     ServerSocket* sock;

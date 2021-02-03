@@ -4,6 +4,7 @@
 #include "clientgame.h"
 #include <QMovie>
 #include <QDir>
+#include <QHostAddress>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -53,9 +54,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
+    const QString serverIpText = ui->textEdit->toPlainText();
+    const QString portText = ui->textEdit_2->toPlainText();
+    quint16 port = portText.toUShort();
     ClientGame* newGame;
     newGame = new ClientGame();
-    newGame->initGame();
+    newGame->initGame(QHostAddress(serverIpText), port);
     newGame->show();
     newGame->setFocusPolicy(Qt::NoFocus);
     MainWindow::hide();

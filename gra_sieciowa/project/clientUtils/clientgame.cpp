@@ -4,6 +4,7 @@
 #include <QHostAddress>
 #include <QtAlgorithms>
 #include <QTimer>
+#include <QPainter>
 
 ClientGame::ClientGame(QWidget *parent)
 {
@@ -12,9 +13,9 @@ ClientGame::ClientGame(QWidget *parent)
     timer->start(30);
 }
 
-void ClientGame::initGame()
+void ClientGame::initGame(const QHostAddress& address, quint16 port)
 {
-    sock = new ServerSocket(QHostAddress::LocalHost,12345, this);
+    sock = new ServerSocket(address,port, this);
     connect(sock, SIGNAL(newPlayerId(int)), this, SLOT(receivedPlayerId(int)));
     connect(sock, SIGNAL(newGameState(const QByteArray&)), this, SLOT(parseGameState(const QByteArray&)));
 
@@ -131,9 +132,17 @@ void ClientGame::renderGameState()
 
         if(gameState.player[i].pos.x() == 0 && gameState.player[i].pos.y() == 0)
             continue;
+//        QPainter* painter = new QPainter();
 
         QGraphicsRectItem* player = new QGraphicsRectItem();
+//        QImage boximg("../../../gra_sieciowa/project/wolf.jpeg");
+
+//        painter->drawImage(QRectF(gameState.player[i].pos, playerSize), boximg);
+//        player->paint(painter,0,this);
+//        player->
         player->setRect(QRectF(gameState.player[i].pos, playerSize));
+//        QBrush tempBrush;
+//        tempBrush.setTexture(QPixmap("../../../gra_sieciowa/project/wolf2.png"));
         player->setBrush(player_colors[gameState.player[i].id]);
         clientGraphicsScene->addItem(player);
     }
