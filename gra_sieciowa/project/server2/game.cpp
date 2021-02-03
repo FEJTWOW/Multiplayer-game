@@ -131,23 +131,6 @@ void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
     }
 }*/
 
-void Game::playerAction() {
-    int playerSpeed = playerSpeed;
-
-    for(const auto& id : playersMap.keys())
-    {
-        Player* player = playersMap[id];
-        if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
-        {
-            if(player->isShooting && !player->shotFired)
-            {
-                fireBullet(player);
-            }
-
-            player->move(playerSpeed);
-        }
-    }
-}
 
 void Game::spawnEnemy()
 {
@@ -193,6 +176,22 @@ void Game::gameLoop() {
     //qDebug() << "gameLoop before sendAll";
     network->sendAll(gameState);
     //qDebug() << "gameLoop aftersendAll";
+}
+
+void Game::playerAction() {
+    for(const auto& id : playersMap.keys())
+    {
+        Player* player = playersMap[id];
+        if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
+        {
+            if(player->isShooting && !player->shotFired)
+            {
+                fireBullet(player);
+            }
+
+            player->move(playerSpeed);
+        }
+    }
 }
 
 void Game::moveAssets() {

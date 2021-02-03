@@ -12,6 +12,7 @@ constexpr QPoint screenPoint = { 0, 0 };
 constexpr int playerSpeed = 10;
 constexpr QSize playerSize = { 35, 35 };
 const QColor playerColor = Qt::red;
+const QColor player_colors[6] = {Qt::red, Qt::cyan, Qt::blue, Qt::green, Qt::darkYellow, Qt::darkRed};
 constexpr int playerMaxCount = 5;
 constexpr int playerMaxBullets = 5;
 constexpr QPoint playerPoint = { 0, 0 };

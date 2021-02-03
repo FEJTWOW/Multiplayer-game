@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "player.h"
-#include "settings.h"
 #include "obstacle.h"
 #include "bullet.h"
 
@@ -30,7 +29,6 @@ public:
     QGraphicsScene * graphicsScene;
     //QList <Player*> players;
     QMap<int, Player*> playersMap;  // int jest takie same jak int w clientsMap w network.h; dzieki temu mamy polaczenie player-client
-    Settings * settings;
     //int numOfPlayers;
     int numOfEnemies;
     QTimer* timer;

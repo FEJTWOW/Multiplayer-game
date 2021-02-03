@@ -1,13 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "settings.h"
 #include "serversocket.h"
+#include "gameSettings.h"
 
 
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsRectItem>
 
 class Game: public QGraphicsView
 {
@@ -18,7 +19,6 @@ public:
     void initGame();
     void renderGameState();
     QGraphicsScene * clientGraphicsScene;
-    Settings * settings;
     ServerSocket* sock;
     int myPlayerId;
     GameState gameState;

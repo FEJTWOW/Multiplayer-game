@@ -23,13 +23,12 @@ void Game::initGame()
     shooting = 0;
     shootDirection = 0;
 
-    settings = new Settings();
     clientGraphicsScene = new QGraphicsScene();
-    clientGraphicsScene->setSceneRect(QRectF(settings->screen_point, settings->screen_size));
+    clientGraphicsScene->setSceneRect(QRectF(screenPoint, screenSize));
     setScene(clientGraphicsScene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(settings->screen_size);
+    setFixedSize(screenSize);
     this->setFocus();
 }
 
@@ -123,7 +122,7 @@ void Game::renderGameState()
     {
 
         QGraphicsRectItem* obstacle = new QGraphicsRectItem();
-        obstacle->setRect(QRectF(gameState.obstacle[i].pos, settings->obstacle_size));
+        obstacle->setRect(QRectF(gameState.obstacle[i].pos, obstacleSize));
         //qDebug() << "Rendering: " << obstacle->rect().x() << " " << obstacle->rect().y();
         clientGraphicsScene->addItem(obstacle);
     }
@@ -134,8 +133,8 @@ void Game::renderGameState()
             continue;
 
         QGraphicsRectItem* player = new QGraphicsRectItem();
-        player->setRect(QRectF(gameState.player[i].pos, settings->player_size));
-        player->setBrush(settings->player_colors[gameState.player[i].id]);
+        player->setRect(QRectF(gameState.player[i].pos, playerSize));
+        player->setBrush(player_colors[gameState.player[i].id]);
         clientGraphicsScene->addItem(player);
     }
     for(int i =0; i< 25; i++)
@@ -151,7 +150,7 @@ void Game::renderGameState()
             continue;
 
         QGraphicsRectItem* enemy = new QGraphicsRectItem();
-        enemy->setRect(QRectF(gameState.enemy[i].pos, settings->enemy_size));
+        enemy->setRect(QRectF(gameState.enemy[i].pos, enemySize));
         clientGraphicsScene->addItem(enemy);
     }
 //    qDebug() << "Received score: " << gameState.player[this->myPlayerId].currentScore;
@@ -168,16 +167,16 @@ void Game::showScore(int currentScore)
 {
     QGraphicsTextItem * io = new QGraphicsTextItem;
     io->setPlainText(QString("Current score:") + QString::number(currentScore));
-    io->setDefaultTextColor(settings->score_color);
-    io->setFont(settings->score_font);
+    io->setDefaultTextColor(scoreColor);
+    io->setFont(scoreFont);
     this->clientGraphicsScene->addItem(io);
 }
 
 void Game::createBullet(QPointF pos)
 {
     QGraphicsRectItem* bullet = new QGraphicsRectItem();
-    bullet->setRect(QRectF(pos, settings->bullet_size));
-    bullet->setBrush(settings->bullet_color);
-    bullet->setPen(QPen(settings->bullet_color, 15, Qt::DashDotLine, Qt::RoundCap));
+    bullet->setRect(QRectF(pos, bulletSize));
+    bullet->setBrush(bulletColor);
+    bullet->setPen(QPen(bulletColor, 15, Qt::DashDotLine, Qt::RoundCap));
     clientGraphicsScene->addItem(bullet);
 }

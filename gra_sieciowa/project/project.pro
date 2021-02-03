@@ -1,10 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    ServerTest \
     game_main \
-    game_test \
     server2 \
+    tests \
     utils
 
 
