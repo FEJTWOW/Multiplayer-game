@@ -13,11 +13,11 @@
 #include "network.h"
 #include "playeraction.h"
 
-class Game: public QGraphicsView
+class ServerGame: public QGraphicsView
 {
     Q_OBJECT
 public:
-    Game(QWidget * parent =0);
+    ServerGame(QWidget * parent =0);
     void initGame();
     void addNewPlayer(QPoint point, QSize size, int playerID);
     void moveAssets();

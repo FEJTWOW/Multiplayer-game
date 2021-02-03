@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#include "game.h"
+#include "clientgame.h"
 #include <QMovie>
 #include <QDir>
 
@@ -53,8 +53,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    Game* newGame;
-    newGame = new Game();
+    ClientGame* newGame;
+    newGame = new ClientGame();
     newGame->initGame();
     newGame->show();
     newGame->setFocusPolicy(Qt::NoFocus);

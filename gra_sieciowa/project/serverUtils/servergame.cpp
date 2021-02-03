@@ -1,17 +1,17 @@
-#include "game.h"
+#include "servergame.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <enemy.h>
 #include <gameSettings.h>
 
 
-Game::Game(QWidget *parent)
+ServerGame::ServerGame(QWidget *parent)
 {
     numOfEnemies = 0;
     network = new Network(12345, this);
 }
 
-void Game::initGame()
+void ServerGame::initGame()
 {
     // Create the game map
     graphicsScene = new QGraphicsScene();
@@ -46,7 +46,7 @@ void Game::initGame()
     connect(network, SIGNAL(gameDisconnect(int)), this, SLOT(onPlayerDisconnected(int)));
 }
 
-void Game::addNewPlayer(QPoint point, QSize size, int playerID)
+void ServerGame::addNewPlayer(QPoint point, QSize size, int playerID)
 {
     playersMap[playerID] = new Player(playerPoint, playerSize,playerID);
     graphicsScene->addItem(playersMap[playerID]);
@@ -56,7 +56,7 @@ void Game::addNewPlayer(QPoint point, QSize size, int playerID)
     show();
 }
 
-/*void Game::keyPressEvent(QKeyEvent *event)  // TODO delete
+/*void ServerGame::keyPressEvent(QKeyEvent *event)  // TODO delete
 {
     // Player id (players[id]) will be received from the client through the socket
     // for now :
@@ -101,7 +101,7 @@ void Game::addNewPlayer(QPoint point, QSize size, int playerID)
     //movePlayer();
 }
 
-void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
+void ServerGame::keyReleaseEvent(QKeyEvent *event)    // TODO delete
 {
     // In final cut this would be changed on server based on clients sending input (not local keyEvents)
     Player* player = playersMap[0];
@@ -132,7 +132,7 @@ void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
 }*/
 
 
-void Game::spawnEnemy()
+void ServerGame::spawnEnemy()
 {
     if(numOfEnemies < 9)
     {
@@ -146,7 +146,7 @@ void Game::spawnEnemy()
     //qDebug() << "On spawn: " << numOfEnemies;
 }
 
-void Game::updatePoints()
+void ServerGame::updatePoints()
 {
     for(const auto& id : playersMap.keys())
     {
@@ -156,7 +156,7 @@ void Game::updatePoints()
     this->dumpGameInfo();
 }
 
-void Game::handlePlayerAction(const PlayerAction &playerAction)
+void ServerGame::handlePlayerAction(const PlayerAction &playerAction)
 {
     qDebug() << "Handle player action!";
     Player* player = playersMap[playerAction.id];
@@ -168,7 +168,7 @@ void Game::handlePlayerAction(const PlayerAction &playerAction)
     player->shootingDirection = playerAction.shootDirection;
 }
 
-void Game::gameLoop() {
+void ServerGame::gameLoop() {
     playerAction();
     moveAssets();
     checkAllCollisions();
@@ -178,7 +178,7 @@ void Game::gameLoop() {
     //qDebug() << "gameLoop aftersendAll";
 }
 
-void Game::playerAction() {
+void ServerGame::playerAction() {
     for(const auto& id : playersMap.keys())
     {
         Player* player = playersMap[id];
@@ -194,7 +194,7 @@ void Game::playerAction() {
     }
 }
 
-void Game::moveAssets() {
+void ServerGame::moveAssets() {
 
     QList<QGraphicsItem *> all_items = graphicsScene->items();
     for(int i =0; i < all_items.length(); i++)
@@ -227,7 +227,7 @@ void Game::moveAssets() {
     }
 }
 
-void Game::checkAllCollisions() {
+void ServerGame::checkAllCollisions() {
     QList<QGraphicsItem *> toBeDeleted;
     QList<QGraphicsItem *> all_items = graphicsScene->items();
 
@@ -321,19 +321,19 @@ void Game::checkAllCollisions() {
 
 }
 
-void Game::killPlayer(Player * player)
+void ServerGame::killPlayer(Player * player)
 {
     player->kill();
     graphicsScene->removeItem(player);
     connect(player, SIGNAL(respawn(Player*)), this, SLOT(respawnPlayer(Player*)));
 }
 
-void Game::respawnPlayer(Player* player) {
+void ServerGame::respawnPlayer(Player* player) {
     graphicsScene->addItem(player);
 }
 
 
-void Game::fireBullet(Player* player)
+void ServerGame::fireBullet(Player* player)
 {
     if(player->playerBullets.size() < playerMaxBullets)
     {
@@ -345,7 +345,7 @@ void Game::fireBullet(Player* player)
 
 }
 
-void Game::generateLayoutOne()
+void ServerGame::generateLayoutOne()
 {
     // Needs proper scaling
 
@@ -376,14 +376,14 @@ void Game::generateLayoutOne()
 }
 
 
-void Game::generateObstacle(QPoint point, QSize size) {
+void ServerGame::generateObstacle(QPoint point, QSize size) {
     auto obstacle = new Obstacle();
     obstacle->setPos(0,0);
     obstacle->setRect(point.x(),point.y(),size.width(),size.height());
     graphicsScene->addItem(obstacle);
 }
 
-GameState Game::dumpGameInfo()
+GameState ServerGame::dumpGameInfo()
 {
     QList<QGraphicsItem*> allItems = graphicsScene->items();
     GameState gameInfo;
@@ -432,7 +432,7 @@ GameState Game::dumpGameInfo()
     return gameInfo;
 }
 
-void Game::onConnection(int id)
+void ServerGame::onConnection(int id)
 {
     qDebug() << "New player with id " << id;
 
@@ -441,7 +441,7 @@ void Game::onConnection(int id)
 }
 
 
-void Game::onPlayerDisconnected(int playerID) {
+void ServerGame::onPlayerDisconnected(int playerID) {
     qDebug() << " Game::onDisconnected, playerID: " << playerID;
 
     if(playersMap[playerID])

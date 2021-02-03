@@ -10,12 +10,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 
-class Game: public QGraphicsView
+class ClientGame: public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    Game(QWidget * parent =0);
+    ClientGame(QWidget* parent =0);
     void initGame();
     void renderGameState();
     QGraphicsScene * clientGraphicsScene;

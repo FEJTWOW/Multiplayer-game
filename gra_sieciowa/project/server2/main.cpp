@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include "game.h"
+#include "servergame.h"
 
-Game * newGame;
+ServerGame * newGame;
 
 int main(int argc, char *argv[])
 {

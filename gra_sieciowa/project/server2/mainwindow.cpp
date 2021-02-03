@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    newGame = new Game();
+    newGame = new ServerGame();
     newGame->initGame();
     newGame->generateLayoutOne();
     newGame->show();

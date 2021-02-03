@@ -22,21 +22,21 @@ SOURCES += \
     bullet.cpp \
     clientsocket.cpp \
     enemy.cpp \
-    game.cpp \
     network.cpp \
     obstacle.cpp \
     player.cpp \
+    servergame.cpp \
     serverutils.cpp
 
 HEADERS += \
     bullet.h \
     clientsocket.h \
     enemy.h \
-    game.h \
     network.h \
     obstacle.h \
     player.h \
     serverUtils_global.h \
+    servergame.h \
     serverutils.h
 
 # Default rules for deployment.

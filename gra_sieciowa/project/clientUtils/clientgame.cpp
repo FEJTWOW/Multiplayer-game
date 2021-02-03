@@ -1,18 +1,18 @@
-#include "game.h"
+#include "clientgame.h"
 #include <QDebug>
 #include <QKeyEvent>
 #include <QHostAddress>
 #include <QtAlgorithms>
 #include <QTimer>
 
-Game::Game(QWidget *parent)
+ClientGame::ClientGame(QWidget *parent)
 {
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));
     timer->start(30);
 }
 
-void Game::initGame()
+void ClientGame::initGame()
 {
     sock = new ServerSocket(QHostAddress::LocalHost,12345, this);
     connect(sock, SIGNAL(newPlayerId(int)), this, SLOT(receivedPlayerId(int)));
@@ -32,7 +32,7 @@ void Game::initGame()
     this->setFocus();
 }
 
-void Game::move() {
+void ClientGame::move() {
     int newHorizontal = 0;
     int newVertical = 0;
     int newShooting = 0;
@@ -79,18 +79,18 @@ void Game::move() {
     }
 }
 
-void Game::keyPressEvent(QKeyEvent *event)
+void ClientGame::keyPressEvent(QKeyEvent *event)
 {
     keys[event->key()] = true;
 }
 
 
-void Game::keyReleaseEvent(QKeyEvent *event)
+void ClientGame::keyReleaseEvent(QKeyEvent *event)
 {
     keys[event->key()] = false;
 }
 
-void Game::parseGameState(const QByteArray &data)
+void ClientGame::parseGameState(const QByteArray &data)
 {
     GameState receivedGameState;
     memcpy(&receivedGameState,data.data(), sizeof(receivedGameState));
@@ -115,7 +115,7 @@ void Game::parseGameState(const QByteArray &data)
     renderGameState();
 }
 
-void Game::renderGameState()
+void ClientGame::renderGameState()
 {
     clientGraphicsScene->clear();
     for(int i=0; i < 20; i++)
@@ -158,12 +158,12 @@ void Game::renderGameState()
 }
 
 
-void Game::receivedPlayerId(const int &id)
+void ClientGame::receivedPlayerId(const int &id)
 {
     myPlayerId = id;
 }
 
-void Game::showScore(int currentScore)
+void ClientGame::showScore(int currentScore)
 {
     QGraphicsTextItem * io = new QGraphicsTextItem;
     io->setPlainText(QString("Current score:") + QString::number(currentScore));
@@ -172,7 +172,7 @@ void Game::showScore(int currentScore)
     this->clientGraphicsScene->addItem(io);
 }
 
-void Game::createBullet(QPointF pos)
+void ClientGame::createBullet(QPointF pos)
 {
     QGraphicsRectItem* bullet = new QGraphicsRectItem();
     bullet->setRect(QRectF(pos, bulletSize));

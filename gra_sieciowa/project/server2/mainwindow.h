@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "game.h"
+#include "servergame.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,6 +18,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Game* newGame;
+    ServerGame* newGame;
 };
 #endif // MAINWINDOW_H

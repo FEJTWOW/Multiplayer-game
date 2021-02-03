@@ -1,5 +1,5 @@
 #include "enemy.h"
-#include "game.h"
+#include "servergame.h"
 
 #include <QTimer>
 #include <QGraphicsScene>

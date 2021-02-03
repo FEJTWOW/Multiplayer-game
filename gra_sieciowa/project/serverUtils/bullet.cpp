@@ -1,7 +1,7 @@
 #include "bullet.h"
 #include "obstacle.h"
 #include "enemy.h"
-#include "game.h"
+#include "servergame.h"
 
 #include <QTimer>
 #include <QGraphicsScene>
