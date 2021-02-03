@@ -200,13 +200,14 @@ void Game::moveAssets() {
         if(typeid(*(all_items[i])) == typeid(Bullet))
         {
             Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
-            bullet->moveBy(bullet->moveSet.x(), bullet->moveSet.y());
+            bullet->move();
             if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0 || all_items[i]->pos().y() > this->settings->screen_size.height()
                     || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > this->settings->screen_size.width() )       // If out of bounds
             {
                 graphicsScene->removeItem(all_items[i]);               
                 auto index = playersMap[bullet->player_id]->playerBullets.indexOf(bullet);
                 playersMap[bullet->player_id]->playerBullets.takeAt(index);
+                delete bullet;
                 continue;
             }
         }
@@ -336,53 +337,12 @@ void Game::respawnPlayer(Player* player) {
 
 void Game::fireBullet(Player* player)
 {
-    QPointF directions;
-    switch (player->shootingDirection)
-    {
-        case 0:
-            directions.setX(0);
-            directions.setY(-settings->bullet_speed);
-            break;
-        case 1:
-            directions.setX(-settings->bullet_speed);
-            directions.setY(0);
-            break;
-        case 2:
-            directions.setX(0);
-            directions.setY(settings->bullet_speed);
-            break;
-        case 3:
-            directions.setX(settings->bullet_speed);
-            directions.setY(0);
-            break;
-        default:
-            break;
-
-    }
     if(player->playerBullets.size() < settings->player_max_bullets)
     {
-        auto newBullet = new Bullet(directions, player->id);
+        auto newBullet = new Bullet(player->shootingDirection, player->id, player->pos());
         player->playerBullets.append(newBullet);
-        switch (player->shootingDirection)
-        {
-            case 0:
-                newBullet->setPos(player->x()+(this->settings->player_size.width()/2),player->y()-(this->settings->player_size.height()+1));
-                break;
-            case 1:
-                newBullet->setPos(player->x()- player->rect().width() -1, player->y() + player->rect().height()/2);
-                break;
-            case 2:
-                newBullet->setPos(player->x()+(this->settings->player_size.width()/2),player->y()+(this->settings->player_size.height()+12));           // ??????
-                break;
-            case 3:
-                newBullet->setPos(player->x()+settings->player_size.width()+12, player->y() +settings->player_size.height()/2 + 1);         // Needs fixing
-                break;
-            default:
-                break;
-        }
-            this->graphicsScene->addItem(newBullet);
-            player->shotFired = true;
-
+        this->graphicsScene->addItem(newBullet);
+        player->shotFired = true;
     }
 
 }

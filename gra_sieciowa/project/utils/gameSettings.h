@@ -25,5 +25,9 @@ constexpr QPointF player_spawns[5] = {
 
 constexpr int respawn_time = 5000;
 
+constexpr QSize bullet_size = {5,20};
+constexpr QPoint bullet_point = {0,0};
+constexpr int bullet_speed = 20;
+
 
 #endif // SETTINGS_H
