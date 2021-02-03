@@ -1,0 +1,12 @@
+#ifndef CLIENTUTILS_GLOBAL_H
+#define CLIENTUTILS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(CLIENTUTILS_LIBRARY)
+#  define CLIENTUTILS_EXPORT Q_DECL_EXPORT
+#else
+#  define CLIENTUTILS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CLIENTUTILS_GLOBAL_H

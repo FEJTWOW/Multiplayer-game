@@ -17,15 +17,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    game.cpp \
     main.cpp \
     mainwindow.cpp \
-    serversocket.cpp
 
 HEADERS += \
-    game.h \
     mainwindow.h \
-    serversocket.h
 
 FORMS += \
     mainwindow.ui
@@ -41,3 +37,10 @@ else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
 
 INCLUDEPATH += $$PWD/../utils
 DEPENDPATH += $$PWD/../utils
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../clientUtils/release/ -lclientUtils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../clientUtils/debug/ -lclientUtils
+else:unix: LIBS += -L$$OUT_PWD/../clientUtils/ -lclientUtils
+
+INCLUDEPATH += $$PWD/../clientUtils
+DEPENDPATH += $$PWD/../clientUtils

@@ -1,0 +1,12 @@
+#ifndef SERVERUTILS_GLOBAL_H
+#define SERVERUTILS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(SERVERUTILS_LIBRARY)
+#  define SERVERUTILS_EXPORT Q_DECL_EXPORT
+#else
+#  define SERVERUTILS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // SERVERUTILS_GLOBAL_H
