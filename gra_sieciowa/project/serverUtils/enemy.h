@@ -2,15 +2,15 @@
 #define ENEMY_H
 
 #include <QObject>
+#include <QGraphicsRectItem>
 
-class Enemy : public QObject
+
+class Enemy: public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
+
 public:
-    explicit Enemy(QObject *parent = nullptr);
-
-signals:
-
+    Enemy();
 };
 
 #endif // ENEMY_H

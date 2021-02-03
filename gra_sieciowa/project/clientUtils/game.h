@@ -1,16 +1,45 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <QObject>
+#include "serversocket.h"
+#include "gameSettings.h"
 
-class Game : public QObject
+
+#include <QWidget>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
+
+class Game: public QGraphicsView
 {
     Q_OBJECT
+
 public:
-    explicit Game(QObject *parent = nullptr);
+    Game(QWidget * parent =0);
+    void initGame();
+    void renderGameState();
+    QGraphicsScene * clientGraphicsScene;
+    ServerSocket* sock;
+    int myPlayerId;
+    GameState gameState;
+    void showScore(int currentScore);
+    void createBullet(QPointF pos);
 
-signals:
+    QTimer* timer;
+    int horizontal;
+    int vertical;
+    int shooting;
+    int shootDirection;
+    QMap<int, bool> keys;
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+
+public slots:
+    void parseGameState(const QByteArray& data);
+    void receivedPlayerId(const int&);
+    void move();
 };
 
 #endif // GAME_H

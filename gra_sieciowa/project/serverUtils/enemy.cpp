@@ -1,6 +1,8 @@
 #include "enemy.h"
+#include "game.h"
 
-Enemy::Enemy(QObject *parent) : QObject(parent)
-{
+#include <QTimer>
+#include <QGraphicsScene>
+#include <QTimer>
 
-}
+Enemy::Enemy() {}

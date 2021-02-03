@@ -1,5 +1,5 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
+#ifndef GAMESTATE_HA
+#define GAMESTATE_HA
 #include <QPoint>
 #include <QList>
 
@@ -42,4 +42,4 @@ public:
 
 
 
-#endif // GAMESTATE_H
+#endif // GAMESTATE_HA

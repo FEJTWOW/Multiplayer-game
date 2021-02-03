@@ -19,24 +19,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    bullet.cpp \
-    enemy.cpp \
-    game.cpp \
-    obstacle.cpp \
-    player.cpp \
-    clientsocket.cpp \
-    network.cpp
 
 HEADERS += \
     mainwindow.h \
-    bullet.h \
-    enemy.h \
-    game.h \
-    gamestate.h \
-    obstacle.h \
-    player.h \
-    clientsocket.h \
-    network.h
 
 FORMS += \
     mainwindow.ui
@@ -46,6 +31,16 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../serverUtils/release/ -lserverUtils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../serverUtils/debug/ -lserverUtils
+else:unix: LIBS += -L$$OUT_PWD/../serverUtils/ -lserverUtils
+
+INCLUDEPATH += $$PWD/../serverUtils
+DEPENDPATH += $$PWD/../serverUtils
+
+
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils

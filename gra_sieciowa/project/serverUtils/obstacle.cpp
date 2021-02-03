@@ -1,6 +1,7 @@
 #include "obstacle.h"
+#include "enemy.h"
+#include "game.h"
 
-Obstacle::Obstacle(QObject *parent) : QObject(parent)
-{
+#include <QGraphicsScene>
 
-}
+Obstacle::Obstacle() {}

@@ -29,7 +29,7 @@ constexpr QPointF playerSpawns[5] = {
 constexpr int respawnTime = 5000;
 constexpr int gameTimerRes = 60;
 
-constexpr QSize bulletSize = {5,20};
+constexpr QSize bulletSize = {10,10};
 constexpr QPoint bulletPoint = {0,0};
 const QColor bulletColor= Qt::blue;
 constexpr int bulletSpeed = 20;

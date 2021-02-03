@@ -1,9 +1,10 @@
 QT -= gui
-
+QT += network widgets
 TEMPLATE = lib
 DEFINES += CLIENTUTILS_LIBRARY
 
 CONFIG += c++11
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -17,14 +18,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    clientutils.cpp
+    clientutils.cpp \
+    game.cpp \
+    serversocket.cpp
 
 HEADERS += \
     clientUtils_global.h \
-    clientutils.h
+    clientutils.h \
+    game.h \
+    serversocket.h
 
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
+else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
+
+INCLUDEPATH += $$PWD/../utils
+DEPENDPATH += $$PWD/../utils

@@ -1,16 +1,19 @@
 #ifndef CLIENTSOCKET_H
 #define CLIENTSOCKET_H
 
-#include <QObject>
+#include "socket.h"
+#include "gamestate.h"
 
-class ClientSocket : public QObject
+// for future improvement
+class ClientSocket : public Socket
 {
     Q_OBJECT
-public:
-    explicit ClientSocket(QObject *parent = nullptr);
 
-signals:
+    public:
+        explicit ClientSocket(QTcpSocket* socket, QObject *parent = nullptr) : Socket(parent, socket) {}
+        void sendGameState(const GameState& gameState) const;
 
+//    void onDisconnected() Q_DECL_OVERRIDE;
 };
 
 #endif // CLIENTSOCKET_H

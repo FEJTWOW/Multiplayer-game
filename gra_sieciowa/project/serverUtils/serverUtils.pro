@@ -1,7 +1,9 @@
 QT -= gui
-
+QT += network widgets
 TEMPLATE = lib
 DEFINES += SERVERUTILS_LIBRARY
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
@@ -17,9 +19,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bullet.cpp \
+    clientsocket.cpp \
+    enemy.cpp \
+    game.cpp \
+    network.cpp \
+    obstacle.cpp \
+    player.cpp \
     serverutils.cpp
 
 HEADERS += \
+    bullet.h \
+    clientsocket.h \
+    enemy.h \
+    game.h \
+    network.h \
+    obstacle.h \
+    player.h \
     serverUtils_global.h \
     serverutils.h
 
@@ -28,3 +44,10 @@ unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../utils/release/ -lutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../utils/debug/ -lutils
+else:unix: LIBS += -L$$OUT_PWD/../utils/ -lutils
+
+INCLUDEPATH += $$PWD/../utils
+DEPENDPATH += $$PWD/../utils
