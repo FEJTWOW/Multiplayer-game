@@ -1,5 +1,5 @@
 #include "network.h"
-#include "settings.h"
+#include "gameSettings.h"
 
 Network::Network(quint16 port, QObject* parent) : QTcpServer(parent)
 {
@@ -19,7 +19,7 @@ void Network::onNewConnection()
     QTcpSocket* clientSock = nextPendingConnection();
     ClientSocket* sockHandle = new ClientSocket(clientSock);
 
-    if(this->clientsMap.size() >= Settings::player_max_count) {
+    if(this->clientsMap.size() >= playerMaxCount) {
         qDebug() << "Max players limit has been reached!";
         delete sockHandle;
     }
@@ -37,7 +37,7 @@ void Network::onNewConnection()
 
 
 int Network::addClientToMap(ClientSocket* clientSocket) {
-    for (int i = 0; i < Settings::player_max_count; ++i) {
+    for (int i = 0; i < playerMaxCount; ++i) {
        if(!clientsMap.contains(i)) {
            clientsMap[i] = clientSocket;
            return i;

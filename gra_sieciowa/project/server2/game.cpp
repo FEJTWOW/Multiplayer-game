@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <enemy.h>
+#include <gameSettings.h>
 
 
 Game::Game(QWidget *parent)
@@ -12,18 +13,17 @@ Game::Game(QWidget *parent)
 
 void Game::initGame()
 {
-    settings = new Settings();
     // Create the game map
     graphicsScene = new QGraphicsScene();
     // Set the size of the map
-    graphicsScene->setSceneRect(QRectF(settings->screen_point, settings->screen_size));
+    graphicsScene->setSceneRect(QRectF(screenPoint, screenSize));
     // Create our view
     setScene(graphicsScene);
     // Disable sidebars
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     // Set the size of the view
-    setFixedSize(settings->screen_size);
+    setFixedSize(screenSize);
 
     //this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->setFocus();
@@ -33,11 +33,11 @@ void Game::initGame()
 
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(gameLoop()));
-    timer->start(this->settings->game_timer_res);
+    timer->start(gameTimerRes);
 
     auto scoreTimer = new QTimer();
     QObject::connect(scoreTimer, SIGNAL(timeout()), this, SLOT(updatePoints()));
-    scoreTimer->start(settings->score_passive_interval_in_ms);
+    scoreTimer->start(scorePassiveIntervalInMs);
 
     auto enemyTimer = new QTimer();
     QObject::connect(enemyTimer, SIGNAL(timeout()), this, SLOT(spawnEnemy()));
@@ -48,7 +48,7 @@ void Game::initGame()
 
 void Game::addNewPlayer(QPoint point, QSize size, int playerID)
 {
-    playersMap[playerID] = new Player(settings->player_point, settings->player_size,playerID);
+    playersMap[playerID] = new Player(playerPoint, playerSize,playerID);
     graphicsScene->addItem(playersMap[playerID]);
     playersMap[playerID]->score = 0; // niepotrzbne
     //playersMap[playerID]->setupScore();    // bezsensu po stronie serwera
@@ -132,7 +132,7 @@ void Game::keyReleaseEvent(QKeyEvent *event)    // TODO delete
 }*/
 
 void Game::playerAction() {
-    int playerSpeed = this->settings->player_speed;
+    int playerSpeed = playerSpeed;
 
     for(const auto& id : playersMap.keys())
     {
@@ -155,7 +155,7 @@ void Game::spawnEnemy()
     {
         auto newEnemy = new Enemy();
         int randPos = rand() & 750;
-        newEnemy->setRect(QRectF(QPoint(randPos, 0), settings->enemy_size));
+        newEnemy->setRect(QRectF(QPoint(randPos, 0), enemySize));
 
         scene()->addItem(newEnemy);
         numOfEnemies++;
@@ -168,7 +168,7 @@ void Game::updatePoints()
     for(const auto& id : playersMap.keys())
     {
         if(!playersMap[id]->dead)
-            playersMap[id]->score += settings->score_passive_value;
+            playersMap[id]->score += scorePassiveValue;
     }
     this->dumpGameInfo();
 }
@@ -204,8 +204,8 @@ void Game::moveAssets() {
         {
             Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
             bullet->move();
-            if(all_items[i]->pos().y() + this->settings->bullet_size.height() < 0 || all_items[i]->pos().y() > this->settings->screen_size.height()
-                    || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > this->settings->screen_size.width() )       // If out of bounds
+            if(all_items[i]->pos().y() + bulletSize.height() < 0 || all_items[i]->pos().y() > screenSize.height()
+                    || all_items[i]->pos().x() < 0 || all_items[i]->pos().x() > screenSize.width() )       // If out of bounds
             {
                 graphicsScene->removeItem(all_items[i]);               
                 auto index = playersMap[bullet->player_id]->playerBullets.indexOf(bullet);
@@ -216,8 +216,8 @@ void Game::moveAssets() {
         }
         else if(typeid(*(all_items[i])) == typeid(Enemy))
         {
-            all_items[i]->moveBy(0, settings->enemy_speed);
-            if(all_items[i]->pos().y() > settings->screen_size.height())
+            all_items[i]->moveBy(0, enemySpeed);
+            if(all_items[i]->pos().y() > screenSize.height())
             {
                 numOfEnemies--;
                 //qDebug() << "On delete(move): " << numOfEnemies;
@@ -272,7 +272,7 @@ void Game::checkAllCollisions() {
                 else
                 {
                     qDebug() << "Player o id: " << bullet->player_id << "zabil!";
-                    playersMap[bullet->player_id]->score -= settings->score_kill_value;
+                    playersMap[bullet->player_id]->score -= scoreKillValue;
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
                     killPlayer(player);
@@ -336,7 +336,7 @@ void Game::respawnPlayer(Player* player) {
 
 void Game::fireBullet(Player* player)
 {
-    if(player->playerBullets.size() < settings->player_max_bullets)
+    if(player->playerBullets.size() < playerMaxBullets)
     {
         auto newBullet = new Bullet(player->shootingDirection, player->id, player->pos());
         player->playerBullets.append(newBullet);
@@ -351,10 +351,10 @@ void Game::generateLayoutOne()
     // Needs proper scaling
 
     QList<Obstacle *> obstacleLayout;
-    QSize size = settings->obstacle_size;
+    QSize size = obstacleSize;
 
-    int screenWidth = settings->screen_size.width();
-    int screenHeight = settings->screen_size.height();
+    int screenWidth = screenSize.width();
+    int screenHeight = screenSize.height();
 
     int count = 0;
     for(int i = 0.2*screenWidth; i < screenWidth; i+= 0.2*screenWidth)
@@ -438,7 +438,7 @@ void Game::onConnection(int id)
     qDebug() << "New player with id " << id;
 
     network->send(id);
-    addNewPlayer(QPoint(settings->player_point), QSize(settings->player_size), id);
+    addNewPlayer(QPoint(playerPoint), QSize(playerSize), id);
 }
 
 

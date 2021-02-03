@@ -4,30 +4,45 @@
 #include <QSize>
 #include <QPoint>
 #include <QColor>
+#include <QFont>
 
-constexpr QSize screen_size = { 800, 600 };
-constexpr QPoint screen_point = { 0, 0 };
+constexpr QSize screenSize = { 800, 600 };
+constexpr QPoint screenPoint = { 0, 0 };
 
-constexpr int player_speed = 10;
-constexpr QSize player_size = { 35, 35 };
-constexpr int player_max_count = 5;
-constexpr int player_max_bullets = 5;
-constexpr QPoint player_point = { 0, 0 };
-constexpr int player_shot_cd = 350;
-constexpr int player_invul_time = 800;
-constexpr QPointF player_spawns[5] = {
-    { 75, screen_size.height()-player_size.height() },
-    { 250, screen_size.height()-player_size.height() },
-    { 375, screen_size.height()-player_size.height() },
-    { 500, screen_size.height()-player_size.height() },
-    { 625, screen_size.height()-player_size.height() }
+constexpr int playerSpeed = 10;
+constexpr QSize playerSize = { 35, 35 };
+const QColor playerColor = Qt::red;
+constexpr int playerMaxCount = 5;
+constexpr int playerMaxBullets = 5;
+constexpr QPoint playerPoint = { 0, 0 };
+constexpr int playerShotCd = 350;
+constexpr int playerInvulTime = 800;
+constexpr QPointF playerSpawns[5] = {
+    { 75, screenSize.height()-playerSize.height() },
+    { 250, screenSize.height()-playerSize.height() },
+    { 375, screenSize.height()-playerSize.height() },
+    { 500, screenSize.height()-playerSize.height() },
+    { 625, screenSize.height()-playerSize.height() }
 };
 
-constexpr int respawn_time = 5000;
+constexpr int respawnTime = 5000;
+constexpr int gameTimerRes = 60;
 
-constexpr QSize bullet_size = {5,20};
-constexpr QPoint bullet_point = {0,0};
-constexpr int bullet_speed = 20;
+constexpr QSize bulletSize = {5,20};
+constexpr QPoint bulletPoint = {0,0};
+const QColor bulletColor= Qt::blue;
+constexpr int bulletSpeed = 20;
 
+constexpr QSize obstacleSize {20,50};
+
+constexpr int enemySpeed = 1;
+constexpr QSize enemySize {50,50};
+
+
+const QColor scoreColor = Qt::red;
+const QFont scoreFont = {"System", 14};
+constexpr int scorePassiveIntervalInMs = 10000;
+constexpr int scorePassiveValue = 30;
+constexpr int scoreKillValue = 5000;
 
 #endif // SETTINGS_H

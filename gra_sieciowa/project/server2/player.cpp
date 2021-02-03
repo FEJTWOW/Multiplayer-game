@@ -5,14 +5,14 @@
 Player::Player(QPoint point, QSize size, int id) : id(id)
 {
     this->setRect(QRectF(point, size));
-    this->setPos(player_spawns[id]);
+    this->setPos(playerSpawns[id]);
 
     //this->setBrush(Qt::red);
     //this->setPen(QPen(newGame->settings->player_color, 15, Qt::DashDotLine, Qt::RoundCap));
 
     auto timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()), this, SLOT(canShoot()));
-    timer->start(player_shot_cd);
+    timer->start(playerShotCd);
 
     verticalMove = 0;
     horizontalMove = 0;
@@ -28,7 +28,7 @@ void Player::kill() {
     dead = true;
     respawnTimer = new QTimer(this);
     QObject::connect(respawnTimer, SIGNAL(timeout()), this, SLOT(onRespawn()));
-    respawnTimer->start(respawn_time);
+    respawnTimer->start(respawnTime);
 }
 
 void Player::onRespawn()
@@ -40,9 +40,9 @@ void Player::onRespawn()
 
     invulTimer = new QTimer();
     connect(invulTimer,SIGNAL(timeout()), this, SLOT(resetInvulnerability()));
-    invulTimer->start(player_invul_time);
+    invulTimer->start(playerInvulTime);
     this->setOpacity(0.2);
-    this->setPos(player_spawns[id]);
+    this->setPos(playerSpawns[id]);
 
     emit respawn(this);
 }
@@ -60,11 +60,11 @@ void Player::move(int speed) {
 
     if(pos().x() < 0)
         setPos(0, pos().y());
-    else if(pos().x() + player_size.width() > screen_size.width())
-       setPos(screen_size.width() - player_size.width(), pos().y());
+    else if(pos().x() + playerSize.width() > screenSize.width())
+       setPos(screenSize.width() - playerSize.width(), pos().y());
 
     if(pos().y() < 0)
         setPos(pos().x(), 0);
-    else if(pos().y() + player_size.height() > screen_size.height())
-        setPos(pos().x(), screen_size.height() - player_size.height());
+    else if(pos().y() + playerSize.height() > screenSize.height())
+        setPos(pos().x(), screenSize.height() - playerSize.height());
 }

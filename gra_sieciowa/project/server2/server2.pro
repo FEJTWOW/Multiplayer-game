@@ -24,7 +24,6 @@ SOURCES += \
     game.cpp \
     obstacle.cpp \
     player.cpp \
-    settings.cpp \
     clientsocket.cpp \
     network.cpp
 
@@ -36,7 +35,6 @@ HEADERS += \
     gamestate.h \
     obstacle.h \
     player.h \
-    settings.h \
     clientsocket.h \
     network.h
 
