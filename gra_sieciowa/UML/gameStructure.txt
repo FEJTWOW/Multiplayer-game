@@ -1,0 +1,19 @@
+package GAME {
+    collections utils as utils
+    collections serverUtils as serverUtils
+    collections clientUtils as clientUtils
+    collections server as server
+    collections client as client
+
+    collections tests as tests #99FF99
+
+    utils <|-- serverUtils
+    utils <|-- clientUtils
+
+    serverUtils <|-- server
+
+    serverUtils -> tests
+    clientUtils -> tests
+
+    clientUtils <|-- client
+}

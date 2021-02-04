@@ -1,5 +1,6 @@
 ## UML diagrams
 
+![game](gameStructure.png)
 ![utils](utils.png)
 ![clientUtils](clientUtils.png)
 ![serverUtils](serverUtils.png)
