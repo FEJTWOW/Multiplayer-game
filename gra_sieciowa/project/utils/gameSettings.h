@@ -17,13 +17,13 @@ constexpr int playerMaxCount = 5;
 constexpr int playerMaxBullets = 5;
 constexpr QPoint playerPoint = { 0, 0 };
 constexpr int playerShotCd = 350;
-constexpr int playerInvulTime = 800;
+constexpr int playerInvulTime = 1000;
 constexpr QPointF playerSpawns[5] = {
     { 75, screenSize.height()-playerSize.height() },
     { 250, screenSize.height()-playerSize.height() },
     { 375, screenSize.height()-playerSize.height() },
-    { 500, screenSize.height()-playerSize.height() },
-    { 625, screenSize.height()-playerSize.height() }
+    { 525, screenSize.height()-playerSize.height() },
+    { 675, screenSize.height()-playerSize.height() }
 };
 
 constexpr int respawnTime = 5000;
@@ -35,17 +35,22 @@ const QColor bulletColor= Qt::blue;
 constexpr int bulletSpeed = 20;
 
 constexpr QSize obstacleSize {20,50};
+const QColor obstacleColor = Qt::darkGray;
+constexpr double obstacleOpacity = 0.90;
 
 constexpr int enemySpeed = 1;
 constexpr QSize enemySize {50,50};
+const QColor enemyColor = Qt::darkMagenta;
+constexpr double enemyOpacity = 0.85;
 
+constexpr double playerInvulnerableOpacity = 0.2;
 
 const QColor scoreColor = Qt::red;
 const QFont scoreFont = {"System", 14};
-constexpr int scorePassiveIntervalInMs = 10000;
+constexpr int scorePassiveIntervalInMs = 1500;
 constexpr int scorePassiveValue = 30;
-constexpr int scoreKillValue = 100;
-constexpr int scoreEnemyHit = 30;
-constexpr int scoreObstacleHit = 5;
+constexpr int scoreKillValue = 10000000;
+constexpr int scoreEnemyHit = 2500;
+constexpr int scoreObstacleHit = 20;
 
 #endif // SETTINGS_H

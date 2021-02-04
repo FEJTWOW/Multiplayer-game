@@ -131,32 +131,31 @@ void ClientGame::renderGameState()
     {
         QGraphicsRectItem* obstacle = new QGraphicsRectItem();
         obstacle->setRect(QRectF(i->pos, obstacleSize));
+        obstacle->setBrush(obstacleColor);
+        obstacle->setOpacity(obstacleOpacity);
         clientGraphicsScene->addItem(obstacle);
     }
     for(auto playerID : gameState.playersInfoMap.keys())
     {
-//        QPainter* painter = new QPainter();
 
         QGraphicsRectItem* player = new QGraphicsRectItem();
-//        QImage boximg("../../../gra_sieciowa/project/wolf.jpeg");
 
-//        painter->drawImage(QRectF(gameState.player[i].pos, playerSize), boximg);
-//        player->paint(painter,0,this);
-//        player->
         player->setRect(QRectF(gameState.playersInfoMap[playerID].pos, playerSize));
-//        QBrush tempBrush;
-//        tempBrush.setTexture(QPixmap("../../../gra_sieciowa/project/wolf2.png"));
+        if(gameState.playersInfoMap[playerID].invulnerable)
+            player->setOpacity(playerInvulnerableOpacity);
         player->setBrush(player_colors[playerID]);
         clientGraphicsScene->addItem(player);
     }
     for(QList<BulletInfo>::iterator i= gameState.bulletList.begin(); i != gameState.bulletList.end(); ++i)
     {
-        createBullet(i->pos);
+        createBullet(i->pos, i->playerID);
     }
     for(QList<EnemyInfo>::iterator i= gameState.enemyList.begin(); i != gameState.enemyList.end(); ++i)
     {
         QGraphicsRectItem* enemy = new QGraphicsRectItem();
         enemy->setRect(QRectF(i->pos, enemySize));
+        enemy->setBrush(enemyColor);
+        enemy->setOpacity(enemyOpacity);
         clientGraphicsScene->addItem(enemy);
     }
 
@@ -178,11 +177,11 @@ void ClientGame::showScore(int currentScore)
     this->clientGraphicsScene->addItem(io);
 }
 
-void ClientGame::createBullet(QPointF pos)
+void ClientGame::createBullet(QPointF pos, int playerID)
 {
     QGraphicsRectItem* bullet = new QGraphicsRectItem();
     bullet->setRect(QRectF(pos, bulletSize));
-    bullet->setBrush(bulletColor);
-    bullet->setPen(QPen(bulletColor, 15, Qt::DashDotLine, Qt::RoundCap));
+    bullet->setBrush(player_colors[playerID]);
+    bullet->setPen(QPen(player_colors[playerID], 15, Qt::DashDotLine, Qt::RoundCap));
     clientGraphicsScene->addItem(bullet);
 }
