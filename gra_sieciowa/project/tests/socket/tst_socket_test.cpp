@@ -17,4 +17,4 @@ private slots:
 
 QTEST_APPLESS_MAIN(tst_socket_test)
 
-#include "tst_tst_socket_test.moc"
+#include "tst_socket_test.moc"
