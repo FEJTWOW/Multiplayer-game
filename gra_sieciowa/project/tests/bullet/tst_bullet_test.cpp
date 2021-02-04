@@ -7,9 +7,9 @@ class bullet_test : public QObject
     Q_OBJECT
 
 private slots:
-    void test_case1()
+    void bulletCreation()
     {
-        return;
+
     }
 
 };
