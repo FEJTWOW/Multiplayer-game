@@ -1,0 +1,52 @@
+package clientUtils {
+    class QGraphicsRectItem {}
+    note top of QGraphicsRectItem
+        Base QGraphics rectangle item object class
+    end note
+    class Socket {}
+    note top of Socket
+        from utils package
+    end note
+    class ClientGame {
+        + ClientGame(QWidget* parent =0)
+        + void initGame(const QHostAddress& address, quint16 port)
+        + void renderGameState()
+        + QGraphicsScene * clientGraphicsScene
+        + ServerSocket* sock
+        + int myPlayerId
+        + GameState gameState
+        + void showScore(int currentScore)
+        + void createBullet(QPointF pos)
+        + void clearGameState()
+
+        + QTimer* timer
+        + int horizontal
+        + int vertical
+        + int shooting
+        + int shootDirection
+        + QMap<int, bool> keys
+        
+        # void keyPressEvent(QKeyEvent *event) override
+        # void keyReleaseEvent(QKeyEvent *event) override
+        .. SLOTS ..
+        # void parseGameState(const QByteArray& data)
+        # void receivedPlayerId(const int&)
+        # void move()
+    }
+    
+    class ServerSocket {
+        + ServerSocket(const QHostAddress &address, quint16 port, QObject *parent)
+        + void sendPlayerAction(const PlayerAction& playerAction) const
+        + GameState parseGameState(const QByteArray& data) const
+        .. SIGNALS ..
+        # void newGameState(const QByteArray& data) const
+        # void newPlayerId(const int& playerId) const
+        .. SLOTS ..
+        # void onMessage(const QString& message) const
+        # void onMessage(const QByteArray& data) const
+    }
+    
+    QGraphicsRectItem <|-- ClientGame
+    Socket <|-- ServerSocket
+    
+}

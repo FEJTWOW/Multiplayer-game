@@ -1,0 +1,67 @@
+package utils {
+    class QObject {}
+    note top of QObject
+        Base QT object class
+    end note
+    class BaseGame {}
+    class Socket {
+        + QTcpSocket *tcpSocket;
+        
+        + explicit Socket(QObject *parent = nullptr, QTcpSocket* socket = nullptr);
+        + virtual ~Socket() { }
+        + virtual void sendString(const QString& string);
+        + virtual void sendData(const QByteArray& data) const
+        .. SLOTS ..
+        # void message(const QString& message) const
+        # void message(const QByteArray& data) const
+        # void error(const QString& error) const
+        # void disconnected() const
+        .. SLOTS ..
+        # void onReadyRead()
+        # void onDisconnected() const
+    }
+    
+    class GameState {
+        + int playerID
+        + QList<ObstacleInfo> obstacleList
+        + QList<BulletInfo> bulletList
+        + QList<EnemyInfo> enemyList
+        + QMap<int, PlayerInfo> playersInfoMap
+        + void insertToDataStream( QDataStream& dataStream, int playerIdentification ) const
+        + void extractFromDataStream( QDataStream& dataStream )
+        
+        - void insertQPointF(QDataStream& dataStream, const QPointF& pointf) const
+        - void extractQPointF(QDataStream& dataStream, QPointF& pointf)
+    }
+    
+    class EnemyInfo {
+        - QPointF pos
+    }
+    
+    class ObstacleInfo {
+        - QPointF pos
+    }
+    
+    class BulletInfo {
+        - QPointF pos
+        - QPointF direction
+    }
+    
+    class BulletInfo {
+        - QPointF pos
+        - int id
+        - int currentScore
+    }
+    
+    class PlayerAction {
+        - int id;
+        - int horizontal
+        - int vertical
+        - int shooting
+        - int shootDirection
+    }
+    
+    QObject <|-- BaseGame
+    QObject <|-- Socket
+    
+}

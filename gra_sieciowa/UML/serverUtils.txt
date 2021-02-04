@@ -1,0 +1,102 @@
+package serverUtils {
+    class QObject {}
+    note top of QObject
+        Base QT object class
+    end note
+    class QGraphicsRectItem {}
+    note top of QGraphicsRectItem
+        Base QGraphics rectangle item object class
+    end note
+    class Bullet {
+        + Bullet(int direction, int player_id, const QPointF& playerPos)
+        + QPointF moveSet
+        + int direction
+        + int player_id
+        
+        + void move()
+    }
+    class Socket {}
+    note top of Socket
+        from utils package
+    end note
+    
+    class ClientSocket {
+        + ClientSocket(QTcpSocket* socket, QObject *parent = nullptr)
+        + void sendGameState(const GameState& gameState, int playerID) const
+    }
+    
+    class Enemy {
+        + Enemy()
+    }
+    class Obstacle {
+        + Obstacle()
+    }
+    class Player {
+        + Player(QPoint x, QSize h, int id)
+        + QList <Bullet*> playerBullets
+        + bool movementDirection[4] = {false}
+        + int shootingDirection
+        + bool shotFired = true
+        + bool isShooting = false
+        + bool dead = false
+        + bool invulnerable = false
+        + int id;
+        + int score = 0
+        + QTimer * respawnTimer
+        + QTimer * invulTimer
+        + int horizontalMove
+        + int verticalMove
+        
+        + void move(int speed)
+        + void kill()
+        .. SIGNALS ..        
+        # void respawn(Player* player)
+        .. SLOTS ..
+        # void canShoot()
+        # void onRespawn()
+        # void resetInvulnerability()
+
+    }
+    class ServerGame {
+        + ServerGame(QWidget * parent =0)
+        + void initGame()
+        + void addNewPlayer(int playerID)
+        + void moveAssets()
+        + void checkAllCollisions()
+        + void fireBullet(Player*)
+        + void generateLayoutOne()
+        + void generateObstacle(QPoint point, QSize size)
+        + void killPlayer(Player *)
+        + QGraphicsScene * graphicsScene
+        + QMap<int, Player*> playersMap
+        + int numOfEnemies
+        + QTimer* timer
+        + GameState gameInfo
+        + Network network
+        # GameState dumpGameInfo();
+        .. SLOTS ..
+        # void onConnection(int id);
+        # void gameLoop();
+        # void playerAction();
+        # void spawnEnemy();
+        # void updatePoints();
+        # void handlePlayerAction(const PlayerAction& playerAction);
+        # void onPlayerDisconnected(int playerID);
+        # void respawnPlayer(Player* player);
+        
+    }
+    
+    
+
+    QObject <|-- Bullet
+    QGraphicsRectItem <|-- Bullet
+    QObject <|-- Enemy
+    QGraphicsRectItem <|-- Enemy
+    QObject <|-- Obstacle
+    QGraphicsRectItem <|-- Obstacle
+    QObject <|-- Player
+    QGraphicsRectItem <|-- Player
+    QObject <|-- Socket
+    Socket <|-- ClientSocket
+    
+}
