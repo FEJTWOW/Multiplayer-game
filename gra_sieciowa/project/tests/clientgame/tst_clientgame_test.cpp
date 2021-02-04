@@ -146,8 +146,6 @@ private slots:
         QCOMPARE(allItems.length(),1);
         deleteApplication();
     }
-
-
 };
 
 

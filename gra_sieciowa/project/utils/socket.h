@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include <QTcpSocket>
 #include <QDataStream>
 
 
@@ -24,7 +23,7 @@ signals:
     void error(const QString& error) const;
     void disconnected() const;
 
-protected slots:
+public slots:
     void onReadyRead();
     void onDisconnected() const;
 
