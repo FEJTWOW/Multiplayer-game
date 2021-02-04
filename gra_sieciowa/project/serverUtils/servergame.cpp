@@ -5,7 +5,7 @@
 #include <gameSettings.h>
 
 
-ServerGame::ServerGame(QWidget *parent)
+ServerGame::ServerGame(QWidget *parent) : QGraphicsView(parent)
 {
     numOfEnemies = 0;
     network = new Network(12345, this);
@@ -46,7 +46,7 @@ void ServerGame::initGame()
     connect(network, SIGNAL(gameDisconnect(int)), this, SLOT(onPlayerDisconnected(int)));
 }
 
-void ServerGame::addNewPlayer(QPoint point, QSize size, int playerID)
+void ServerGame::addNewPlayer(int playerID)
 {
     playersMap[playerID] = new Player(playerPoint, playerSize,playerID);
     graphicsScene->addItem(playersMap[playerID]);
@@ -437,7 +437,7 @@ void ServerGame::onConnection(int id)
     qDebug() << "New player with id " << id;
 
     network->send(id);
-    addNewPlayer(QPoint(playerPoint), QSize(playerSize), id);
+    addNewPlayer(id);
 }
 
 
