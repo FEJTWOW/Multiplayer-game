@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QMovie *movie = new QMovie("../../../gra_sieciowa/project/animation.gif");
+    QMovie *movie = new QMovie("../../../gra_sieciowa/project/animation.gif", QByteArray(), this);
     ui->movieLabel->setMovie(movie);
     movie->start();
     QPixmap *pixmap = new QPixmap("../../../gra_sieciowa/project/background.jpeg");
@@ -44,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->verticalLayout_2->addWidget(ui->gamepad_10);
     ui->verticalLayout_2->addWidget(ui->gamepad_11);
     ui->verticalLayout_2->addWidget(ui->gamepad_12);
+
+    delete pixmap;
+    delete pixmap2;
 }
 
 MainWindow::~MainWindow()

@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QPainter>
 
-ClientGame::ClientGame(QWidget *parent)
+ClientGame::ClientGame(QWidget *parent) : QGraphicsView(parent)
 {
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()), this, SLOT(move()));

@@ -55,7 +55,7 @@ void Network::onDisconnected()
         exit(EXIT_FAILURE);
     }
 
-    auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
+    //auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
     //clients.removeOne(client);
     //delete client;
     emit gameDisconnect(disconnecteSocketID);

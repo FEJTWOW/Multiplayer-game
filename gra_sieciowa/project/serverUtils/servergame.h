@@ -19,7 +19,7 @@ class ServerGame: public QGraphicsView
 public:
     ServerGame(QWidget * parent =0);
     void initGame();
-    void addNewPlayer(QPoint point, QSize size, int playerID);
+    void addNewPlayer(int playerID);
     void moveAssets();
     void checkAllCollisions();
     void fireBullet(Player*);  // This might need to be refactored to player or sth
