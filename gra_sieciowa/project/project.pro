@@ -9,7 +9,8 @@ SUBDIRS += \
     utils
 
 
-game_main.depends = utils
-server2.depends = utils
+game_main.depends = clientUtils
+server2.depends = serverUtils
 serverUtils.depends = utils
 clientUtils.depends = utils
+tests.depends = serverUtils

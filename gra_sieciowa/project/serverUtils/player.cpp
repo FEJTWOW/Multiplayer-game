@@ -24,7 +24,13 @@ void Player::canShoot()
 }
 
 void Player::kill() {
-    //score = 0; TODO chcemy zerowac tutaj wynik?
+    //this->setBrush(Qt::red);
+    this->setPos({10000, 10000});
+    //this->setBrush(Qt::white);
+    //this->setPen(QPen(Qt::white, 15, Qt::DashDotLine, Qt::RoundCap));
+    this->score -= scoreKillValue;
+    if(this->score < 0)
+        this->score = 0;
     dead = true;
     respawnTimer = new QTimer(this);
     QObject::connect(respawnTimer, SIGNAL(timeout()), this, SLOT(onRespawn()));
@@ -43,7 +49,6 @@ void Player::onRespawn()
     invulTimer->start(playerInvulTime);
     this->setOpacity(0.2);
     this->setPos(playerSpawns[id]);
-
     emit respawn(this);
 }
 

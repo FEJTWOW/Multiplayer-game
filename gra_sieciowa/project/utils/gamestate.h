@@ -2,6 +2,7 @@
 #define GAMESTATE_HA
 #include <QPoint>
 #include <QList>
+#include <QDataStream>
 
 struct PlayerInfo
 {
@@ -29,17 +30,21 @@ struct EnemyInfo
 class GameState
 {
 public:
-    ObstacleInfo obstacle[20];
-    PlayerInfo player[5];
-    BulletInfo bullet[25];
-    EnemyInfo enemy[10];
-//    QList<PlayerInfo> player;
-//    QList<BulletInfo> bullet;
-//    QList<EnemyInfo> enemy;
-//    QList<ObstacleInfo> obstacle;
+    int playerID;
+    QList<ObstacleInfo> obstacleList;
+    QList<BulletInfo> bulletList;
+    QList<EnemyInfo> enemyList;
+    QMap<int, PlayerInfo> playersInfoMap;
+    void insertToDataStream( QDataStream& dataStream, int playerIdentification ) const;
+    void extractFromDataStream( QDataStream& dataStream );
 
+private:
+    void insertQPointF(QDataStream& dataStream, const QPointF& pointf) const;
+    void extractQPointF(QDataStream& dataStream, QPointF& pointf);
 };
 
+//QDataStream& operator<<( QDataStream& dataStream, const GameState& gameState );
+//QDataStream& operator>>( QDataStream& dataStream, GameState& gameState );
 
 
 #endif // GAMESTATE_HA

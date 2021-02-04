@@ -94,44 +94,47 @@ void ClientGame::keyReleaseEvent(QKeyEvent *event)
 void ClientGame::parseGameState(const QByteArray &data)
 {
     GameState receivedGameState;
-    memcpy(&receivedGameState,data.data(), sizeof(receivedGameState));
-    for(int i=0; i < 20; i++)
+    QDataStream receivedStream(data);
+    receivedGameState.extractFromDataStream(receivedStream);
+    myPlayerId = receivedGameState.playerID;    // TODO usunac myPlayerID
+    clearGameState();
+    for(int i=0; i < receivedGameState.obstacleList.length(); i++)
     {
-        this->gameState.obstacle[i] = receivedGameState.obstacle[i];
+        this->gameState.obstacleList.append(receivedGameState.obstacleList[i]);
     }
-    for(int i =0; i < 5; i++)
+    for(auto playerID : receivedGameState.playersInfoMap.keys()) {
+        this->gameState.playersInfoMap[playerID] = receivedGameState.playersInfoMap[playerID];
+    }
+    for(int i =0; i < receivedGameState.bulletList.length(); i++)
     {
-
-        this->gameState.player[i] = receivedGameState.player[i];
+        this->gameState.bulletList.append(receivedGameState.bulletList[i]);
     }
-    for(int i =0; i < 25; i++)
+    for(int i=0; i<receivedGameState.enemyList.length(); i++)
     {
-        this->gameState.bullet[i] = receivedGameState.bullet[i];
+        this->gameState.enemyList.append(receivedGameState.enemyList[i]);
     }
-    for(int i=0; i<10; i++)
-    {
-        this->gameState.enemy[i] = receivedGameState.enemy[i];
-    }
-    //this->gameState.player[this->myPlayerId].currentScore = receivedGameState.player[this->myPlayerId].currentScore;
     renderGameState();
+}
+
+void ClientGame::clearGameState() {
+      gameState.obstacleList.clear();
+      gameState.bulletList.clear();
+      gameState.enemyList.clear();
+
+      gameState.playersInfoMap.clear();
 }
 
 void ClientGame::renderGameState()
 {
     clientGraphicsScene->clear();
-    for(int i=0; i < 20; i++)
+    for(QList<ObstacleInfo>::iterator i= gameState.obstacleList.begin(); i != gameState.obstacleList.end(); ++i)
     {
-
         QGraphicsRectItem* obstacle = new QGraphicsRectItem();
-        obstacle->setRect(QRectF(gameState.obstacle[i].pos, obstacleSize));
-        //qDebug() << "Rendering: " << obstacle->rect().x() << " " << obstacle->rect().y();
+        obstacle->setRect(QRectF(i->pos, obstacleSize));
         clientGraphicsScene->addItem(obstacle);
     }
-    for(int i =0; i< 5; i++)
+    for(auto playerID : gameState.playersInfoMap.keys())
     {
-
-        if(gameState.player[i].pos.x() == 0 && gameState.player[i].pos.y() == 0)
-            continue;
 //        QPainter* painter = new QPainter();
 
         QGraphicsRectItem* player = new QGraphicsRectItem();
@@ -140,30 +143,24 @@ void ClientGame::renderGameState()
 //        painter->drawImage(QRectF(gameState.player[i].pos, playerSize), boximg);
 //        player->paint(painter,0,this);
 //        player->
-        player->setRect(QRectF(gameState.player[i].pos, playerSize));
+        player->setRect(QRectF(gameState.playersInfoMap[playerID].pos, playerSize));
 //        QBrush tempBrush;
 //        tempBrush.setTexture(QPixmap("../../../gra_sieciowa/project/wolf2.png"));
-        player->setBrush(player_colors[gameState.player[i].id]);
+        player->setBrush(player_colors[playerID]);
         clientGraphicsScene->addItem(player);
     }
-    for(int i =0; i< 25; i++)
+    for(QList<BulletInfo>::iterator i= gameState.bulletList.begin(); i != gameState.bulletList.end(); ++i)
     {
-        if(gameState.bullet[i].pos.x() == 0 && gameState.bullet[i].pos.y() == 0)
-            continue;
-
-        createBullet(gameState.bullet[i].pos);
+        createBullet(i->pos);
     }
-    for(int i =0; i <10; i++)
+    for(QList<EnemyInfo>::iterator i= gameState.enemyList.begin(); i != gameState.enemyList.end(); ++i)
     {
-        if(gameState.enemy[i].pos.x() == 0 && gameState.enemy[i].pos.y() == 0)
-            continue;
-
         QGraphicsRectItem* enemy = new QGraphicsRectItem();
-        enemy->setRect(QRectF(gameState.enemy[i].pos, enemySize));
+        enemy->setRect(QRectF(i->pos, enemySize));
         clientGraphicsScene->addItem(enemy);
     }
-//    qDebug() << "Received score: " << gameState.player[this->myPlayerId].currentScore;
-     showScore(gameState.player[this->myPlayerId].currentScore);
+
+    showScore(gameState.playersInfoMap[this->myPlayerId].currentScore);
 }
 
 

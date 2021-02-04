@@ -8,10 +8,8 @@ Network::Network(quint16 port, QObject* parent) : QTcpServer(parent)
     if (!listen(QHostAddress::Any, port))
     {
            close();
-           qDebug() << "Error in listen!";
     }
 
-    qDebug() << "Server started on port" << serverPort();
 }
 
 void Network::onNewConnection()
@@ -95,9 +93,9 @@ void Network::sendAll(const QByteArray &data) const
 
 void Network::sendAll(const GameState& gameState) const
 {
-    for (const auto& socket : clientsMap.values())
+    for (const auto& clientID : clientsMap.keys())
     {
-        socket->sendGameState(gameState);
+        clientsMap[clientID]->sendGameState(gameState, clientID);
     }
 }
 
@@ -110,26 +108,19 @@ void Network::send(const int playerID) const
 void Network::onMessage(const QString& message) const
 {
     //sendAll(message);
-    qDebug() << "String" << message;
 }
 
 
 void Network::onMessage(const QByteArray& data) const
 {
-    //qDebug() << "Data" << data;
-    qDebug() << "Received!!";
     PlayerAction pA = parsePlayerAction(data);
-    //GameState test{1,2,3,4,200,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
     emit playerMadeAction(pA);
-    //sendAll(test);
 }
 
 PlayerAction Network::parsePlayerAction(const QByteArray& data) const
 {
     PlayerAction playerAction;
-    qDebug() << "Received!!";
     memcpy(&playerAction,data.data(), sizeof(playerAction));
-    //qDebug() << playerAction.actions << playerAction.posX << playerAction.posY;
     return playerAction;
 
 }

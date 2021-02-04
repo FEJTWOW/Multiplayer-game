@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     basegame.cpp \
+    gamestate.cpp \
     socket.cpp \
     utils.cpp
 

@@ -235,6 +235,7 @@ void ServerGame::checkAllCollisions() {
     {
         if(typeid(*(all_items[i])) == typeid(Bullet))
         {
+            int bulletPlayerID = ((Bullet*)all_items[i])->player_id;
             QList<QGraphicsItem *> colliding_items = all_items[i]->collidingItems();
             if(!colliding_items.size())
             {
@@ -249,6 +250,7 @@ void ServerGame::checkAllCollisions() {
             }
             else if(typeid(*(colliding_items[0])) == typeid(Enemy))
             {
+                playersMap[bulletPlayerID]->score += scoreObstacleHit;
                 if(!toBeDeleted.contains(all_items[i]))
                     toBeDeleted.push_back(all_items[i]);
                 if(!toBeDeleted.contains(colliding_items[0]))
@@ -256,6 +258,7 @@ void ServerGame::checkAllCollisions() {
             }
             else if (typeid(*(colliding_items[0])) == typeid(Player))
             {
+                playersMap[bulletPlayerID]->score += scoreEnemyHit;     // TODO dodac obsluge zeby player nie dostawal pkt za swoje bullety
                 Player * player = dynamic_cast<Player *>(colliding_items[0]);
                 Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
                 if(player->dead || player->id == bullet->player_id)
@@ -271,7 +274,7 @@ void ServerGame::checkAllCollisions() {
                 else
                 {
                     qDebug() << "Player o id: " << bullet->player_id << "zabil!";
-                    playersMap[bullet->player_id]->score -= scoreKillValue;
+                    //playersMap[bullet->player_id]->score -= scoreKillValue;   // cos tu jest zle ?
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
                     killPlayer(player);
@@ -324,7 +327,7 @@ void ServerGame::checkAllCollisions() {
 void ServerGame::killPlayer(Player * player)
 {
     player->kill();
-    graphicsScene->removeItem(player);
+    //graphicsScene->removeItem(player);
     connect(player, SIGNAL(respawn(Player*)), this, SLOT(respawnPlayer(Player*)));
 }
 
@@ -388,45 +391,34 @@ GameState ServerGame::dumpGameInfo()
     QList<QGraphicsItem*> allItems = graphicsScene->items();
     GameState gameInfo;
 
-    int bulletCount =0;
-    int playerCount =0;
-    int enemyCount =0;
-    int obstacleCount =0;
-    for (auto* i : allItems)
+    for (auto* item : allItems)
     {
-
-        if (typeid(*i) == typeid(Bullet))
+        if (typeid(*item) == typeid(Bullet))
         {
-            Bullet* tempBullet = dynamic_cast<Bullet*>(i);
+            Bullet* tempBullet = dynamic_cast<Bullet*>(item);
             BulletInfo bulletInfo = { .pos = tempBullet->pos(), .direction = tempBullet->moveSet };
-            gameInfo.bullet[bulletCount] = bulletInfo;
-            bulletCount++;
+            gameInfo.bulletList.append(bulletInfo);
         }
-        if (typeid(*i) == typeid(Player))
+        if (typeid(*item) == typeid(Player))
         {
-            Player* tempPlayer = dynamic_cast<Player*>(i);
-            // sth is crashing here after disconnect
+            Player* tempPlayer = dynamic_cast<Player*>(item);
             PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playersMap[tempPlayer->id]->score };
-            gameInfo.player[playerCount] = playerInfo;
-            playerCount++;
+            gameInfo.playersInfoMap[playerInfo.id] = playerInfo;
+            //qDebug() << "Player " << tempPlayer->id << " currentScore: " << this->playersMap[tempPlayer->id]->score;
         }
-        if (typeid(*i) == typeid(Obstacle))
+        if (typeid(*item) == typeid(Obstacle))
         {
-            Obstacle* tempObstacle = dynamic_cast<Obstacle*>(i);
+            Obstacle* tempObstacle = dynamic_cast<Obstacle*>(item);
             QPointF point(tempObstacle->rect().x(), tempObstacle->rect().y());
             ObstacleInfo obstacleInfo = { .pos = point};
-            gameInfo.obstacle[obstacleCount] = obstacleInfo;
-            obstacleCount++;
+            gameInfo.obstacleList.append(obstacleInfo);
         }
-        if (typeid(*i) == typeid(Enemy))
+        if (typeid(*item) == typeid(Enemy))
         {
-            Enemy* tempEnemy = dynamic_cast<Enemy*>(i);
+            Enemy* tempEnemy = dynamic_cast<Enemy*>(item);
             QPointF point(tempEnemy->rect().x(),tempEnemy->pos().y());
-            //qDebug() << tempEnemy->rect().x() << tempEnemy->pos().y() << "IS THE ENEMY";
             EnemyInfo enemyInfo = { .pos = point };
-            gameInfo.enemy[enemyCount] = enemyInfo;
-            enemyCount++;
-
+            gameInfo.enemyList.append(enemyInfo);
         }
     }
     return gameInfo;
@@ -436,7 +428,7 @@ void ServerGame::onConnection(int id)
 {
     qDebug() << "New player with id " << id;
 
-    network->send(id);
+    //network->send(id); // TODO do wyrzucenia
     addNewPlayer(QPoint(playerPoint), QSize(playerSize), id);
 }
 

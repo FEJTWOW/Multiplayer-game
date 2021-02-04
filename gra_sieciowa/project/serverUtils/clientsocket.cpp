@@ -1,12 +1,12 @@
 #include "clientsocket.h"
+#include <QDataStream>
+#include <QByteArray>
 
-
-void ClientSocket::sendGameState(const GameState& gameState) const
+void ClientSocket::sendGameState(const GameState& gameState, int playerID) const
 {
-    sendData(QByteArray(static_cast<char*>((void*)&gameState), sizeof(gameState)));
+    QByteArray byteArray;
+    QDataStream stream(&byteArray, QIODevice::WriteOnly);
+    gameState.insertToDataStream(stream, playerID);
+
+    sendData(byteArray);
 }
-
-
-//void ClientSocket::onDisconnected() {
-//    qDebug() << "ClientSocket disconnected";
-//}

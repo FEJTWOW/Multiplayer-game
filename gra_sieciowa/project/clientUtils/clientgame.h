@@ -24,6 +24,7 @@ public:
     GameState gameState;
     void showScore(int currentScore);
     void createBullet(QPointF pos);
+    void clearGameState();
 
     QTimer* timer;
     int horizontal;

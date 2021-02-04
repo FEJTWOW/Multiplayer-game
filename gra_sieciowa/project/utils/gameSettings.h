@@ -44,6 +44,8 @@ const QColor scoreColor = Qt::red;
 const QFont scoreFont = {"System", 14};
 constexpr int scorePassiveIntervalInMs = 10000;
 constexpr int scorePassiveValue = 30;
-constexpr int scoreKillValue = 5000;
+constexpr int scoreKillValue = 100;
+constexpr int scoreEnemyHit = 30;
+constexpr int scoreObstacleHit = 5;
 
 #endif // SETTINGS_H

@@ -858,15 +858,21 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="tabChangesFocus">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QTextEdit" name="textEdit_2">
     <property name="geometry">
      <rect>
       <x>460</x>
       <y>170</y>
-      <width>61</width>
+      <width>91</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="tabChangesFocus">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -924,12 +930,17 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>textEdit</tabstop>
+  <tabstop>textEdit_2</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
