@@ -141,13 +141,11 @@ private slots:
     {
         createApplication();
         QPointF pointBullet(2,3);
-        clientGame->createBullet(pointBullet);
+        clientGame->createBullet(pointBullet, 0);
         QList<QGraphicsItem *> allItems = clientGame->clientGraphicsScene->items();
         QCOMPARE(allItems.length(),1);
         deleteApplication();
     }
-
-
 };
 
 

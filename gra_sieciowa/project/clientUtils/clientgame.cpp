@@ -31,6 +31,11 @@ void ClientGame::initGame(const QHostAddress& address, quint16 port)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(screenSize);
     this->setFocus();
+
+    // a gradient background
+    QGradient gradient(QGradient::SpikyNaga);
+    //gradient.setSpread(QGradient::AlchemistLab);
+    clientGraphicsScene->setBackgroundBrush(gradient);
 }
 
 void ClientGame::move() {
@@ -131,19 +136,29 @@ void ClientGame::renderGameState()
     {
         QGraphicsRectItem* obstacle = new QGraphicsRectItem();
         obstacle->setRect(QRectF(i->pos, obstacleSize));
-        obstacle->setBrush(obstacleColor);
+        QLinearGradient gradient(0, 0, 10, 10);
+        gradient.setSpread(QGradient::RepeatSpread);
+        gradient.setColorAt(1.0, Qt::black);
+        gradient.setColorAt(0.5, Qt::yellow);
+        gradient.setColorAt(0, Qt::black);
+        obstacle->setBrush(gradient);
         obstacle->setOpacity(obstacleOpacity);
         clientGraphicsScene->addItem(obstacle);
     }
     for(auto playerID : gameState.playersInfoMap.keys())
     {
-
         QGraphicsRectItem* player = new QGraphicsRectItem();
 
         player->setRect(QRectF(gameState.playersInfoMap[playerID].pos, playerSize));
         if(gameState.playersInfoMap[playerID].invulnerable)
             player->setOpacity(playerInvulnerableOpacity);
-        player->setBrush(player_colors[playerID]);
+//        QRadialGradient gradient(10, 15, 4);
+//        gradient.setSpread(QGradient::RepeatSpread);
+//        gradient.setColorAt(1.0, player_colors[playerID]);
+//        gradient.setColorAt(0, Qt::white);
+        QGradient gradient(playerGradientColors[playerID]);
+        player->setBrush(gradient);
+        //player->setBrush(player_colors[playerID]);
         clientGraphicsScene->addItem(player);
     }
     for(QList<BulletInfo>::iterator i= gameState.bulletList.begin(); i != gameState.bulletList.end(); ++i)
@@ -154,7 +169,13 @@ void ClientGame::renderGameState()
     {
         QGraphicsRectItem* enemy = new QGraphicsRectItem();
         enemy->setRect(QRectF(i->pos, enemySize));
-        enemy->setBrush(enemyColor);
+//        enemy->setBrush(enemyColor);
+        QGradient gradient(QGradient::MagicRay);
+        //QRadialGradient gradient(10, 15, 20);
+        //gradient.setSpread(QGradient::PadSpread);
+        //gradient.setColorAt(1.0, Qt::darkRed);
+        //gradient.setColorAt(0, Qt::white);
+        enemy->setBrush(gradient);
         enemy->setOpacity(enemyOpacity);
         clientGraphicsScene->addItem(enemy);
     }
@@ -179,9 +200,14 @@ void ClientGame::showScore(int currentScore)
 
 void ClientGame::createBullet(QPointF pos, int playerID)
 {
+    QRadialGradient gradient(10, 15, 4);
+    gradient.setSpread(QGradient::RepeatSpread);
+    gradient.setColorAt(1.0, player_colors[playerID]);
+    gradient.setColorAt(0, Qt::black);
+    gradient.setRadius(0.5);
     QGraphicsRectItem* bullet = new QGraphicsRectItem();
     bullet->setRect(QRectF(pos, bulletSize));
-    bullet->setBrush(player_colors[playerID]);
-    bullet->setPen(QPen(player_colors[playerID], 15, Qt::DashDotLine, Qt::RoundCap));
+    bullet->setBrush(gradient);
+    bullet->setPen(QPen(gradient, 15, Qt::DashDotLine, Qt::RoundCap));
     clientGraphicsScene->addItem(bullet);
 }
