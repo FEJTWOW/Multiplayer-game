@@ -17,8 +17,6 @@ void ServerSocket::onMessage(const QString& message) const
 
 void ServerSocket::onMessage(const QByteArray& data) const
 {
-    // TODO error handling
-
     emit newGameState(data);
 }
 
@@ -30,7 +28,6 @@ void ServerSocket::sendPlayerAction(const PlayerAction &playerAction) const
 GameState ServerSocket::parseGameState(const QByteArray& data) const
 {
     GameState gameState;
-
     memcpy(&gameState,data.data(), sizeof(gameState));
     return gameState;
 }

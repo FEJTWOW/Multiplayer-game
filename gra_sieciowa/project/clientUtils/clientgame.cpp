@@ -32,9 +32,7 @@ void ClientGame::initGame(const QHostAddress& address, quint16 port)
     setFixedSize(screenSize);
     this->setFocus();
 
-    // a gradient background
     QGradient gradient(QGradient::SpikyNaga);
-    //gradient.setSpread(QGradient::AlchemistLab);
     clientGraphicsScene->setBackgroundBrush(gradient);
 }
 
@@ -101,7 +99,7 @@ void ClientGame::parseGameState(const QByteArray &data)
     GameState receivedGameState;
     QDataStream receivedStream(data);
     receivedGameState.extractFromDataStream(receivedStream);
-    myPlayerId = receivedGameState.playerID;    // TODO usunac myPlayerID
+    myPlayerId = receivedGameState.playerID;
     clearGameState();
     for(int i=0; i < receivedGameState.obstacleList.length(); i++)
     {
@@ -152,13 +150,8 @@ void ClientGame::renderGameState()
         player->setRect(QRectF(gameState.playersInfoMap[playerID].pos, playerSize));
         if(gameState.playersInfoMap[playerID].invulnerable)
             player->setOpacity(playerInvulnerableOpacity);
-//        QRadialGradient gradient(10, 15, 4);
-//        gradient.setSpread(QGradient::RepeatSpread);
-//        gradient.setColorAt(1.0, player_colors[playerID]);
-//        gradient.setColorAt(0, Qt::white);
         QGradient gradient(playerGradientColors[playerID]);
         player->setBrush(gradient);
-        //player->setBrush(player_colors[playerID]);
         clientGraphicsScene->addItem(player);
     }
     for(QList<BulletInfo>::iterator i= gameState.bulletList.begin(); i != gameState.bulletList.end(); ++i)
@@ -169,12 +162,7 @@ void ClientGame::renderGameState()
     {
         QGraphicsRectItem* enemy = new QGraphicsRectItem();
         enemy->setRect(QRectF(i->pos, enemySize));
-//        enemy->setBrush(enemyColor);
         QGradient gradient(QGradient::MagicRay);
-        //QRadialGradient gradient(10, 15, 20);
-        //gradient.setSpread(QGradient::PadSpread);
-        //gradient.setColorAt(1.0, Qt::darkRed);
-        //gradient.setColorAt(0, Qt::white);
         enemy->setBrush(gradient);
         enemy->setOpacity(enemyOpacity);
         clientGraphicsScene->addItem(enemy);

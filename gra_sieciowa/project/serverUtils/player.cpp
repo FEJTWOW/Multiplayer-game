@@ -7,9 +7,6 @@ Player::Player(QPoint point, QSize size, int id) : id(id)
     this->setRect(QRectF(point, size));
     this->setPos(playerSpawns[id]);
 
-    //this->setBrush(Qt::red);
-    //this->setPen(QPen(newGame->settings->player_color, 15, Qt::DashDotLine, Qt::RoundCap));
-
     auto timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()), this, SLOT(canShoot()));
     timer->start(playerShotCd);
@@ -57,7 +54,6 @@ void Player::resetInvulnerability()
 }
 
 void Player::move(int speed) {
-    //qDebug() << "Ruch" << horizontalMove << verticalMove;
     this->moveBy(horizontalMove*speed, verticalMove*speed);
 
     if(pos().x() < 0)

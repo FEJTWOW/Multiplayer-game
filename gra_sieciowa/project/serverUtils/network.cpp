@@ -23,7 +23,6 @@ void Network::onNewConnection()
     }
 
     int clientMapId = addClientToMap(sockHandle);
-    //this->clients.push_back(sockHandle);
 
     qDebug() << "New connection, with id: " << clientMapId;
     emit newClientConnected(clientMapId);
@@ -55,12 +54,7 @@ void Network::onDisconnected()
         exit(EXIT_FAILURE);
     }
 
-    //auto client = static_cast<ClientSocket*>(sender()); // nw czy sender() zadziala bo do QObject posyłamy nullptr ale to Qt wiec kij wie co tam sie dzieje
-    //clients.removeOne(client);
-    //delete client;
     emit gameDisconnect(disconnecteSocketID);
-
-    //clientsMap.remove(disconnecteSocketID);
 }
 
 int Network::getDisconnectedSocketID() {

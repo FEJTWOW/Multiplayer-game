@@ -28,7 +28,6 @@ void GameState::insertToDataStream( QDataStream& dataStream, int playerIdentific
         dataStream << playersInfoMap[key].currentScore;
         dataStream << playersInfoMap[key].invulnerable;
     }
-    //dataStream << obstacleList[0].pos.toPoint().x() << obstacleList[0].pos.toPoint().y();
 }
 
 

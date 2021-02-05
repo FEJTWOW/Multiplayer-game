@@ -22,21 +22,17 @@ public:
     void addNewPlayer(int playerID);
     void moveAssets();
     void checkAllCollisions();
-    void fireBullet(Player*);  // This might need to be refactored to player or sth
+    void fireBullet(Player*);
     void generateLayoutOne();
     void generateObstacle(QPoint point, QSize size);
     void killPlayer(Player *);
     QGraphicsScene * graphicsScene;
-    //QList <Player*> players;
-    QMap<int, Player*> playersMap;  // int jest takie same jak int w clientsMap w network.h; dzieki temu mamy polaczenie player-client
-    //int numOfPlayers;
+    QMap<int, Player*> playersMap;
     int numOfEnemies;
     QTimer* timer;
     GameState gameInfo;
 
 protected:
-    //void keyPressEvent(QKeyEvent *event) override;
-    //void keyReleaseEvent(QKeyEvent *event) override;
     GameState dumpGameInfo();
 
 public slots:

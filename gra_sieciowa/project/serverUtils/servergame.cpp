@@ -13,19 +13,12 @@ ServerGame::ServerGame(QWidget *parent) : QGraphicsView(parent)
 
 void ServerGame::initGame()
 {
-    // Create the game map
     graphicsScene = new QGraphicsScene();
-    // Set the size of the map
     graphicsScene->setSceneRect(QRectF(screenPoint, screenSize));
-    // Create our view
     setScene(graphicsScene);
-    // Disable sidebars
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // Set the size of the view
     setFixedSize(screenSize);
-
-    //this->setFlag(QGraphicsItem::ItemIsFocusable);
     this->setFocus();
 
     connect(network, SIGNAL(playerMadeAction(const PlayerAction&)), this, SLOT(handlePlayerAction(const PlayerAction&)));
@@ -50,8 +43,7 @@ void ServerGame::addNewPlayer(int playerID)
 {
     playersMap[playerID] = new Player(playerPoint, playerSize,playerID);
     graphicsScene->addItem(playersMap[playerID]);
-    playersMap[playerID]->score = 0; // niepotrzbne
-    //playersMap[playerID]->setupScore();    // bezsensu po stronie serwera
+    playersMap[playerID]->score = 0;
 
     show();
 }
@@ -67,7 +59,6 @@ void ServerGame::spawnEnemy()
         scene()->addItem(newEnemy);
         numOfEnemies++;
     }
-    //qDebug() << "On spawn: " << numOfEnemies;
 }
 
 void ServerGame::updatePoints()
@@ -97,16 +88,14 @@ void ServerGame::gameLoop() {
     moveAssets();
     checkAllCollisions();
     GameState gameState = dumpGameInfo();
-    //qDebug() << "gameLoop before sendAll";
     network->sendAll(gameState);
-    //qDebug() << "gameLoop aftersendAll";
 }
 
 void ServerGame::playerAction() {
     for(const auto& id : playersMap.keys())
     {
         Player* player = playersMap[id];
-        if(!player->dead)   // Bandaid, prob can disable keyEvents altogether
+        if(!player->dead)
         {
             if(player->isShooting && !player->shotFired)
             {
@@ -261,7 +250,6 @@ void ServerGame::checkAllCollisions() {
 void ServerGame::killPlayer(Player * player)
 {
     player->kill();
-    //graphicsScene->removeItem(player);
     connect(player, SIGNAL(respawn(Player*)), this, SLOT(respawnPlayer(Player*)));
 }
 
@@ -284,8 +272,6 @@ void ServerGame::fireBullet(Player* player)
 
 void ServerGame::generateLayoutOne()
 {
-    // Needs proper scaling
-
     QList<Obstacle *> obstacleLayout;
     QSize size = obstacleSize;
 
@@ -347,7 +333,6 @@ GameState ServerGame::dumpGameInfo()
                 .invulnerable = this->playersMap[tempPlayer->id]->invulnerable
             };
             gameInfo.playersInfoMap[playerInfo.id] = playerInfo;
-            //qDebug() << "Player " << tempPlayer->id << " currentScore: " << this->playersMap[tempPlayer->id]->score;
         }
         if (typeid(*item) == typeid(Obstacle))
         {
@@ -370,7 +355,6 @@ GameState ServerGame::dumpGameInfo()
 void ServerGame::onConnection(int id)
 {
     qDebug() << "New player with id " << id;
-
     addNewPlayer(id);
 }
 

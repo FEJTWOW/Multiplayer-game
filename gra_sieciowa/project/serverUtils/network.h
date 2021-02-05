@@ -11,7 +11,7 @@ class Network : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Network(quint16 port = 0, QObject* parent = nullptr); // port jest 2 bajtowa liczba
+    explicit Network(quint16 port = 0, QObject* parent = nullptr);
     quint16 port() const { return serverPort(); }
     PlayerAction parsePlayerAction(const QByteArray& data) const;
     void sendAll(const QString &message) const;
@@ -32,8 +32,7 @@ public slots:
     void onMessage(const QByteArray& data) const;
 
 public:
-    //QList<ClientSocket*> clients;
-    QMap<int, ClientSocket*> clientsMap;    // slabe rozwiazanie ale lepiej zrobic jeszcze jeden krok w tym bagnie niz wróćić się do początku
+    QMap<int, ClientSocket*> clientsMap;
 };
 
 #endif // NETWORK_H
