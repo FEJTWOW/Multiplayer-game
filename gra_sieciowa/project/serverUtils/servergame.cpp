@@ -56,82 +56,6 @@ void ServerGame::addNewPlayer(int playerID)
     show();
 }
 
-/*void ServerGame::keyPressEvent(QKeyEvent *event)  // TODO delete
-{
-    // Player id (players[id]) will be received from the client through the socket
-    // for now :
-    int player_id = 0;
-    Player* player = playersMap[player_id];
-    if(!player->dead)
-    {
-        if(event->key() == Qt::Key_Left)
-            player->movementDirection[LEFT] = true;
-        else if(event->key() == Qt::Key_Right)
-            player->movementDirection[RIGHT] = true;
-        else if(event->key() == Qt::Key_Up)
-            player->movementDirection[UP] = true;
-        else if(event->key() == Qt::Key_Down)
-            player->movementDirection[DOWN] = true;
-        else if(event->key() == Qt::Key_W)
-        {
-                player->isShooting = true;
-                player->shootingDirection = 0;
-        }
-        else if(event->key() == Qt::Key_A)
-        {
-                player->isShooting = true;
-                player->shootingDirection = 1;
-        }
-        else if(event->key() == Qt::Key_S)
-        {
-                player->isShooting = true;
-                player->shootingDirection = 2;
-        }
-        else if(event->key() == Qt::Key_D)
-        {
-                player->isShooting = true;
-                player->shootingDirection = 3;
-        }
-        else if(event->key() == Qt::Key_Escape)
-        {
-            exit(EXIT_SUCCESS);
-        }
-    }
-
-    //movePlayer();
-}
-
-void ServerGame::keyReleaseEvent(QKeyEvent *event)    // TODO delete
-{
-    // In final cut this would be changed on server based on clients sending input (not local keyEvents)
-    Player* player = playersMap[0];
-    if(!player->dead)
-    {
-        switch ( event->key() )
-        {
-        case Qt::Key_Up:
-            player->movementDirection[UP] = 0;
-            break;
-        case Qt::Key_Left:
-            player->movementDirection[LEFT] = 0;
-            break;
-        case Qt::Key_Down:
-            player->movementDirection[DOWN] = 0;
-            break;
-        case Qt::Key_Right:
-            player->movementDirection[RIGHT] = 0;
-            break;
-        case Qt::Key_W:
-        case Qt::Key_A:
-        case Qt::Key_S:
-        case Qt::Key_D:
-            player->isShooting = false;
-            break;
-        }
-    }
-}*/
-
-
 void ServerGame::spawnEnemy()
 {
     if(numOfEnemies < 9)
@@ -258,7 +182,6 @@ void ServerGame::checkAllCollisions() {
             }
             else if (typeid(*(colliding_items[0])) == typeid(Player))
             {
-                playersMap[bulletPlayerID]->score += scoreEnemyHit;     // TODO dodac obsluge zeby player nie dostawal pkt za swoje bullety
                 Player * player = dynamic_cast<Player *>(colliding_items[0]);
                 Bullet * bullet = dynamic_cast<Bullet *>(all_items[i]);
                 if(player->dead || player->id == bullet->player_id)
@@ -274,7 +197,7 @@ void ServerGame::checkAllCollisions() {
                 else
                 {
                     qDebug() << "Player o id: " << bullet->player_id << "zabil!";
-                    //playersMap[bullet->player_id]->score -= scoreKillValue;   // cos tu jest zle ?
+                    playersMap[bulletPlayerID]->score += scoreEnemyHit;
                     if(!toBeDeleted.contains(all_items[i]))
                         toBeDeleted.push_back(all_items[i]);
                     killPlayer(player);
@@ -299,6 +222,17 @@ void ServerGame::checkAllCollisions() {
                     {
                         killPlayer(player);
                     }
+                }
+                else if(typeid(*(colliding_items[j])) == typeid(Player) )
+                {
+                    Player * player = dynamic_cast<Player *>(all_items[i]);
+                    Player * player2 = dynamic_cast<Player *>(colliding_items[j]);
+                    if(player->dead || player2->dead)
+                        continue;
+                    if(!player->invulnerable)
+                        killPlayer(player);
+                    if(!player2->invulnerable)
+                        killPlayer(player2);
                 }
             }
         }
@@ -332,7 +266,7 @@ void ServerGame::killPlayer(Player * player)
 }
 
 void ServerGame::respawnPlayer(Player* player) {
-    graphicsScene->addItem(player);
+    //graphicsScene->addItem(player);
 }
 
 
@@ -396,13 +330,22 @@ GameState ServerGame::dumpGameInfo()
         if (typeid(*item) == typeid(Bullet))
         {
             Bullet* tempBullet = dynamic_cast<Bullet*>(item);
-            BulletInfo bulletInfo = { .pos = tempBullet->pos(), .direction = tempBullet->moveSet };
+            BulletInfo bulletInfo = {
+                .pos = tempBullet->pos(),
+                .direction = tempBullet->moveSet,
+                .playerID = tempBullet->player_id
+            };
             gameInfo.bulletList.append(bulletInfo);
         }
         if (typeid(*item) == typeid(Player))
         {
             Player* tempPlayer = dynamic_cast<Player*>(item);
-            PlayerInfo playerInfo = { .pos = tempPlayer->pos(), .id = tempPlayer->id, .currentScore = this->playersMap[tempPlayer->id]->score };
+            PlayerInfo playerInfo = {
+                .pos = tempPlayer->pos(),
+                .id = tempPlayer->id,
+                .currentScore = this->playersMap[tempPlayer->id]->score,
+                .invulnerable = this->playersMap[tempPlayer->id]->invulnerable
+            };
             gameInfo.playersInfoMap[playerInfo.id] = playerInfo;
             //qDebug() << "Player " << tempPlayer->id << " currentScore: " << this->playersMap[tempPlayer->id]->score;
         }

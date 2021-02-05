@@ -1,33 +1,6 @@
 #include "gamestate.h"
 #include <QDebug>
 
-//QDataStream &operator<<(QDataStream &out, const GameState &gameState)
-//{
-//    out << gameState.obstacleList.count();
-//    for(int i = 0; i < gameState.obstacleList.count(); ++i) {
-//        int x = gameState.obstacleList[i].pos.toPoint().x();
-//        int y = gameState.obstacleList[i].pos.toPoint().y();
-//        out << x << y;
-//    }
-//    return out;
-//}
-
-//QDataStream &operator>>(QDataStream &in, GameState &gameState)
-//{
-//    int obstacleCount;
-//    in >> obstacleCount;
-//    for(int i = 0; i < obstacleCount; ++i) {
-//        ObstacleInfo obstacleInfo;
-//        int x, y;
-//        in >> x >> y;
-//        obstacleInfo.pos.setX(x);
-//        obstacleInfo.pos.setY(y);
-//        gameState.obstacleList.append(obstacleInfo);
-//    }
-//    return in;
-//}
-
-
 void GameState::insertToDataStream( QDataStream& dataStream, int playerIdentification ) const{
     dataStream << playerIdentification;
 
@@ -40,6 +13,7 @@ void GameState::insertToDataStream( QDataStream& dataStream, int playerIdentific
     for(int i = 0; i < bulletList.count(); ++i) {
         insertQPointF(dataStream, bulletList[i].pos);
         insertQPointF(dataStream, bulletList[i].direction);
+        dataStream << bulletList[i].playerID;
     }
 
     dataStream << enemyList.count();
@@ -52,6 +26,7 @@ void GameState::insertToDataStream( QDataStream& dataStream, int playerIdentific
         insertQPointF(dataStream, playersInfoMap[key].pos);
         dataStream << playersInfoMap[key].id;
         dataStream << playersInfoMap[key].currentScore;
+        dataStream << playersInfoMap[key].invulnerable;
     }
     //dataStream << obstacleList[0].pos.toPoint().x() << obstacleList[0].pos.toPoint().y();
 }
@@ -74,6 +49,7 @@ void GameState::extractFromDataStream( QDataStream& dataStream )
         BulletInfo bulletInfo;
         extractQPointF(dataStream, bulletInfo.pos);
         extractQPointF(dataStream, bulletInfo.direction);
+        dataStream >> bulletInfo.playerID;
         bulletList.append(bulletInfo);
     }
 
@@ -90,6 +66,7 @@ void GameState::extractFromDataStream( QDataStream& dataStream )
         extractQPointF(dataStream, playerInfo.pos);
         dataStream >> playerInfo.id;
         dataStream >> playerInfo.currentScore;
+        dataStream >> playerInfo.invulnerable;
         playersInfoMap[playerInfo.id] = playerInfo;
     }
 }

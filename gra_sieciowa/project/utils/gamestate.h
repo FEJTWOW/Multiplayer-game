@@ -9,12 +9,14 @@ struct PlayerInfo
     QPointF pos;
     int id;
     int currentScore;
+    bool invulnerable;
 };
 
 struct BulletInfo
 {
     QPointF pos;
     QPointF direction;
+    int playerID;
 };
 
 struct ObstacleInfo
