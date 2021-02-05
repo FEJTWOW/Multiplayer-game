@@ -91,6 +91,75 @@ private slots:
         QCOMPARE(serverGame->playersMap[2]->score, 2*scorePassiveValue);
         deleteApplication();
     }
+
+    void collisionTest() {
+        createApplication();
+        serverGame->addNewPlayer(0);
+        serverGame->addNewPlayer(2);
+
+
+        serverGame->playersMap[2]->setPos(serverGame->playersMap[0]->pos());
+
+        serverGame->checkAllCollisions();
+
+        QVERIFY(serverGame->playersMap[2]->dead);
+        QVERIFY(serverGame->playersMap[0]->dead);
+    }
+
+    void fireBulletsTest() {
+        createApplication();
+        serverGame->addNewPlayer(0);
+
+        serverGame->playersMap[0]->shootingDirection = 0;
+
+        serverGame->fireBullet(serverGame->playersMap[0]);
+
+        auto all = serverGame->graphicsScene->items();
+
+        Bullet* b;
+
+        for(int i = 0; i < all.length(); i++) {
+            if(typeid(*(all[i])) == typeid(Bullet))
+                b = dynamic_cast<Bullet *>(all[i]);
+        }
+
+        QVERIFY(b);
+    }
+
+    void moveTest() {
+        createApplication();
+        serverGame->addNewPlayer(0);
+
+        serverGame->playersMap[0]->shootingDirection = 0;
+
+        serverGame->fireBullet(serverGame->playersMap[0]);
+
+        auto all = serverGame->graphicsScene->items();
+
+        Bullet* b;
+
+        for(int i = 0; i < all.length(); i++) {
+            if(typeid(*(all[i])) == typeid(Bullet))
+                b = dynamic_cast<Bullet *>(all[i]);
+        }
+
+        QVERIFY(b);
+
+        auto pos = b->pos();
+
+        serverGame->moveAssets();
+
+        QVERIFY(pos.y() != b->pos().y());
+    }
+
+    void killPlayerTest() {
+        createApplication();
+        serverGame->addNewPlayer(0);
+
+        serverGame->killPlayer(serverGame->playersMap[0]);
+
+        QVERIFY(serverGame->playersMap[0]->dead);
+    }
 };
 
 QTEST_APPLESS_MAIN(servergame_test)
