@@ -41,7 +41,7 @@ void Player::onRespawn()
     invulnerable = true;
     isShooting = false;
 
-    invulTimer = new QTimer();
+    invulTimer = new QTimer(this);
     connect(invulTimer,SIGNAL(timeout()), this, SLOT(resetInvulnerability()));
     invulTimer->start(playerInvulTime);
     this->setOpacity(playerInvulnerableOpacity);

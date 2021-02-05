@@ -110,7 +110,7 @@ private slots:
         p.kill();
 
         QVERIFY(p.dead);
-        QVERIFY(p.score == 100 - scoreKillValue);
+        QVERIFY(p.score == 0);
     }
 
 };
